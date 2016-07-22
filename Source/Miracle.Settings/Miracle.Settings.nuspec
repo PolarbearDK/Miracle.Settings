@@ -8,16 +8,18 @@
     <owners>Philip Hoppe</owners>
     <licenseUrl>https://github.com/PolarbearDK/Miracle.Settings/blob/master/LICENSE.txt</licenseUrl>
     <projectUrl>https://github.com/PolarbearDK/Miracle.Settings</projectUrl>
-    <iconUrl>https://github.com/PolarbearDK/Miracle.Settings/blob/master/nuget-icon.png</iconUrl>
+    <iconUrl>https://github.com/PolarbearDK/Miracle.Settings/raw/master/nuget-icon.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Miracle.Settings replaces error prone local loading of AppSettings with strong typed objects.</description>
-    <summary>Load multiple settings into a strong typed object with two lines of codes:
-  ISettingsLoader settingsLoader = new SettingsLoader();
-  var settings = settingsLoader.Create&gt;MyCustomSettingsClass&lt;();
+    <description>Miracle.Settings replaces error prone local loading of AppSettings with strong typed objects.
+Load multiple settings into a strong typed object with two lines of codes:
+
+ISettingsLoader settingsLoader = new SettingsLoader();
+var settings = settingsLoader.Create&gt;MyCustomSettingsClass&lt;();
 
 Supports nested objects, arrays, lists and dictionaries.
 Custom converter system supporting Enum, Guid, Timespan and Uri. Add your own converters with one line of code. 
-	</summary>
+	</description>
+    <summary>Miracle.Settings replaces error prone local loading of AppSettings with strong typed objects.</summary>
     <releaseNotes>Initial version.</releaseNotes>
     <copyright>Copyright 2016</copyright>
     <tags>AppSettings settings POCO class object strong type typed config configuration nested array list dictionary</tags>

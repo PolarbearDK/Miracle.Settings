@@ -1,4 +1,5 @@
 # Miracle.Settings
+
 Deserialize/Load settings into strong typed object (POCO).
 
 Features:
@@ -8,7 +9,16 @@ Features:
 * Supports nested objects, arrays, lists and dictionaries.
 * Extentable type convertion system which extends Convert.ChangeType with default custom converters for Enum, Guid, Timespan and Uri.
 
-## Simple usage
+## Usage
+Available as a NuGet package: [Miracle.Settings](https://www.nuget.org/packages/Miracle.Settings/)
+
+To install Miracle.Settings, run the following command in the Package Manager Console
+```Powershell
+PM> Install-Package Miracle.Settings
+```
+
+
+## Simple example
 A basic example on how to load a POCO object with settings.
 ```XML
 <configuration>
@@ -31,7 +41,7 @@ ISettingsLoader settingsLoader = new SettingsLoader();
 var settings = settingsLoader.Create<FooBar>();
 ```
 
-## Default value
+## Using default value
 If no value is provided for a property, then value is taken from DefaultValueAttribute.
 
 Sample:
@@ -59,7 +69,6 @@ var settings = settingsLoader.Create<FooBar>();
 ## Nested object
 Nested objects are supported using "dot" notation.
 
-With config:
 ```XML
 <configuration>
   <appSettings>
@@ -70,7 +79,6 @@ With config:
 </configuration>
 ```
 
-And settings classes:
 ```CSharp
 public class FooBar
 {
@@ -95,7 +103,6 @@ var settings = settingsLoader.Create<FooBar>("MyPrefix");
 Collections (Arrays, Lists & Dictionaries) can be loaded directly or as nested properties. 
 Keys must be unique, so collection keys must be suffixed by something to make them unique.
 
-Sample:
 ```XML
 <configuration>
   <appSettings>
@@ -105,6 +112,7 @@ Sample:
   </appSettings>
 </configuration>
 ```
+
 ```CSharp
 ISettingsLoader settingsLoader = new SettingsLoader();
 // Get the same settings as array, list & dictionary.

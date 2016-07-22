@@ -27,8 +27,9 @@ namespace Miracle.Settings
         /// <summary>
         /// Create dictionary from settings prefixed by <param name="prefix"/>
         /// </summary>
-        /// <param name="prefix">The prefix of all settings in the array</param>
-        Dictionary<TKey, TValue> CreateDictionary<TKey, TValue>(string prefix);
+        /// <param name="prefix">The prefix of all settings in the dictionary</param>
+        /// <param name="comparer">Optional dictionary key comparer</param>
+        Dictionary<TKey, TValue> CreateDictionary<TKey, TValue>(string prefix, IEqualityComparer<TKey> comparer = null);
 
         /// <summary>
         /// Load settings prefixed by <param name="prefix"/> into existing object instance

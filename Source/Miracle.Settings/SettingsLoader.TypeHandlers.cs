@@ -78,7 +78,7 @@ namespace Miracle.Settings
                     GetType()
                         .GetMethod(nameof(CreateDictionary))
                         .MakeGenericMethod(propertyType.GetGenericArguments())
-                        .Invoke(this, new object[] { key + PropertySeparator });
+                        .Invoke(this, new object[] { key + PropertySeparator, null });
                 return true;
             }
             value = null;

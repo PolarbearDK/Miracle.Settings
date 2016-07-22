@@ -109,7 +109,8 @@ namespace Miracle.Settings
         /// Create dictionary from settings prefixed by <param name="prefix"/>
         /// </summary>
         /// <param name="prefix">The prefix of all settings in the dictionary</param>
-        public Dictionary<TKey, TValue> CreateDictionary<TKey, TValue>(string prefix)
+        /// <param name="comparer">Optional dictionary key comparer</param>
+        public Dictionary<TKey, TValue> CreateDictionary<TKey, TValue>(string prefix, IEqualityComparer<TKey> comparer = null)
         {
             // Ensure valid collection prefix (including .)
             prefix = ToCollectionPrefix(prefix);
@@ -117,9 +118,15 @@ namespace Miracle.Settings
             return GetCollectionPrefixes(prefix)?
                 .ToDictionary(
                     x => (TKey)ChangeType(x.Substring(prefix.Length), typeof(TKey)), 
-                    Create<TValue>);
+                    Create<TValue>,
+                    comparer);
         }
 
+        /// <summary>
+        /// Ensure that a prefix is a collection prefix (must end with PropertySeparator) 
+        /// </summary>
+        /// <param name="prefix"></param>
+        /// <returns></returns>
         private string ToCollectionPrefix(string prefix)
         {
             return string.IsNullOrWhiteSpace(prefix) || prefix.EndsWith(PropertySeparator) ? prefix : prefix + PropertySeparator;
