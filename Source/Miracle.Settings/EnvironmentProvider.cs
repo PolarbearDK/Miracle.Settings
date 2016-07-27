@@ -4,6 +4,9 @@ using System.Linq;
 
 namespace Miracle.Settings
 {
+    /// <summary>
+    /// Value provider using environment variables as values
+    /// </summary>
     public class EnvironmentProvider : IValueProvider
     {
         public bool TryGetValue(string key, out string value)

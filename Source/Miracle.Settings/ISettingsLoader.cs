@@ -2,6 +2,9 @@
 
 namespace Miracle.Settings
 {
+    /// <summary>
+    /// Provides the basic functionality for a settings loader
+    /// </summary>
     public interface ISettingsLoader
     {
         /// <summary>

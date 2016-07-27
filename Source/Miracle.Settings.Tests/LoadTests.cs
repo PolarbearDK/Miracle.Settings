@@ -15,8 +15,7 @@ namespace Miracle.Settings.Tests
         public LoadTests()
         {
             _loader = new SettingsLoader()
-                .RemoveTypeConverter(typeof(int))
-                .AddTypeConverter(typeof(DateTime), s => XmlConvert.ToDateTime(s, XmlDateTimeSerializationMode.Local))
+                .AddTypeConverter(s => XmlConvert.ToDateTime(s, XmlDateTimeSerializationMode.Local))
                 .AddProvider(new EnvironmentProvider());
         }
 
@@ -49,9 +48,9 @@ namespace Miracle.Settings.Tests
         }
 
         [Test]
-        public void SettingAttributesLoadTest()
+        public void SettingNameLoadTest()
         {
-            var settings = _loader.Create<SimpleSettingsWithSettingAttributes>();
+            var settings = _loader.Create<SimpleSettingsWithSettingName>();
 
             //Simple
             Assert.That(settings.Enum2, Is.EqualTo(BindingFlags.NonPublic | BindingFlags.Static));
@@ -60,6 +59,37 @@ namespace Miracle.Settings.Tests
             Assert.That(settings.TimeSpan4, Is.EqualTo(new TimeSpan(11, 22, 33, 44, 560)));
             Assert.That(settings.Uri5, Is.EqualTo(new Uri("Http://hello.eu")));
             Assert.That(settings.Guid6, Is.EqualTo(Guid.Parse("DCFA0942-0BEC-43E4-8D77-57BA63C7BF7B")));
+        }
+
+        [Test]
+        public void SettingReferenceLoadTest()
+        {
+            var settings = _loader.Create<ReferenceSettings>("SettingReference");
+
+            // Example of loading settings with references to other settings
+            Assert.That(settings, Is.DeepEqualTo(
+                new ReferenceSettings()
+                {
+                    MyUrl = new Uri("http://foo.bar"),
+                    PageUrl = new Uri(new Uri("http://foo.bar"), "/home/index.aspx"),
+                    LoginUrl = new Uri(new Uri("http://foo.bar"), "/login.aspx"),
+                }));
+        }
+
+        [Test]
+        public void SettingAttributesWithTypeConverterLoadTest()
+        {
+            var settings = _loader.Create<PathTypeConverterSettings>("TypeConverter");
+
+            //Simple
+            // Array
+            Assert.That(settings, Is.DeepEqualTo(
+                new PathTypeConverterSettings()
+                {
+                    Upload = @"C:\Foo\Bar\Upload\",
+                    Download = @"E:\Download\",
+                    Sub = @"C:\Foo\Bar\Upload\Sub\",
+                }));
         }
 
         [Test]

@@ -5,7 +5,7 @@ using System.Linq;
 namespace Miracle.Settings
 {
     /// <summary>
-    /// Value provider that load settings from ConfigurationManager.AppSettings
+    /// Value provider using ConfigurationManager.AppSettings as values
     /// </summary>
     public class AppSettingsProvider : IValueProvider
     {

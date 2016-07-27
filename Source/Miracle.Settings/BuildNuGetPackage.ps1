@@ -20,5 +20,5 @@ if($pack) {
 
 if($push) {
 	$filename = Get-ChildItem "$packageprefix*" | Sort-Object LastWriteTime -Descending | Select -First 1
-	& ..\.NuGet\NuGet.exe push "$filename" -s http://nugetserver.miraclecloudcontrol.com/ 1FDB0C3A-392F-44D7-A516-95AFD0F42D6A
+	& ..\.NuGet\NuGet.exe push "$filename" -Source https://www.nuget.org/api/v2/package
 }

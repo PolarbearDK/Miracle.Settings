@@ -5,9 +5,23 @@ Deserialize/Load settings into strong typed object (POCO).
 Features:
 * Load settings from config file, environment variables or custom source (Database is an obvious scenario)
 * Load settings prefixed by a specific prefix, or from root (prefix=null)
-* Throws exceptions in case of missing setting.
+* Throws exception in case of missing setting.
 * Supports nested objects, arrays, lists and dictionaries.
-* Extentable type convertion system which extends Convert.ChangeType with default custom converters for Enum, Guid, Timespan and Uri.
+* Construct property from more than one value.
+* Extendable type convertion system
+* Built in converters for Enum, Guid, Timespan and Uri.
+
+## Table of content
+* [Usage](#usage)
+* [Simple Example](#simple-example)
+* [Using default value](#using-default-value)
+* [Nested object](#Nested-object)
+* [Arrays, Lists & Dictionaries](arrays-lists--dictionaries)
+
+Advanced topics
+* [Setting attribute](SettingAttribute.md)
+* [Type converters](TypeConverters.md)
+* [Value providers](ValueProviders.md)
 
 ## Usage
 Available as a NuGet package: [Miracle.Settings](https://www.nuget.org/packages/Miracle.Settings/)
@@ -62,7 +76,8 @@ public class FooBar
 ```
 ```CSharp
 ISettingsLoader settingsLoader = new SettingsLoader();
-// Foo is loaded from setting. No value is provided in settings for Bar, but as it has a DefaultValueAttribute it gets a value of 42.
+// Foo is loaded from setting. 
+// No value is provided in settings for Bar, but as it has a DefaultValueAttribute it gets a value of 42.
 var settings = settingsLoader.Create<FooBar>();
 ```
 

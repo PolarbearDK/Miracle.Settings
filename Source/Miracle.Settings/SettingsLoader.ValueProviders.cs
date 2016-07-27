@@ -32,7 +32,7 @@ namespace Miracle.Settings
         private bool TryGetValue(string key, out string value)
         {
             value = null;
-            foreach (var provider in this.ValueProviders)
+            foreach (var provider in ValueProviders)
             {
                 if (provider.TryGetValue(key, out value))
                     return true;
@@ -48,7 +48,7 @@ namespace Miracle.Settings
         /// <returns></returns>
         private bool GetKeys(string prefix, out IEnumerable<string> keys)
         {
-            foreach (var provider in this.ValueProviders)
+            foreach (var provider in ValueProviders)
             {
                 if (provider.TryGetKeys(prefix, out keys))
                 {

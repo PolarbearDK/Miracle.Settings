@@ -44,12 +44,12 @@ namespace Miracle.Settings.Tests
         public Guid Guid { get; private set; }
     }
 
-    public class SimpleSettingsWithSettingAttributes
+    public class SimpleSettingsWithSettingName
     {
-        // -- Values with SettingAttribute --
+        // -- Values with Setting Attribute --
         [Setting("String")]
         public string String1 { get; private set; }
-        [Setting("Enum")]
+        [Setting(Name="Enum")]
         public BindingFlags Enum2 { get; private set; }
         [Setting("DateTime")]
         public DateTime DateTime3 { get; private set; }
@@ -94,4 +94,27 @@ namespace Miracle.Settings.Tests
         public bool Talks { get; set; }
     }
 
+    public class ReferenceSettings
+    {
+        // -- Settings with References --
+        [Setting(Name="BaseUrl")]
+        public Uri MyUrl { get; set; }
+        [Setting(Reference="BaseUrl")]
+        public Uri PageUrl { get; set; }
+        [Setting(References = new [] {"BaseUrl"})]
+        public Uri LoginUrl { get; set; }
+    }
+
+    public class PathTypeConverterSettings
+    {
+        // -- Settings with TypeConverter --
+        [Setting(Reference="RootFolder", TypeConverter = typeof(PathTypeConverter))]
+        public string Upload { get; set; }
+        // -- Settings with TypeConverter --
+        [Setting(Reference="RootFolder", TypeConverter = typeof(PathTypeConverter))]
+        public string Download { get; set; }
+        // -- Settings with TypeConverter --
+        [Setting(References= new string[] { "RootFolder", "Upload"}, TypeConverter = typeof(PathTypeConverter))]
+        public string Sub { get; set; }
+    }
 }

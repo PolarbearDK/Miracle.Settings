@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Linq;
 
 namespace Miracle.Settings
 {
@@ -8,53 +10,80 @@ namespace Miracle.Settings
         /// <summary>
         /// Dictionary containing explicit type conversions (in addition to what <see cref="Convert"/> can handle)
         /// </summary>
-        public Dictionary<Type, Func<string, object>> TypeConverters { get; }
+        public List<ITypeConverter> TypeConverters { get; }
 
         /// <summary>
         /// Get default type converters
         /// </summary>
         /// <returns></returns>
-        protected virtual Dictionary<Type, Func<string, object>> GetDefaultTypeConverters()
+        private List<ITypeConverter> GetDefaultTypeConverters()
         {
-            return new Dictionary<Type, Func<string, object>>
+            return new List<ITypeConverter>()
             {
-                {typeof(Guid), s => Guid.Parse(s)},
-                {typeof(TimeSpan), s => TimeSpan.Parse(s)},
-                {typeof(Uri), s => new Uri(s)}
+                new SimpleTypeConverter<Guid>(Guid.Parse),
+                new SimpleTypeConverter<TimeSpan>(TimeSpan.Parse),
+                new UriTypeConverter(),
+                new EnumTypeConverter(),
+                new DefaultChangeTypeConverter(),
             };
         }
+
         /// <summary>
-        /// Add extra explicit conversions to what Convert.ChangeType can handle
+        /// Convert value into instance of type conversionType
         /// </summary>
         /// <param name="value">the value to convert</param>
         /// <param name="conversionType">The type to convert to</param>
         /// <returns></returns>
         private object ChangeType(object value, Type conversionType)
         {
-            var s = value as string;
-            if (s != null)
-            {
-                Func<string, object> func;
-                if (TypeConverters.TryGetValue(conversionType, out func))
-                {
-                    return func(s);
-                }
-
-                if (conversionType.IsEnum)
-                    return Enum.Parse(conversionType, s, true);
-            }
-            return Convert.ChangeType(value, conversionType);
+            return ChangeType(new[] {value}, conversionType);
         }
 
-        public SettingsLoader RemoveTypeConverter(Type type)
+        /// <summary>
+        /// Convert values into instance of type conversionType
+        /// </summary>
+        /// <param name="values">the values to convert</param>
+        /// <param name="conversionType">The type to convert to</param>
+        /// <returns></returns>
+        private object ChangeType(object[] values, Type conversionType)
         {
-            TypeConverters.Remove(type);
+            foreach (var typeConverter in TypeConverters)
+            {
+                if (typeConverter.CanConvert(values, conversionType))
+                    return typeConverter.ChangeType(values, conversionType);
+            }
+
+            throw new ConfigurationErrorsException(
+                values.Length == 1 
+                ? $"Unable to convert value: {values.FirstOrDefault()} into type {conversionType}"
+                : $"Unable to convert values: {string.Join(", ",values.Select(x=>x.ToString()))} into type {conversionType}");
+        }
+
+        public SettingsLoader RemoveTypeConverter(ITypeConverter typeConverter)
+        {
+            TypeConverters.Remove(typeConverter);
             return this;
         }
 
-        public SettingsLoader AddTypeConverter(Type type, Func<string, object> converter)
+
+        public SettingsLoader AddTypeConverter(ITypeConverter typeConverter)
         {
-            TypeConverters.Add(type, converter);
+            TypeConverters.Insert(0, typeConverter);
+            return this;
+        }
+
+        /// <summary>
+        /// Add simple type converter for type <typeparamref name="T" /> using converter function <paramref name="convert" />
+        /// </summary>
+        /// <remarks>
+        /// Implemented using <see cref="SimpleTypeConverter{T}"/>
+        /// </remarks>
+        /// <typeparam name="T">Type to add converter for</typeparam>
+        /// <param name="convert">converter function to convert from string to <typeparamref name="T" /></param>
+        /// <returns>Reference to current SettingsLoader for fluid configuration</returns>
+        public SettingsLoader AddTypeConverter<T>(Func<string, T> convert)
+        {
+            AddTypeConverter(new SimpleTypeConverter<T>(convert));
             return this;
         }
     }

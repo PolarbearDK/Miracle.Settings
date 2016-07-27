@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Configuration;
 using System.Linq;
 using System.Reflection;
@@ -31,32 +30,19 @@ namespace Miracle.Settings
         public ISettingsLoader Load<T>(T instance, string prefix = null)
         {
             // Initialize all properties of T with values provided by typehandlers using reflection
-            foreach (var prop in GetLoadableProperties<T>())
+            foreach (var propertyInfo in GetLoadableProperties<T>())
             {
-                var key = GetSettingKey(prefix, prop);
+                var key = GetSettingKey(prefix, propertyInfo);
 
                 object value = null;
-                foreach (var typeHandler in _typeHandlers)
+                if (_typeHandlers.Any(typeHandler => typeHandler(propertyInfo, prefix, key, out value)))
                 {
-                    // Attempt to get value from type handler. Exit when a handler succedes (returns true)
-                    if (typeHandler(prop.PropertyType, key, out value))
-                        break;
+                    propertyInfo.SetValue(instance, value, null);
                 }
-
-                if (value == null)
+                else
                 {
-                    // Set default value if DefaultValueAttribute is present
-                    DefaultValueAttribute attr = prop.GetCustomAttributes(typeof(DefaultValueAttribute), false).FirstOrDefault() as DefaultValueAttribute;
-                    if (attr != null)
-                        value = ChangeType(attr.Value, prop.PropertyType);
-                    else
-                    {
-                        throw new ConfigurationErrorsException("A value has to be provided for Setting: " + key);
-                    }
+                    throw new ConfigurationErrorsException("A value has to be provided for Setting: " + key);
                 }
-
-                prop.SetValue(instance, value, null);
-
             }
             return this;
         }
@@ -78,7 +64,7 @@ namespace Miracle.Settings
                 string stringValue;
                 if (TryGetValue(prefix, out stringValue))
                 {
-                    return (T)ChangeType(stringValue, typeof(T));
+                    return (T) ChangeType(stringValue, typeof (T));
                 }
             }
             return default(T);
@@ -189,14 +175,14 @@ namespace Miracle.Settings
         /// Get the setting key by combining prefix and property name or setting name (annotation)
         /// </summary>
         /// <param name="prefix">The prefix of the current setting</param>
-        /// <param name="prop">The property that is being loaded</param>
+        /// <param name="propertyInfo">The property that is being loaded</param>
         /// <returns></returns>
-        protected virtual string GetSettingKey(string prefix, PropertyInfo prop)
+        protected virtual string GetSettingKey(string prefix, PropertyInfo propertyInfo)
         {
-            SettingAttribute attr = prop.GetCustomAttributes(typeof(SettingAttribute), false).FirstOrDefault() as SettingAttribute;
-            if (attr != null)
-                return prefix + attr.Name;
-            return prefix + prop.Name;
+            SettingAttribute attribute = propertyInfo.GetCustomAttributes(typeof(SettingAttribute), false).FirstOrDefault() as SettingAttribute;
+            if (attribute != null && attribute.Name != null)
+                return prefix + attribute.Name;
+            return prefix + propertyInfo.Name;
         }
     }
 }

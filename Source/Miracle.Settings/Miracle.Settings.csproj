@@ -42,16 +42,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppSettingsProvider.cs" />
+    <Compile Include="DefaultChangeTypeConverter.cs" />
+    <Compile Include="EnumTypeConverter.cs" />
     <Compile Include="EnvironmentProvider.cs" />
     <Compile Include="GenericTypeExtensions.cs" />
     <Compile Include="ISettingsLoader.cs" />
+    <Compile Include="ITypeConverter.cs" />
     <Compile Include="IValueProvider.cs" />
+    <Compile Include="PathTypeConverter.cs" />
     <Compile Include="SettingAttribute.cs" />
     <Compile Include="SettingsLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SettingsLoader.ValueProviders.cs" />
     <Compile Include="SettingsLoader.TypeConverters.cs" />
     <Compile Include="SettingsLoader.TypeHandlers.cs" />
+    <Compile Include="SimpleTypeConverter.cs" />
+    <Compile Include="UriTypeConverter.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
