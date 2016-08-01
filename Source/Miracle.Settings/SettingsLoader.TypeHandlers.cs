@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.ExceptionServices;
+using Miracle.Settings.Properties;
 
 namespace Miracle.Settings
 {
@@ -28,13 +31,21 @@ namespace Miracle.Settings
         private bool DirectGet(PropertyInfo propertyInfo, string prefix, string key, out object value)
         {
             object propertyValue;
+            var list = GetReferencesList(propertyInfo, prefix);
             if (TryGetPropertyValue(propertyInfo, key, out propertyValue))
             {
-                var list = GetReferencesList(propertyInfo, prefix);
                 list.Add(propertyValue);
 
                 if (TryConstructPropertyValue(propertyInfo, list.ToArray(), out value))
                     return true;
+            }
+            else
+            {
+                // No value provided. Throw an error if any of the type converters can handle this property.
+                list.Add(string.Empty);
+                var values = list.ToArray();
+                if (TypeConverters.Any(x => x.CanConvert(values, propertyInfo.PropertyType)))
+                    throw new ConfigurationErrorsException(string.Format(Resources.MissingValueFormat,key));
             }
             value = null;
             return false;
@@ -46,12 +57,18 @@ namespace Miracle.Settings
             if (propertyType.IsArray)
             {
                 Type elementType = propertyType.GetElementType();
-                value =
-                    GetType()
-                        .GetMethod(nameof(CreateArray))
-                        .MakeGenericMethod(elementType)
-                        .Invoke(this, new object[] { key + PropertySeparator });
-                return true;
+                value = GetType()
+                    .GetMethod(nameof(CreateArray))
+                    .MakeGenericMethod(elementType)
+                    .Invoke(this, new object[] { key + PropertySeparator });
+
+                if (value != null)
+                    return true;
+
+                if (TryGetPropertyValue(propertyInfo, key, out value))
+                    return true;
+
+                throw new ConfigurationErrorsException(string.Format(Resources.MissingArrayValueFormat, key));
             }
             value = null;
             return false;
@@ -67,7 +84,14 @@ namespace Miracle.Settings
                         .GetMethod(nameof(CreateList))
                         .MakeGenericMethod(propertyType.GetGenericArguments())
                         .Invoke(this, new object[] { key + PropertySeparator });
-                return true;
+
+                if (value != null)
+                    return true;
+
+                if (TryGetPropertyValue(propertyInfo, key, out value))
+                    return true;
+
+                throw new ConfigurationErrorsException(string.Format(Resources.MissingListValueFormat, key));
             }
             value = null;
             return false;
@@ -83,7 +107,14 @@ namespace Miracle.Settings
                         .GetMethod(nameof(CreateDictionary))
                         .MakeGenericMethod(propertyType.GetGenericArguments())
                         .Invoke(this, new object[] { key + PropertySeparator, null });
-                return true;
+
+                if (value != null)
+                    return true;
+
+                if (TryGetPropertyValue(propertyInfo, key, out value))
+                    return true;
+
+                throw new ConfigurationErrorsException(string.Format(Resources.MissingDictionaryValueFormat, key));
             }
             value = null;
             return false;
@@ -94,12 +125,20 @@ namespace Miracle.Settings
             var propertyType = propertyInfo.PropertyType;
             if (propertyType.IsClass && propertyType != typeof(string))
             {
-                value =
-                    GetType()
-                        .GetMethod(nameof(Create))
-                        .MakeGenericMethod(propertyType)
-                        .Invoke(this, new object[] { key });
-                return true;
+                try
+                {
+                    value =
+                        GetType()
+                            .GetMethod(nameof(Create))
+                            .MakeGenericMethod(propertyType)
+                            .Invoke(this, new object[] {key});
+                    return true;
+                }
+                // Remove the awfull TargetInvocationException
+                catch (System.Reflection.TargetInvocationException ex)
+                {
+                    ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+                }
             }
             value = null;
             return false;
@@ -122,7 +161,7 @@ namespace Miracle.Settings
                     }
                     else
                     {
-                        throw new ConfigurationErrorsException("A value has to be provided for referenced Setting: " + referenceKey);
+                        throw new ConfigurationErrorsException(string.Format(Resources.MissingReferenceValueFormat, referenceKey));
                     }
                 }
             }
@@ -155,16 +194,29 @@ namespace Miracle.Settings
             SettingAttribute attribute = propertyInfo.GetCustomAttributes(typeof(SettingAttribute), false).FirstOrDefault() as SettingAttribute;
             if (attribute != null && attribute.TypeConverter != null)
             {
-                ITypeConverter typeConverter = Activator.CreateInstance(attribute.TypeConverter) as ITypeConverter;
+                ITypeConverter typeConverter;
+                try
+                {
+                    typeConverter = Activator.CreateInstance(attribute.TypeConverter) as ITypeConverter;
+                }
+                catch (Exception ex)
+                {
+                    throw new ConfigurationErrorsException(string.Format(Resources.CreateTypeConverterErrorFormat, attribute.TypeConverter), ex);
+                }
+
                 if (typeConverter == null)
-                    throw new ConfigurationErrorsException("Setting TypeConverters must implement " + typeof (ITypeConverter));
+                    throw new ConfigurationErrorsException(string.Format(Resources.BadExplicitTypeConverterTypeFormat,typeof (ITypeConverter)));
 
                 if (typeConverter.CanConvert(values, propertyInfo.PropertyType))
                 {
-                    value = typeConverter.ChangeType(values, propertyInfo.PropertyType);
+                    value = ChangeType(values, propertyInfo.PropertyType, typeConverter);
                     return true;
                 }
-                throw new ConfigurationErrorsException($"Unable to convert values: {string.Join(",", values.Select(x => x.ToString()))} into type {propertyInfo.PropertyType}");
+                throw new ConfigurationErrorsException(
+                    string.Format(
+                        Resources.ExplicitTypeConverterErrorFormat,
+                        string.Join(",", values.Select(x => x.ToString())),
+                        propertyInfo.PropertyType));
             }
 
             value = ChangeType(values, propertyInfo.PropertyType);

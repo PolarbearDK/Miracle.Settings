@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Reflection;
+using Miracle.Settings.Properties;
 
 namespace Miracle.Settings
 {
@@ -41,7 +42,7 @@ namespace Miracle.Settings
                 }
                 else
                 {
-                    throw new ConfigurationErrorsException("A value has to be provided for Setting: " + key);
+                    throw new ConfigurationErrorsException(string.Format(Resources.MissingValueFormat, key));
                 }
             }
             return this;
@@ -55,7 +56,15 @@ namespace Miracle.Settings
         {
             if (typeof(T).IsClass && typeof(T) != typeof(string))
             {
-                var instance = Activator.CreateInstance<T>();
+                T instance;
+                try
+                {
+                    instance = Activator.CreateInstance<T>();
+                }
+                catch (Exception ex)
+                {
+                    throw new ConfigurationErrorsException(string.Format(Resources.CreateErrorFormat, typeof(T), prefix), ex);
+                }
                 Load(instance, string.IsNullOrEmpty(prefix) ? prefix : prefix + PropertySeparator);
                 return instance;
             }

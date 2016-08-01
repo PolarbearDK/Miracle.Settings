@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Reflection;
+using Miracle.Settings.Properties;
 
 namespace Miracle.Settings
 {
@@ -47,16 +49,49 @@ namespace Miracle.Settings
         /// <returns></returns>
         private object ChangeType(object[] values, Type conversionType)
         {
+            if(values.Length == 1 && conversionType.IsInstanceOfType(values[0]))
+            {
+                return values[0];
+            }
+
             foreach (var typeConverter in TypeConverters)
             {
                 if (typeConverter.CanConvert(values, conversionType))
-                    return typeConverter.ChangeType(values, conversionType);
+                {
+                    return ChangeType(values, conversionType, typeConverter);
+                }
             }
 
             throw new ConfigurationErrorsException(
-                values.Length == 1 
-                ? $"Unable to convert value: {values.FirstOrDefault()} into type {conversionType}"
-                : $"Unable to convert values: {string.Join(", ",values.Select(x=>x.ToString()))} into type {conversionType}");
+                String.Format(
+                    values.Length == 1
+                        ? Resources.ConvertValueErrorFormat
+                        : Resources.ConvertValuesErrorFormat,
+                    string.Join(", ", values.Select(x => x.ToString())),
+                    conversionType));
+        }
+
+        private static object ChangeType(object[] values, Type conversionType, ITypeConverter typeConverter)
+        {
+            try
+            {
+                return typeConverter.ChangeType(values, conversionType);
+            }
+            catch (ConfigurationErrorsException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new ConfigurationErrorsException(
+                    String.Format(
+                        values.Length == 1
+                            ? Resources.ConvertValueErrorFormat
+                            : Resources.ConvertValuesErrorFormat,
+                        string.Join(", ", values.Select(x => x.ToString())),
+                        conversionType),
+                    ex);
+            }
         }
 
         public SettingsLoader RemoveTypeConverter(ITypeConverter typeConverter)
@@ -64,7 +99,6 @@ namespace Miracle.Settings
             TypeConverters.Remove(typeConverter);
             return this;
         }
-
 
         public SettingsLoader AddTypeConverter(ITypeConverter typeConverter)
         {

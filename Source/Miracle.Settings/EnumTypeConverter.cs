@@ -1,5 +1,6 @@
 using System;
 using System.Configuration;
+using Miracle.Settings.Properties;
 
 namespace Miracle.Settings
 {
@@ -13,7 +14,7 @@ namespace Miracle.Settings
             if (values[0].GetType() == conversionType)
                 return values[0];
 
-            throw new ConfigurationErrorsException("Unable to convert value " + values[0] + " to type " + conversionType);
+            throw new ConfigurationErrorsException(string.Format(Resources.ConvertValueErrorFormat, values[0], conversionType));
         }
 
         public bool CanConvert(object[] values, Type conversionType)

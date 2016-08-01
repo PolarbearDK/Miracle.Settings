@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
+// ReSharper disable ClassNeverInstantiated.Global
+// ReSharper disable UnusedAutoPropertyAccessor.Local
+// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace Miracle.Settings.Tests
 {
@@ -31,6 +34,9 @@ namespace Miracle.Settings.Tests
 
         [DefaultValue("EE58EE2B-4CE6-44A4-8773-EC4E283146EB")]
         public Guid DefaultGuid { get; private set; }
+
+        [DefaultValue(new[] {"foo","bar"})]
+        public string[] DefaultArray { get; private set; }
     }
 
     public class SimpleSettings
@@ -114,7 +120,52 @@ namespace Miracle.Settings.Tests
         [Setting(Reference="RootFolder", TypeConverter = typeof(PathTypeConverter))]
         public string Download { get; set; }
         // -- Settings with TypeConverter --
-        [Setting(References= new string[] { "RootFolder", "Upload"}, TypeConverter = typeof(PathTypeConverter))]
+        [Setting(References= new[] { "RootFolder", "Upload"}, TypeConverter = typeof(PathTypeConverter))]
         public string Sub { get; set; }
+    }
+
+    public class MissingStringSetting
+    {
+        public string MissingString { get; set; }
+    }
+
+    public class MissingDateTimeSetting
+    {
+        public string MissingDateTime { get; set; }
+    }
+
+    public class MissingIntSetting
+    {
+        public string MissingInt { get; set; }
+    }
+
+    public class MissingTimeSpanSetting
+    {
+        public string MissingTimeSpan { get; set; }
+    }
+
+    public class MissingUriSetting
+    {
+        public Uri MissingUri { get; set; }
+    }
+
+    public class BadTypeConverterSetting
+    {
+        [Setting(TypeConverter = typeof(string))]
+        [DefaultValue("Bar")]
+        public string Foo { get; set; }
+    }
+
+    public class TypeConversionFailureSetting
+    {
+        [DefaultValue("XYZ")]
+        public int Foo { get; set; }
+    }
+
+    public class ExplicitTypeConversionFailureSetting
+    {
+        [DefaultValue("http://XYZ")]
+        [Setting(TypeConverter = typeof(UriTypeConverter))]
+        public int Foo { get; set; }
     }
 }

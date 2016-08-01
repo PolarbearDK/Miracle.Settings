@@ -1,42 +1,40 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Xml;
+using KellermanSoftware.CompareNetObjects;
 using NUnit.Framework;
 using Is = NUnit.DeepObjectCompare.Is;
 
 namespace Miracle.Settings.Tests
 {
     [TestFixture]
-    public class LoadTests
+    public class LoadTests : LoadTestBase
     {
-        private readonly ISettingsLoader _loader;
-
-        public LoadTests()
-        {
-            _loader = new SettingsLoader()
-                .AddTypeConverter(s => XmlConvert.ToDateTime(s, XmlDateTimeSerializationMode.Local))
-                .AddProvider(new EnvironmentProvider());
-        }
-
         [Test]
         public void DefaultLoadTest()
         {
-            var settings = _loader.Create<DefaultSettings>();
+            var settings = SettingsLoader.Create<DefaultSettings>();
 
             // Defaults
-            Assert.That(settings.DefaultString, Is.EqualTo("Default Hello World"));
-            Assert.That(settings.DefaultEnum, Is.EqualTo(BindingFlags.Instance | BindingFlags.Public));
-            Assert.That(settings.DefaultDateTime, Is.EqualTo(new DateTime(1966, 6, 11, 13, 34, 56, DateTimeKind.Local).AddMilliseconds(789)));
-            Assert.That(settings.DefaultTimeSpan, Is.EqualTo(new TimeSpan(1, 2, 3, 4)));
-            Assert.That(settings.DefaultUri, Is.EqualTo(new Uri("https://foo.bar")));
-            Assert.That(settings.DefaultGuid, Is.EqualTo(Guid.Parse("EE58EE2B-4CE6-44A4-8773-EC4E283146EB")));
+            Assert.That(settings, Is.DeepEqualTo(
+                new
+                {
+                    DefaultString = "Default Hello World",
+                    DefaultEnum = BindingFlags.Instance | BindingFlags.Public,
+                    DefaultDateTime = new DateTime(1966, 6, 11, 13, 34, 56, DateTimeKind.Local).AddMilliseconds(789),
+                    DefaultTimeSpan = new TimeSpan(1, 2, 3, 4),
+                    DefaultUri = new Uri("https://foo.bar"),
+                    DefaultGuid = Guid.Parse("EE58EE2B-4CE6-44A4-8773-EC4E283146EB"),
+                    DefaultArray = new[] { "foo", "bar" },
+                })
+                .WithComparisonConfig(new ComparisonConfig() {IgnoreObjectTypes = true})
+                );
         }
 
         [Test]
         public void SimpleLoadTest()
         {
-            var settings = _loader.Create<SimpleSettings>();
+            var settings = SettingsLoader.Create<SimpleSettings>();
 
             //Simple
             Assert.That(settings.Enum, Is.EqualTo(BindingFlags.NonPublic | BindingFlags.Static));
@@ -50,7 +48,7 @@ namespace Miracle.Settings.Tests
         [Test]
         public void SettingNameLoadTest()
         {
-            var settings = _loader.Create<SimpleSettingsWithSettingName>();
+            var settings = SettingsLoader.Create<SimpleSettingsWithSettingName>();
 
             //Simple
             Assert.That(settings.Enum2, Is.EqualTo(BindingFlags.NonPublic | BindingFlags.Static));
@@ -64,7 +62,7 @@ namespace Miracle.Settings.Tests
         [Test]
         public void SettingReferenceLoadTest()
         {
-            var settings = _loader.Create<ReferenceSettings>("SettingReference");
+            var settings = SettingsLoader.Create<ReferenceSettings>("SettingReference");
 
             // Example of loading settings with references to other settings
             Assert.That(settings, Is.DeepEqualTo(
@@ -79,7 +77,7 @@ namespace Miracle.Settings.Tests
         [Test]
         public void SettingAttributesWithTypeConverterLoadTest()
         {
-            var settings = _loader.Create<PathTypeConverterSettings>("TypeConverter");
+            var settings = SettingsLoader.Create<PathTypeConverterSettings>("TypeConverter");
 
             //Simple
             // Array
@@ -95,7 +93,7 @@ namespace Miracle.Settings.Tests
         [Test]
         public void NestedLoadTest()
         {
-            var settings = _loader.Create<NestedSettings>();
+            var settings = SettingsLoader.Create<NestedSettings>();
 
             // Nested
             Assert.That(settings, Is.DeepEqualTo(
@@ -112,7 +110,7 @@ namespace Miracle.Settings.Tests
         [Test]
         public void ArrayLoadTest()
         {
-            var settings = _loader.Create<ArraySettings>();
+            var settings = SettingsLoader.Create<ArraySettings>();
 
             // Array
             Assert.That(settings.MySimpleArrayProperty, Is.EqualTo(
@@ -138,7 +136,7 @@ namespace Miracle.Settings.Tests
         [Test]
         public void ListLoadTest()
         {
-            var settings = _loader.Create<ListSettings>();
+            var settings = SettingsLoader.Create<ListSettings>();
 
             // List
             Assert.That(settings.MySimpleListProperty, Is.DeepEqualTo(
@@ -158,7 +156,7 @@ namespace Miracle.Settings.Tests
         [Test]
         public void DictionaryLoadTest()
         {
-            var settings = _loader.Create<DictionarySettings>();
+            var settings = SettingsLoader.Create<DictionarySettings>();
 
             // Various Dictionarys 
             Assert.That(settings.MySimpleDictionaryProperty, Is.DeepEqualTo(
@@ -185,7 +183,7 @@ namespace Miracle.Settings.Tests
         [Test]
         public void CreateDictionaryLoadTest()
         {
-            var settings = _loader.CreateDictionary<AnimalType, Animal>("Animals");
+            var settings = SettingsLoader.CreateDictionary<AnimalType, Animal>("Animals");
 
             // Dictionary with non string TKey
             Assert.That(settings, Is.DeepEqualTo(
