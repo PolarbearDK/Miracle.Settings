@@ -49,6 +49,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <Choose>
@@ -60,6 +61,8 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="DatabaseTest\SampleSqlValueProvider.cs" />
+    <Compile Include="DatabaseTest\SampleSqlValueProviderTests.cs" />
     <Compile Include="GenericTests.cs" />
     <Compile Include="LoadFailTests.cs" />
     <Compile Include="LoadTestBase.cs" />

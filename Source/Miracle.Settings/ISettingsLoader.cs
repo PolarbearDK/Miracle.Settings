@@ -19,20 +19,20 @@ namespace Miracle.Settings
         /// Create array of type T from settings prefixed by <param name="prefix"/>
         /// </summary>
         /// <param name="prefix">The prefix of all settings in the array</param>
-        T[] CreateArray<T>(string prefix);
+        T[] CreateArray<T>(string prefix = null);
 
         /// <summary>
         /// Create list from settings prefixed by <param name="prefix"/>
         /// </summary>
         /// <param name="prefix">The prefix of all settings in the array</param>
-        List<T> CreateList<T>(string prefix);
+        List<T> CreateList<T>(string prefix = null);
 
         /// <summary>
         /// Create dictionary from settings prefixed by <param name="prefix"/>
         /// </summary>
         /// <param name="prefix">The prefix of all settings in the dictionary</param>
         /// <param name="comparer">Optional dictionary key comparer</param>
-        Dictionary<TKey, TValue> CreateDictionary<TKey, TValue>(string prefix, IEqualityComparer<TKey> comparer = null);
+        Dictionary<TKey, TValue> CreateDictionary<TKey, TValue>(string prefix = null, IEqualityComparer<TKey> comparer = null);
 
         /// <summary>
         /// Load settings prefixed by <param name="prefix"/> into existing object instance

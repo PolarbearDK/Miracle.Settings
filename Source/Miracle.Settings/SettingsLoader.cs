@@ -112,7 +112,7 @@ namespace Miracle.Settings
 
             return GetCollectionPrefixes(prefix)?
                 .ToDictionary(
-                    x => (TKey)ChangeType(x.Substring(prefix.Length), typeof(TKey)), 
+                    x => (TKey)ChangeType(prefix != null ? x.Substring(prefix.Length) : x, typeof(TKey)), 
                     Create<TValue>,
                     comparer);
         }
@@ -166,7 +166,8 @@ namespace Miracle.Settings
         /// <returns></returns>
         private string GetCollectionSelector(string prefix, string key)
         {
-            var pos = key.IndexOf(PropertySeparator, prefix.Length + PropertySeparator.Length, StringComparison.InvariantCulture);
+            var toskip = (prefix != null ? prefix.Length : 0) + PropertySeparator.Length;
+            var pos = key.IndexOf(PropertySeparator, toskip, StringComparison.InvariantCulture);
             return pos == -1 ? key : key.Substring(0, pos);
         }
 
