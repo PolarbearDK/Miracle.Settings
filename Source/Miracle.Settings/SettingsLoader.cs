@@ -177,7 +177,9 @@ namespace Miracle.Settings
         /// <returns>properties that are to be loaded on type <typeparam name="T" /></returns>
         protected virtual IEnumerable<PropertyInfo> GetLoadableProperties<T>()
         {
-            return typeof(T).GetProperties(BindingFlags.Instance | BindingFlags.Public);
+            return typeof(T)
+                .GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                .Where(x => x.CanWrite);
         }
 
         /// <summary>
