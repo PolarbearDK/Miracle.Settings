@@ -10,7 +10,7 @@ namespace Miracle.Settings.Tests
         {
             SettingsLoader = new SettingsLoader()
                 .AddTypeConverter(s => XmlConvert.ToDateTime(s, XmlDateTimeSerializationMode.Local))
-                .AddProvider(new EnvironmentProvider());
+                .AddProvider(new EnvironmentValueProvider());
         }
     }
 }

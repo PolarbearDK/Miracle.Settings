@@ -2,6 +2,9 @@ using System.Collections.Generic;
 
 namespace Miracle.Settings
 {
+    /// <summary>
+    /// The interface describing Value providers.
+    /// </summary>
     public interface IValueProvider
     {
         /// <summary>

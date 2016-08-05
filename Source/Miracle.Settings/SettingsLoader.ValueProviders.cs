@@ -13,7 +13,7 @@ namespace Miracle.Settings
         {
             return new List<IValueProvider>
             {
-                new AppSettingsProvider()
+                new AppSettingsValueProvider()
             };
         }
 

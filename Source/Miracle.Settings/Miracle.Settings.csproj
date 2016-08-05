@@ -41,10 +41,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppSettingsProvider.cs" />
+    <Compile Include="AppSettingsValueProvider.cs" />
     <Compile Include="DefaultChangeTypeConverter.cs" />
     <Compile Include="EnumTypeConverter.cs" />
-    <Compile Include="EnvironmentProvider.cs" />
+    <Compile Include="EnvironmentValueProvider.cs" />
     <Compile Include="GenericTypeExtensions.cs" />
     <Compile Include="ISettingsLoader.cs" />
     <Compile Include="ITypeConverter.cs" />

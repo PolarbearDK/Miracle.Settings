@@ -165,7 +165,7 @@ When loading a strong typed object, the following rules apply:
 1. A value MUST be provided for each public property with a setter, or an exception is thrown.
 2. Values are attempted loaded from value providers in the order they are specified. DefaultValueAttribute is always considered last.
 3. Values are converted to target type using custom "TypeConverters" with fallback to Convert.ChangeType. Add custom type converter using: AddTypeConverter.
-4. The key of the setting being loaded is calcualted as: (Prefix + PropertySeparator) + Name. No PropertySeparator is applied if Prefix is null (root). Name is the name of the property, but this can be overwritten by applying a SettingAttribute.
+4. The key of the setting being loaded is calcualted as: (Prefix + PropertySeparator) + Name. No PropertySeparator is applied if Prefix is null (root). Name is the name of the property, but this can be overwritten by applying a SettingAttribute with "Name" property.
 5. TODO more rules
 
 

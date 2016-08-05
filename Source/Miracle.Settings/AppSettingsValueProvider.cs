@@ -7,7 +7,7 @@ namespace Miracle.Settings
     /// <summary>
     /// Value provider using ConfigurationManager.AppSettings as values
     /// </summary>
-    public class AppSettingsProvider : IValueProvider
+    public class AppSettingsValueProvider : IValueProvider
     {
         public bool TryGetValue(string key, out string value)
         {

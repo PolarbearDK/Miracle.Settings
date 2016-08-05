@@ -7,7 +7,7 @@ namespace Miracle.Settings
     /// <summary>
     /// Value provider using environment variables as values
     /// </summary>
-    public class EnvironmentProvider : IValueProvider
+    public class EnvironmentValueProvider : IValueProvider
     {
         public bool TryGetValue(string key, out string value)
         {

@@ -4,7 +4,9 @@ Type converters controls how a value is constructed from one or more settings.
 
 ## Custom Type Converter
 You can add custom type converters for types not supported out of the box.
-A good examle is DateTime which doesn't have a default converter due to string representation varies with localization.
+A good examle is DateTime where string representation varies with localization. 
+If you want a more "stable" representation you could use ISO 8601 format.
+
 
 Sample:
 ```XML
