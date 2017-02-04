@@ -13,27 +13,7 @@ namespace Miracle.Settings.Tests.DatabaseTest
     class SampleSqlValueProviderTests
     {
         /*
-        * Requires SQL script:
-        * 
-        USE [Settings]
-        GO
-
-        DROP TABLE [dbo].[Setting]
-        GO
-
-        CREATE TABLE [dbo].[Setting]
-        (
-            [Key] NVARCHAR(50) NOT NULL PRIMARY KEY, 
-            [Value] NVARCHAR(MAX) NULL
-        )
-        GO
-
-        INSERT INTO  [dbo].[Setting] ([Key],[Value])
-        VALUES 
-        (N'Foo', N'Foo from database'),
-        (N'Bar', N'14'),
-        (N'Baz', N'hello world')
-
+        * Requires SQL server to test: Run script setup_database.sql
         */
 
         private IDbConnection _connection;
@@ -42,7 +22,7 @@ namespace Miracle.Settings.Tests.DatabaseTest
         [SetUp]
         public void SetUp()
         {
-            _connection = new SqlConnection("Data Source=.;Database=Settings;Trusted_Connection=Yes");
+            _connection = new SqlConnection("Data Source=.;Database=SettingsUnitTest;Trusted_Connection=Yes");
             _connection.Open();
             _settingLoader = new SettingsLoader()
                 .ClearProviders()

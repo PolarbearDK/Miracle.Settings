@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using Miracle.Settings.Properties;
@@ -23,8 +24,9 @@ namespace Miracle.Settings
             return new List<ITypeConverter>()
             {
                 new SimpleTypeConverter<Guid>(Guid.Parse),
-                new SimpleTypeConverter<TimeSpan>(TimeSpan.Parse),
-                new UriTypeConverter(),
+				new SimpleTypeConverter<TimeSpan>(TimeSpan.Parse),
+				new FileInfoTypeConverter(Path.GetFullPath, required: false),
+				new UriTypeConverter(),
                 new EnumTypeConverter(),
                 new DefaultChangeTypeConverter(),
             };

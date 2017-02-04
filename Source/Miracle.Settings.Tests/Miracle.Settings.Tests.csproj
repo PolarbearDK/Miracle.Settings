@@ -66,6 +66,7 @@
     <Compile Include="GenericTests.cs" />
     <Compile Include="LoadFailTests.cs" />
     <Compile Include="LoadTestBase.cs" />
+    <Compile Include="PathLoadTests.cs" />
     <Compile Include="LoadTests.cs" />
     <Compile Include="SampleSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -81,6 +82,9 @@
       <Project>{A1351FB7-62E7-4AC9-B3C0-1AA87E31DBA8}</Project>
       <Name>Miracle.Config</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DatabaseTest\setup_database.sql" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

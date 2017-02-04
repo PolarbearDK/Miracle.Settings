@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Reflection;
 // ReSharper disable ClassNeverInstantiated.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Local
@@ -67,7 +68,25 @@ namespace Miracle.Settings.Tests
         public Guid Guid6 { get; private set; }
     }
 
-    public class NestedSettings
+	public class PathSettings
+	{
+		// -- Values with Setting Attribute --
+		[Setting(PathOptions=PathOptions.MustExist)]
+		public FileInfo SimpleFile { get; private set; }
+		[Setting("FullFile")]
+		public FileInfo FullFileInfo { get; private set; }
+		[Setting("RelativeFile")]
+		public FileInfo RelativeFileInfo { get; private set; }
+
+		[Setting(PathOptions = PathOptions.MustExist)]
+		public DirectoryInfo SimpleDirectory { get; private set; }
+		[Setting("FullDirectory")]
+		public DirectoryInfo FullDirInfo { get; private set; }
+		[Setting("RelativeDirectory")]
+		public DirectoryInfo RelativeDirInfo { get; private set; }
+	}
+
+	public class NestedSettings
     {
         public Nested MyNestedProperty { get; set; }
     }
