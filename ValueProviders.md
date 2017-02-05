@@ -5,8 +5,9 @@ Value providers provides the string values that SettingLoader use to initialize 
 
 
 ## Built in ValueProviders
-- __AppSettingsValueProvider__ (Default) - Load from AppSettings
-- __EnvironmentValueProvider__ - Load from Environment.
+- __AppSettingsValueProvider__ (Default) - Load string from AppSettings
+- __EnvironmentValueProvider__ - Load strings from Environment.
+
 
 ## Change value provider
 Value providers can be changed using the following SettingLoader methods:

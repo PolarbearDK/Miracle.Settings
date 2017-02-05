@@ -3,13 +3,6 @@ using System.Linq;
 
 namespace Miracle.Settings
 {
-	[Flags]
-	public enum PathOptions
-	{
-		MustExist = 1,
-		Create = 2,
-	}
-
 	/// <summary>
     /// Describe how to construct the value of a property
     /// </summary>
@@ -20,11 +13,6 @@ namespace Miracle.Settings
         /// Name of setting
         /// </summary>
         public string Name { get; set; }
-
-		/// <summary>
-		/// Name of setting
-		/// </summary>
-		public PathOptions PathOptions { get; set; }
 
 		/// <summary>
 		/// Add additional settings reference used by typeconverter to construct this property
@@ -42,9 +30,9 @@ namespace Miracle.Settings
         /// <summary>
         /// Construct property value using specific type converter
         /// </summary>
-        public Type TypeConverter { get; set; } 
+        public Type TypeConverter { get; set; }
 
-        /// <summary>
+	    /// <summary>
         /// Construct setting attribute
         /// </summary>
         public SettingAttribute()

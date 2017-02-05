@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
-using System.Reflection;
+using System.Web.Hosting;
 using Miracle.Settings.Properties;
 
 namespace Miracle.Settings
@@ -25,8 +25,9 @@ namespace Miracle.Settings
             {
                 new SimpleTypeConverter<Guid>(Guid.Parse),
 				new SimpleTypeConverter<TimeSpan>(TimeSpan.Parse),
-				new FileInfoTypeConverter(Path.GetFullPath, required: false),
-				new UriTypeConverter(),
+                new FileInfoTypeConverter(HostingEnvironment.MapPath, required:true),
+                new FileInfoTypeConverter(Path.GetFullPath, required:true),
+                new UriTypeConverter(),
                 new EnumTypeConverter(),
                 new DefaultChangeTypeConverter(),
             };
@@ -96,14 +97,25 @@ namespace Miracle.Settings
             }
         }
 
+        /// <summary>
+        /// Remove instance of type converter from list of type converters.
+        /// </summary>
+        /// <param name="typeConverter">The type converter instance to remove.</param>
+        /// <returns></returns>
         public SettingsLoader RemoveTypeConverter(ITypeConverter typeConverter)
         {
             TypeConverters.Remove(typeConverter);
             return this;
         }
 
+        /// <summary>
+        /// Add type converter instance to front of list of type converters.
+        /// </summary>
+        /// <param name="typeConverter"></param>
+        /// <returns></returns>
         public SettingsLoader AddTypeConverter(ITypeConverter typeConverter)
         {
+            // Insert at top of list.
             TypeConverters.Insert(0, typeConverter);
             return this;
         }
