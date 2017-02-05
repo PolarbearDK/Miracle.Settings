@@ -27,6 +27,8 @@ namespace Miracle.Settings
 				new SimpleTypeConverter<TimeSpan>(TimeSpan.Parse),
                 new FileInfoTypeConverter(HostingEnvironment.MapPath, required:true),
                 new FileInfoTypeConverter(Path.GetFullPath, required:true),
+                new DirectoryInfoTypeConverter(HostingEnvironment.MapPath, required:true),
+                new DirectoryInfoTypeConverter(Path.GetFullPath, required:true),
                 new UriTypeConverter(),
                 new EnumTypeConverter(),
                 new DefaultChangeTypeConverter(),
