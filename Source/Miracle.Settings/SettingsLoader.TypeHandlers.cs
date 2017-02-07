@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
@@ -45,7 +44,7 @@ namespace Miracle.Settings
                 list.Add(string.Empty);
                 var values = list.ToArray();
                 if (TypeConverters.Any(x => x.CanConvert(values, propertyInfo.PropertyType)))
-                    throw new ConfigurationErrorsException(string.Format(Resources.MissingValueFormat,key));
+                    throw new ConfigurationErrorsException(string.Format(Resources.MissingValueFormat, propertyInfo.PropertyType, key));
             }
             value = null;
             return false;
@@ -68,7 +67,7 @@ namespace Miracle.Settings
                 if (TryGetPropertyValue(propertyInfo, key, out value))
                     return true;
 
-                throw new ConfigurationErrorsException(string.Format(Resources.MissingArrayValueFormat, key));
+                throw new ConfigurationErrorsException(string.Format(Resources.MissingValueFormat, propertyType, key));
             }
             value = null;
             return false;
@@ -91,7 +90,7 @@ namespace Miracle.Settings
                 if (TryGetPropertyValue(propertyInfo, key, out value))
                     return true;
 
-                throw new ConfigurationErrorsException(string.Format(Resources.MissingListValueFormat, key));
+                throw new ConfigurationErrorsException(string.Format(Resources.MissingValueFormat, propertyType, key));
             }
             value = null;
             return false;
@@ -114,7 +113,7 @@ namespace Miracle.Settings
                 if (TryGetPropertyValue(propertyInfo, key, out value))
                     return true;
 
-                throw new ConfigurationErrorsException(string.Format(Resources.MissingDictionaryValueFormat, key));
+                throw new ConfigurationErrorsException(string.Format(Resources.MissingValueFormat, propertyType, key));
             }
             value = null;
             return false;

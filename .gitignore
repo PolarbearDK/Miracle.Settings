@@ -201,3 +201,4 @@ Logs/
 # Ignore _CodeDeploy build folder and output
 _[Cc]ode[Dd]eploy
 *_Revision_*.zip
+AppReadme/

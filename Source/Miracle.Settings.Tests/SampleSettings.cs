@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Reflection;
 // ReSharper disable ClassNeverInstantiated.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Local
@@ -67,7 +68,27 @@ namespace Miracle.Settings.Tests
         public Guid Guid6 { get; private set; }
     }
 
-    public class NestedSettings
+    public class FileSettings
+    {
+        public FileInfo SimpleFile { get; private set; }
+        public FileInfo PartialFile { get; private set; }
+		[Setting("FullFile")]
+		public FileInfo FullFileInfo { get; private set; }
+		[Setting("RelativeFile", Reference = "RelativeDirectory")]
+        public FileInfo RelativeFileInfo { get; private set; }
+    }
+
+    public class DirectorySettings
+    {
+        public DirectoryInfo SimpleDirectory { get; private set; }
+		public DirectoryInfo PartialDirectory { get; private set; }
+		[Setting("FullDirectory")]
+        public DirectoryInfo FullDirectoryInfo { get; private set; }
+		[Setting("RelativeDirectory2", Reference = "RelativeDirectory")]
+		public DirectoryInfo RelativeDirectoryInfo { get; private set; }
+	}
+
+	public class NestedSettings
     {
         public Nested MyNestedProperty { get; set; }
     }
@@ -131,17 +152,17 @@ namespace Miracle.Settings.Tests
 
     public class MissingDateTimeSetting
     {
-        public string MissingDateTime { get; set; }
+        public DateTime MissingDateTime { get; set; }
     }
 
     public class MissingIntSetting
     {
-        public string MissingInt { get; set; }
+        public int MissingInt { get; set; }
     }
 
     public class MissingTimeSpanSetting
     {
-        public string MissingTimeSpan { get; set; }
+        public TimeSpan MissingTimeSpan { get; set; }
     }
 
     public class MissingUriSetting
@@ -149,7 +170,17 @@ namespace Miracle.Settings.Tests
         public Uri MissingUri { get; set; }
     }
 
-    public class BadTypeConverterSetting
+	public class MissingFileInfoSetting
+	{
+		public FileInfo MissingFile { get; set; }
+	}
+
+	public class MissingDirectoryInfoSetting
+	{
+		public DirectoryInfo MissingDir { get; set; }
+	}
+
+	public class BadTypeConverterSetting
     {
         [Setting(TypeConverter = typeof(string))]
         [DefaultValue("Bar")]

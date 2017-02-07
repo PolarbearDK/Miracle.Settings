@@ -135,19 +135,10 @@
   <data name="ExplicitTypeConverterErrorFormat" xml:space="preserve">
     <value>Unable to convert values: {0} into type {1} using specified type converter</value>
   </data>
-  <data name="MissingArrayValueFormat" xml:space="preserve">
-    <value>An array value has to be provided for prefix: {0}</value>
-  </data>
-  <data name="MissingDictionaryValueFormat" xml:space="preserve">
-    <value>A dictionary value has to be provided for prefix: {0}</value>
-  </data>
-  <data name="MissingListValueFormat" xml:space="preserve">
-    <value>A list value has to be provided for prefix: {0}</value>
-  </data>
   <data name="MissingReferenceValueFormat" xml:space="preserve">
     <value>A value has to be provided for referenced Setting: {0}</value>
   </data>
   <data name="MissingValueFormat" xml:space="preserve">
-    <value>A value has to be provided for Setting: {0}</value>
+    <value>A value of type {0} has to be provided for Setting: {1}</value>
   </data>
 </root>

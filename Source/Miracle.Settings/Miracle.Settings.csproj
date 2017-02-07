@@ -33,6 +33,7 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -43,8 +44,10 @@
   <ItemGroup>
     <Compile Include="AppSettingsValueProvider.cs" />
     <Compile Include="DefaultChangeTypeConverter.cs" />
+    <Compile Include="DirectoryInfoTypeConverter.cs" />
     <Compile Include="EnumTypeConverter.cs" />
     <Compile Include="EnvironmentValueProvider.cs" />
+    <Compile Include="FileInfoTypeConverter.cs" />
     <Compile Include="GenericTypeExtensions.cs" />
     <Compile Include="ISettingsLoader.cs" />
     <Compile Include="ITypeConverter.cs" />
@@ -70,6 +73,9 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Miracle.Settings.nuspec" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

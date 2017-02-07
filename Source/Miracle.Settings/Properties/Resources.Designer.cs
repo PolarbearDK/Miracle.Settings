@@ -115,33 +115,6 @@ namespace Miracle.Settings.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An array value has to be provided for prefix: {0}.
-        /// </summary>
-        internal static string MissingArrayValueFormat {
-            get {
-                return ResourceManager.GetString("MissingArrayValueFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to A dictionary value has to be provided for prefix: {0}.
-        /// </summary>
-        internal static string MissingDictionaryValueFormat {
-            get {
-                return ResourceManager.GetString("MissingDictionaryValueFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to A list value has to be provided for prefix: {0}.
-        /// </summary>
-        internal static string MissingListValueFormat {
-            get {
-                return ResourceManager.GetString("MissingListValueFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to A value has to be provided for referenced Setting: {0}.
         /// </summary>
         internal static string MissingReferenceValueFormat {
@@ -151,7 +124,7 @@ namespace Miracle.Settings.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A value has to be provided for Setting: {0}.
+        ///   Looks up a localized string similar to A value of type {0} has to be provided for Setting: {1}.
         /// </summary>
         internal static string MissingValueFormat {
             get {

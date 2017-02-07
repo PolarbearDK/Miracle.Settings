@@ -2,15 +2,25 @@ using System.Xml;
 
 namespace Miracle.Settings.Tests
 {
-    public abstract class LoadTestBase
+    public abstract class LoadTestBase: LoadFailTestBase
     {
         protected readonly ISettingsLoader SettingsLoader;
 
-        protected LoadTestBase()
-        {
-            SettingsLoader = new SettingsLoader()
-                .AddTypeConverter(s => XmlConvert.ToDateTime(s, XmlDateTimeSerializationMode.Local))
-                .AddProvider(new EnvironmentValueProvider());
-        }
-    }
+		protected LoadTestBase(ISettingsLoader settingsLoader)
+		{
+			SettingsLoader = settingsLoader;
+		}
+
+		//protected LoadTestBase()
+		//	: this(new SettingsLoader()
+		//		.AddTypeConverter(s => XmlConvert.ToDateTime(s, XmlDateTimeSerializationMode.Local))
+		//		.AddProvider(new EnvironmentValueProvider()))
+  //      {
+  //      }
+
+		protected void AssertThrowsConfigurationErrorsExceptionMessageTest<T>(string format, params object[] args)
+		{
+			AssertThrowsConfigurationErrorsExceptionMessageTest(() => SettingsLoader.Create<T>(NotFoundPrefix), format, args);
+		}
+	}
 }

@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Runtime.Versioning;
+using Miracle.Settings.Properties;
 using NUnit.Framework;
 using Is = NUnit.DeepObjectCompare.Is;
 
@@ -10,56 +13,48 @@ namespace Miracle.Settings.Tests.DatabaseTest
 
     [TestFixture]
     [Category("Integration")]
-    class SampleSqlValueProviderTests
-    {
+    class SampleSqlValueProviderTests: LoadTestBase, IDisposable
+	{
         /*
-        * Requires SQL script:
-        * 
-        USE [Settings]
-        GO
-
-        DROP TABLE [dbo].[Setting]
-        GO
-
-        CREATE TABLE [dbo].[Setting]
-        (
-            [Key] NVARCHAR(50) NOT NULL PRIMARY KEY, 
-            [Value] NVARCHAR(MAX) NULL
-        )
-        GO
-
-        INSERT INTO  [dbo].[Setting] ([Key],[Value])
-        VALUES 
-        (N'Foo', N'Foo from database'),
-        (N'Bar', N'14'),
-        (N'Baz', N'hello world')
-
+        * Requires SQL server to test: Run script setup_database.sql
         */
 
-        private IDbConnection _connection;
-        private ISettingsLoader _settingLoader;
+        private readonly IDbConnection _connection;
 
-        [SetUp]
+		public void Dispose()
+		{
+			_connection?.Dispose();
+		}
+
+		public SampleSqlValueProviderTests(IDbConnection connection)
+			: base(new SettingsLoader()
+				.ClearProviders()
+				.AddProvider(new SampleSqlValueProvider(connection)))
+		{
+			_connection = connection;
+		}
+
+		public SampleSqlValueProviderTests()
+			:this(new SqlConnection("Data Source=.;Database=SettingsUnitTest;Trusted_Connection=Yes"))
+		{
+		}
+
+		[SetUp]
         public void SetUp()
         {
-            _connection = new SqlConnection("Data Source=.;Database=Settings;Trusted_Connection=Yes");
-            _connection.Open();
-            _settingLoader = new SettingsLoader()
-                .ClearProviders()
-                .AddProvider(new SampleSqlValueProvider(_connection));
-        }
+			_connection.Open();
+		}
 
-        [TearDown]
+		[TearDown]
         public void TearDown()
         {
             _connection.Close();
-            _connection.Dispose();
         }
 
         [Test]
         public void GetValueTest()
         {
-            var result = _settingLoader.Create<string>("Foo");
+            var result = SettingsLoader.Create<string>("Foo");
 
             Assert.That(result, Is.EqualTo("Foo from database"));
         }
@@ -67,7 +62,7 @@ namespace Miracle.Settings.Tests.DatabaseTest
         [Test]
         public void GetKeysTest()
         {
-            var dictionary = _settingLoader.CreateDictionary<string, string>();
+            var dictionary = SettingsLoader.CreateDictionary<string, string>();
 
             Assert.That(dictionary, Is.DeepEqualTo(
                 new Dictionary<string, string>
@@ -81,7 +76,7 @@ namespace Miracle.Settings.Tests.DatabaseTest
         [Test]
         public void GetNestedFromDatabase()
         {
-            var dictionary = _settingLoader.Create<Nested>();
+            var dictionary = SettingsLoader.Create<Nested>();
 
             Assert.That(dictionary, Is.DeepEqualTo(
                 new Nested
@@ -91,22 +86,25 @@ namespace Miracle.Settings.Tests.DatabaseTest
                 }));
         }
 
-        [Test]
-        public void GetValueNotFoundTest()
-        {
-            var result = _settingLoader.Create<string>("NotFound");
-            Assert.That(result, Is.Null);
-        }
+		[Test]
+		public void CreateMissingStringTest()
+		{
+			AssertThrowsConfigurationErrorsExceptionMessageTest<string>(
+				Resources.MissingValueFormat, typeof(string), GetKey(NotFoundPrefix));
+		}
+
+		[Test]
+		public void CreateMissingNumericTest()
+		{
+			AssertThrowsConfigurationErrorsExceptionMessageTest<int>(
+				Resources.MissingValueFormat, typeof(int), GetKey(NotFoundPrefix));
+		}
 
         [Test]
         public void GetNestedSettingsNotFoundTest()
         {
-            var ex = Assert.Throws<ConfigurationErrorsException>(() =>
-            {
-                var result = _settingLoader.Create<NestedSettings>("NotFound");
-            });
-            Assert.That(ex, Has.Message.EqualTo("A value has to be provided for Setting: NotFound.MyNestedProperty.Foo"));
+			AssertThrowsConfigurationErrorsExceptionMessageTest<NestedSettings>(
+				Resources.MissingValueFormat, typeof(string), GetKey(NotFoundPrefix, nameof(NestedSettings.MyNestedProperty), nameof(Nested.Foo)));
         }
-
-    }
+	}
 }

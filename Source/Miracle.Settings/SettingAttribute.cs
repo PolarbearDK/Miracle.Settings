@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Miracle.Settings
 {
-    /// <summary>
+	/// <summary>
     /// Describe how to construct the value of a property
     /// </summary>
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
@@ -14,10 +14,10 @@ namespace Miracle.Settings
         /// </summary>
         public string Name { get; set; }
 
-        /// <summary>
-        /// Add additional settings reference used by typeconverter to construct this property
-        /// </summary>
-        public string Reference
+		/// <summary>
+		/// Add additional settings reference used by typeconverter to construct this property
+		/// </summary>
+		public string Reference
         {
             get { return References != null ? References.FirstOrDefault() : null; }
             set { References = new[] {value}; }
@@ -30,9 +30,9 @@ namespace Miracle.Settings
         /// <summary>
         /// Construct property value using specific type converter
         /// </summary>
-        public Type TypeConverter { get; set; } 
+        public Type TypeConverter { get; set; }
 
-        /// <summary>
+	    /// <summary>
         /// Construct setting attribute
         /// </summary>
         public SettingAttribute()

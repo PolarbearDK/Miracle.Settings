@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
-using System.Reflection;
+using System.Web.Hosting;
 using Miracle.Settings.Properties;
 
 namespace Miracle.Settings
@@ -23,20 +24,35 @@ namespace Miracle.Settings
             return new List<ITypeConverter>()
             {
                 new SimpleTypeConverter<Guid>(Guid.Parse),
-                new SimpleTypeConverter<TimeSpan>(TimeSpan.Parse),
+				new SimpleTypeConverter<TimeSpan>(TimeSpan.Parse),
+                new FileInfoTypeConverter(HostingEnvironment.MapPath, required:true),
+                new FileInfoTypeConverter(Path.GetFullPath, required:true),
+                new DirectoryInfoTypeConverter(HostingEnvironment.MapPath, required:true),
+                new DirectoryInfoTypeConverter(Path.GetFullPath, required:true),
                 new UriTypeConverter(),
                 new EnumTypeConverter(),
                 new DefaultChangeTypeConverter(),
             };
         }
 
-        /// <summary>
-        /// Convert value into instance of type conversionType
-        /// </summary>
-        /// <param name="value">the value to convert</param>
-        /// <param name="conversionType">The type to convert to</param>
-        /// <returns></returns>
-        private object ChangeType(object value, Type conversionType)
+		/// <summary>
+		/// Convert value into instance of type conversionType
+		/// </summary>
+		/// <param name="values">the values to convert</param>
+		/// <param name="conversionType">The type to convert to</param>
+		/// <returns></returns>
+		private bool CanChangeType(object[] values, Type conversionType)
+		{
+			return TypeConverters.Any(typeConverter => typeConverter.CanConvert(values, conversionType));
+		}
+
+		/// <summary>
+		/// Convert value into instance of type conversionType
+		/// </summary>
+		/// <param name="value">the value to convert</param>
+		/// <param name="conversionType">The type to convert to</param>
+		/// <returns></returns>
+		private object ChangeType(object value, Type conversionType)
         {
             return ChangeType(new[] {value}, conversionType);
         }
@@ -94,14 +110,25 @@ namespace Miracle.Settings
             }
         }
 
+        /// <summary>
+        /// Remove instance of type converter from list of type converters.
+        /// </summary>
+        /// <param name="typeConverter">The type converter instance to remove.</param>
+        /// <returns></returns>
         public SettingsLoader RemoveTypeConverter(ITypeConverter typeConverter)
         {
             TypeConverters.Remove(typeConverter);
             return this;
         }
 
+        /// <summary>
+        /// Add type converter instance to front of list of type converters.
+        /// </summary>
+        /// <param name="typeConverter"></param>
+        /// <returns></returns>
         public SettingsLoader AddTypeConverter(ITypeConverter typeConverter)
         {
+            // Insert at top of list.
             TypeConverters.Insert(0, typeConverter);
             return this;
         }
