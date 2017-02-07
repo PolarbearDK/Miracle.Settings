@@ -35,13 +35,24 @@ namespace Miracle.Settings
             };
         }
 
-        /// <summary>
-        /// Convert value into instance of type conversionType
-        /// </summary>
-        /// <param name="value">the value to convert</param>
-        /// <param name="conversionType">The type to convert to</param>
-        /// <returns></returns>
-        private object ChangeType(object value, Type conversionType)
+		/// <summary>
+		/// Convert value into instance of type conversionType
+		/// </summary>
+		/// <param name="values">the values to convert</param>
+		/// <param name="conversionType">The type to convert to</param>
+		/// <returns></returns>
+		private bool CanChangeType(object[] values, Type conversionType)
+		{
+			return TypeConverters.Any(typeConverter => typeConverter.CanConvert(values, conversionType));
+		}
+
+		/// <summary>
+		/// Convert value into instance of type conversionType
+		/// </summary>
+		/// <param name="value">the value to convert</param>
+		/// <param name="conversionType">The type to convert to</param>
+		/// <returns></returns>
+		private object ChangeType(object value, Type conversionType)
         {
             return ChangeType(new[] {value}, conversionType);
         }

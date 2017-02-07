@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Xml;
 using KellermanSoftware.CompareNetObjects;
 using NUnit.Framework;
 using Is = NUnit.DeepObjectCompare.Is;
@@ -10,7 +11,14 @@ namespace Miracle.Settings.Tests
     [TestFixture]
     public class LoadTests : LoadTestBase
     {
-        [Test]
+	    public LoadTests()
+		    : base(new SettingsLoader()
+			    .AddTypeConverter(s => XmlConvert.ToDateTime(s, XmlDateTimeSerializationMode.Local))
+			    .AddProvider(new EnvironmentValueProvider()))
+	    {
+	    }
+
+	    [Test]
         public void DefaultLoadTest()
         {
             var settings = SettingsLoader.Create<DefaultSettings>();
@@ -123,7 +131,48 @@ namespace Miracle.Settings.Tests
                 {
                     1, 2, 3, 4
                 }));
-            Assert.That(settings.MyArrayProperty, Is.DeepEqualTo(
+			Assert.That(settings.MyArrayProperty, Is.DeepEqualTo(
+                new[]
+                {
+                    new Nested {Foo = "Foo Primary", Bar = 420},
+                    new Nested {Foo = "Foo 1", Bar = 421},
+                    new Nested {Foo = "Foo 2", Bar = 422},
+                }));
+        }
+
+		[Test]
+        public void DirectStringArrayLoadTest()
+        {
+            var settings = SettingsLoader.CreateArray<string>("MySimpleArrayProperty");
+
+            // Array
+            Assert.That(settings, Is.EqualTo(
+                new[]
+                {
+                    "Foo Primary", "Foo 1", "Foo 2"
+                }));
+        }
+
+		[Test]
+        public void DirectNumericArrayLoadTest()
+        {
+            var settings = SettingsLoader.CreateArray<int>("MyNumericArrayProperty");
+
+            // Array
+            Assert.That(settings, Is.DeepEqualTo(
+                new int[]
+                {
+                    1, 2, 3, 4
+                }));
+        }
+
+		[Test]
+        public void DirectClassArrayLoadTest()
+        {
+            var settings = SettingsLoader.CreateArray<Nested>("MyArrayProperty");
+
+            // Array
+            Assert.That(settings, Is.DeepEqualTo(
                 new[]
                 {
                     new Nested {Foo = "Foo Primary", Bar = 420},
@@ -158,7 +207,7 @@ namespace Miracle.Settings.Tests
         {
             var settings = SettingsLoader.Create<DictionarySettings>();
 
-            // Various Dictionarys 
+            // Various Dictionarys
             Assert.That(settings.MySimpleDictionaryProperty, Is.DeepEqualTo(
                 new Dictionary<string, string>
                 {

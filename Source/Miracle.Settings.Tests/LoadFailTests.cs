@@ -1,92 +1,110 @@
 using System;
-using System.Configuration;
+using System.Collections.Generic;
+using System.IO;
 using NUnit.Framework;
 using Miracle.Settings.Properties;
 
 namespace Miracle.Settings.Tests
 {
-    [TestFixture]
+	[TestFixture]
     public class LoadFailTests : LoadTestBase
     {
-        private const string Prefix = "Missing";
+		public LoadFailTests()
+			: base(new SettingsLoader())
+		{
+		}
 
-        private string GetKey(params string[] elements)
-        {
-            return string.Join(".", elements);
-        }
+		[Test]
+		public void CreateMissingStringTest()
+		{
+			AssertThrowsConfigurationErrorsExceptionMessageTest<string>(
+				Resources.MissingValueFormat, typeof(string), GetKey(NotFoundPrefix));
+		}
 
-        private void AssertThrowsConfigurationErrorsExceptionMessageTest<T>(string format, params object[] args)
-        {
-            var ex = Assert.Throws<ConfigurationErrorsException>(() => SettingsLoader.Create<T>(Prefix));
-            Console.WriteLine(ex);
-            var expectedMessage = string.Format(format, args);
-            Assert.That(ex.Message, Is.EqualTo(expectedMessage));
-        }
+		[Test]
+		public void CreateMissingNumericTest()
+		{
+			AssertThrowsConfigurationErrorsExceptionMessageTest<int>(
+				Resources.MissingValueFormat, typeof(int), GetKey(NotFoundPrefix));
+		}
 
-        [Test]
-        public void CreateMissingStringSettingTest()
-        {
-            AssertThrowsConfigurationErrorsExceptionMessageTest<MissingStringSetting>(
-                Resources.MissingValueFormat, GetKey(Prefix, nameof(MissingStringSetting.MissingString)));
-        }
+		[Test]
+		public void CreateMissingStringSettingTest()
+		{
+			AssertThrowsConfigurationErrorsExceptionMessageTest<MissingStringSetting>(
+				Resources.MissingValueFormat, typeof(String), GetKey(NotFoundPrefix, nameof(MissingStringSetting.MissingString)));
+		}
 
-        [Test]
+		[Test]
         public void CreateMissingDateTimeSettingTest()
         {
             AssertThrowsConfigurationErrorsExceptionMessageTest<MissingDateTimeSetting>(
-                Resources.MissingValueFormat, GetKey(Prefix, nameof(MissingDateTimeSetting.MissingDateTime)));
+                Resources.MissingValueFormat, typeof(DateTime), GetKey(NotFoundPrefix, nameof(MissingDateTimeSetting.MissingDateTime)));
         }
 
         [Test]
         public void CreateMissingUriSettingTest()
         {
             AssertThrowsConfigurationErrorsExceptionMessageTest<MissingUriSetting>(
-                Resources.MissingValueFormat, GetKey(Prefix, nameof(MissingUriSetting.MissingUri)));
+                Resources.MissingValueFormat, typeof(Uri), GetKey(NotFoundPrefix, nameof(MissingUriSetting.MissingUri)));
         }
 
         [Test]
         public void CreateMissingTimeSpanSettingTest()
         {
             AssertThrowsConfigurationErrorsExceptionMessageTest<MissingTimeSpanSetting>(
-                Resources.MissingValueFormat, GetKey(Prefix, nameof(MissingTimeSpanSetting.MissingTimeSpan)));
+                Resources.MissingValueFormat, typeof(TimeSpan), GetKey(NotFoundPrefix, nameof(MissingTimeSpanSetting.MissingTimeSpan)));
         }
 
         [Test]
         public void CreateMissingIntSettingTest()
         {
             AssertThrowsConfigurationErrorsExceptionMessageTest<MissingIntSetting>(
-                Resources.MissingValueFormat, GetKey(Prefix, nameof(MissingIntSetting.MissingInt)));
+                Resources.MissingValueFormat, typeof(int), GetKey(NotFoundPrefix, nameof(MissingIntSetting.MissingInt)));
         }
 
-        [Test]
+		[Test]
+		public void CreateMissingFileInfoSettingTest()
+		{
+			AssertThrowsConfigurationErrorsExceptionMessageTest<MissingFileInfoSetting>(
+				Resources.MissingValueFormat, typeof(FileInfo), GetKey(NotFoundPrefix, nameof(MissingFileInfoSetting.MissingFile)));
+		}
+		[Test]
+		public void CreateMissingDirectoryInfoSettingTest()
+		{
+			AssertThrowsConfigurationErrorsExceptionMessageTest<MissingDirectoryInfoSetting>(
+				Resources.MissingValueFormat, typeof(DirectoryInfo), GetKey(NotFoundPrefix, nameof(MissingDirectoryInfoSetting.MissingDir)));
+		}
+
+		[Test]
         public void CreateMissingArraySettingTest()
         {
             AssertThrowsConfigurationErrorsExceptionMessageTest<ArraySettings>(
-                Resources.MissingArrayValueFormat, GetKey(Prefix, nameof(ArraySettings.MySimpleArrayProperty)));
+                Resources.MissingValueFormat, typeof(string[]), GetKey(NotFoundPrefix, nameof(ArraySettings.MySimpleArrayProperty)));
         }
 
         [Test]
         public void CreateMissingListSettingTest()
         {
             AssertThrowsConfigurationErrorsExceptionMessageTest<ListSettings>(
-                Resources.MissingListValueFormat, GetKey(Prefix, nameof(ListSettings.MySimpleListProperty)));
+                Resources.MissingValueFormat, typeof(IList<string>), GetKey(NotFoundPrefix, nameof(ListSettings.MySimpleListProperty)));
         }
 
         [Test]
         public void CreateMissingDictionarySettingTest()
         {
             AssertThrowsConfigurationErrorsExceptionMessageTest<DictionarySettings>(
-                Resources.MissingDictionaryValueFormat, GetKey(Prefix, nameof(DictionarySettings.MySimpleDictionaryProperty)));
+                Resources.MissingValueFormat, typeof(Dictionary<string, string>), GetKey(NotFoundPrefix, nameof(DictionarySettings.MySimpleDictionaryProperty)));
         }
 
-        [Test]
-        public void CreateMissingNestedSettingTest()
-        {
-            AssertThrowsConfigurationErrorsExceptionMessageTest<NestedSettings>(
-                Resources.MissingValueFormat, GetKey(Prefix, nameof(NestedSettings.MyNestedProperty), nameof(Nested.Foo)));
-        }
+		[Test]
+		public void CreateMissingNestedSettingTest()
+		{
+			AssertThrowsConfigurationErrorsExceptionMessageTest<NestedSettings>(
+				Resources.MissingValueFormat, typeof(string), GetKey(NotFoundPrefix, nameof(NestedSettings.MyNestedProperty), nameof(Nested.Foo)));
+		}
 
-        [Test]
+		[Test]
         public void BadTypeConverterSettingTest()
         {
             AssertThrowsConfigurationErrorsExceptionMessageTest<BadTypeConverterSetting>(

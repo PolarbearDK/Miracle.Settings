@@ -30,9 +30,9 @@ namespace Miracle.Settings
 
         private string MapPath(object[] values)
         {
-            if (values.Length > 0 && values.All(x => x is string))
-            {
-                return PathResolver(Path.Combine(values.Cast<string>().ToArray()));
+			if (values.Length > 0 && values.All(x => x is string) && !string.IsNullOrEmpty((string)values[0]))
+			{
+				return PathResolver(Path.Combine(values.Cast<string>().ToArray()));
             }
             return null;
         }

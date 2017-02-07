@@ -63,7 +63,9 @@
   <ItemGroup>
     <Compile Include="DatabaseTest\SampleSqlValueProvider.cs" />
     <Compile Include="DatabaseTest\SampleSqlValueProviderTests.cs" />
+    <Compile Include="DirectoryInfoLoadTests.cs" />
     <Compile Include="GenericTests.cs" />
+    <Compile Include="LoadFailTestBase.cs" />
     <Compile Include="LoadFailTests.cs" />
     <Compile Include="LoadTestBase.cs" />
     <Compile Include="FileInfoLoadTests.cs" />
@@ -85,6 +87,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="DatabaseTest\setup_database.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="TestFolder\TestSubFolder\TextFile2.txt" />
+    <None Include="TestFolder\TextFile1.txt" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
