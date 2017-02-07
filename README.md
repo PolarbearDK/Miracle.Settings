@@ -10,6 +10,7 @@ Features:
 * Construct property from more than one value.
 * Extendable type convertion system
 * Built in converters for Enum, Guid, Timespan and Uri.
+* Built in converters for DirectoryInfo and FileInfo that check the existance of the file system object.
 
 ## Table of content
 * [Usage](#usage)
@@ -166,6 +167,6 @@ When loading a strong typed object, the following rules apply:
 2. Values are attempted loaded from value providers in the order they are specified. DefaultValueAttribute is always considered last.
 3. Values are converted to target type using custom "TypeConverters" with fallback to Convert.ChangeType. Add custom type converter using: AddTypeConverter.
 4. The key of the setting being loaded is calcualted as: (Prefix + PropertySeparator) + Name. No PropertySeparator is applied if Prefix is null (root). Name is the name of the property, but this can be overwritten by applying a SettingAttribute with "Name" property.
-5. TODO more rules
+5. Elements in Arrays and Lists are returned in the same order as they are returned by the value provider. The AppSettings value proveider returns values in the same order as they are specified. 
 
 
