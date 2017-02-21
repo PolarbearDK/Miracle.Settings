@@ -4,6 +4,7 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Web.Hosting;
+using System.Xml;
 using Miracle.Settings.Properties;
 
 namespace Miracle.Settings
@@ -29,8 +30,10 @@ namespace Miracle.Settings
                 new FileInfoTypeConverter(Path.GetFullPath, required:true),
                 new DirectoryInfoTypeConverter(HostingEnvironment.MapPath, required:true),
                 new DirectoryInfoTypeConverter(Path.GetFullPath, required:true),
-                new UriTypeConverter(),
-                new EnumTypeConverter(),
+				new SimpleTypeConverter<DateTime>(s => XmlConvert.ToDateTime(s, XmlDateTimeSerializationMode.Local)),
+				new TypeTypeConverter(),
+				new UriTypeConverter(),
+				new EnumTypeConverter(),
                 new DefaultChangeTypeConverter(),
             };
         }

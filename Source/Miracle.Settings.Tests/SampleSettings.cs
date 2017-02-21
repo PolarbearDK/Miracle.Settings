@@ -30,10 +30,13 @@ namespace Miracle.Settings.Tests
         [DefaultValue("1.02:03:04")]
         public TimeSpan DefaultTimeSpan { get; private set; }
 
-        [DefaultValue("https://foo.bar")]
-        public Uri DefaultUri { get; private set; }
+		[DefaultValue(typeof(AccessViolationException))]
+		public Type DefaultType { get; private set; }
 
-        [DefaultValue("EE58EE2B-4CE6-44A4-8773-EC4E283146EB")]
+		[DefaultValue("https://foo.bar")]
+		public Uri DefaultUri { get; private set; }
+
+		[DefaultValue("EE58EE2B-4CE6-44A4-8773-EC4E283146EB")]
         public Guid DefaultGuid { get; private set; }
 
         [DefaultValue(new[] {"foo","bar"})]
@@ -47,8 +50,9 @@ namespace Miracle.Settings.Tests
         public BindingFlags Enum { get; private set; }
         public DateTime DateTime { get; private set; }
         public TimeSpan TimeSpan { get; private set; }
-        public Uri Uri { get; private set; }
-        public Guid Guid { get; private set; }
+	    public Type Type { get; private set; }
+	    public Uri Uri { get; private set; }
+	    public Guid Guid { get; private set; }
     }
 
     public class SimpleSettingsWithSettingName
@@ -77,6 +81,17 @@ namespace Miracle.Settings.Tests
 		[Setting("RelativeFile", Reference = "RelativeDirectory")]
         public FileInfo RelativeFileInfo { get; private set; }
     }
+
+    public class FileAnnotationSettings
+    {
+		[Setting(Name = "FileName", References = new[] { "Drive", "Folder" })]
+		public FileInfo FullName { get; private set; }
+	}
+
+    public class TypeSettings
+    {
+		public Type Foo { get; private set; }
+	}
 
     public class DirectorySettings
     {

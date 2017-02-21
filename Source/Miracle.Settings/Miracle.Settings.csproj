@@ -65,6 +65,7 @@
     <Compile Include="SettingsLoader.TypeConverters.cs" />
     <Compile Include="SettingsLoader.TypeHandlers.cs" />
     <Compile Include="SimpleTypeConverter.cs" />
+    <Compile Include="TypeTypeConverter.cs" />
     <Compile Include="UriTypeConverter.cs" />
   </ItemGroup>
   <ItemGroup>

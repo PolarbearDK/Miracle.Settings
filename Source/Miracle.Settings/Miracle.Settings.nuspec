@@ -15,11 +15,12 @@
 ISettingsLoader settingsLoader = new SettingsLoader();
 var settings = settingsLoader.Create&lt;MyCustomSettingsClass&gt;();
 
-Supports nested objects, arrays, lists and dictionaries. Custom converter system supporting Enum, Guid, Timespan and Uri. Add your own converters with one line of code. 
+Supports nested objects, arrays, lists and dictionaries. Custom converter system supporting Enum, Guid, DateTime, Timespan, Type and Uri out of the box. 
+Add your own converters with one line of code. 
 	</description>
-    <summary>Miracle.Settings replaces error prone local loading of AppSettings with strong typed objects.</summary>
-    <releaseNotes>Add support for checked file and directory references.</releaseNotes>
+    <summary>Miracle.Settings replaces error prone local loading of AppSettings with strong typed objects with type checking.</summary>
+    <releaseNotes>Add support for System.Type.</releaseNotes>
     <copyright>Copyright 2016-2017</copyright>
-    <tags>AppSetting AppSettings setting settings POCO class object strong type typed config configuration nested array list dictionary file directory verified</tags>
+    <tags>AppSetting AppSettings setting settings POCO class object strong type typed config configuration nested array list dictionary file directory type uri guid verified</tags>
   </metadata>
 </package>

@@ -7,20 +7,29 @@ Features:
 * Load settings prefixed by a specific prefix, or from root (prefix=null)
 * Throws exception in case of missing setting.
 * Supports nested objects, arrays, lists and dictionaries.
-* Construct property from more than one value.
+* Construct property from more than one value (reference).
 * Extendable type convertion system
-* Built in converters for Enum, Guid, Timespan and Uri.
-* Built in converters for DirectoryInfo and FileInfo that check the existance of the file system object.
+* Built-in type converters for most common types with error checking:
+  * All System.* simple value types.
+  * System.String
+  * System.Enum (incl. flags enum)
+  * System.Guid
+  * System.DateTime (ISO8601 converted to local date/time)
+  * System.Timespan
+  * System.Type (throws if type is not found)
+  * System.Uri (throws if invalid uri)
+  * DirectoryInfo (throws if directory does not exist)
+  * FileInfo (throws if directory does not exist)
 
 ## Table of content
 * [Usage](#usage)
 * [Simple Example](#simple-example)
 * [Using default value](#using-default-value)
 * [Nested object](#Nested-object)
-* [Arrays, Lists & Dictionaries](arrays-lists--dictionaries)
+* [Arrays, Lists & Dictionaries](#arrays-lists--dictionaries)
 
 Advanced topics
-* [Setting attribute](SettingAttribute.md)
+* [Controlling deserialization with annotations](Annotatons.md)
 * [Type converters](TypeConverters.md)
 * [Value providers](ValueProviders.md)
 
@@ -138,26 +147,6 @@ List<string> settings2 = settingsLoader.CreateList<string>("MyPrefix");
 // With dictionary, the part of the key after prefix is used as dictionary key. 
 // In this case this would produce keys: "1","2","x"
 Dictionary<string,string> settings3 = settingsLoader.CreateDictionary<string>("MyPrefix");
-```
-
-## Custom Type Converter
-Add custom type converters for types not supported out of the box. 
-
-A good examle is DateTime which doesn't have a default converter due to DateTime objects varying formats due to localization and timezones.
-
-Sample:
-```XML
-<configuration>
-  <appSettings>
-    <add key="DateTime" value="2004-07-17T08:00:00.000000+01:00" />
-  </appSettings>
-</configuration>
-```
-```CSharp
-ISettingsLoader settingsLoader = new SettingsLoader()
-    // Add converter from Xml date/time format to DateTime
-    .AddTypeConverter(typeof(DateTime), s => XmlConvert.ToDateTime(s, XmlDateTimeSerializationMode.Local));
-DateTime dateTime = settingsLoader.Create<DateTime>("DateTime");
 ```
 
 ## Rules

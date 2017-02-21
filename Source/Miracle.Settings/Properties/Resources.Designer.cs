@@ -70,7 +70,7 @@ namespace Miracle.Settings.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unable to convert value {0} to type {1}.
+        ///   Looks up a localized string similar to Unable to convert value [{0}] to type {1}.
         /// </summary>
         internal static string ConvertValueErrorFormat {
             get {
@@ -79,7 +79,7 @@ namespace Miracle.Settings.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unable to convert values {0} into type {1}.
+        ///   Looks up a localized string similar to Unable to convert values [{0}] into type {1}.
         /// </summary>
         internal static string ConvertValuesErrorFormat {
             get {
@@ -88,7 +88,7 @@ namespace Miracle.Settings.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unable to create settings instance of type {0} while loading settings prefixed by: {1}.
+        ///   Looks up a localized string similar to Unable to create settings instance of type {0} while loading settings prefixed by: [{1}].
         /// </summary>
         internal static string CreateErrorFormat {
             get {
@@ -106,7 +106,7 @@ namespace Miracle.Settings.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unable to convert values: {0} into type {1} using specified type converter.
+        ///   Looks up a localized string similar to Unable to convert values: [{0}] into type {1} using specified type converter.
         /// </summary>
         internal static string ExplicitTypeConverterErrorFormat {
             get {
@@ -115,7 +115,7 @@ namespace Miracle.Settings.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A value has to be provided for referenced Setting: {0}.
+        ///   Looks up a localized string similar to A value has to be provided for referenced Setting: [{0}].
         /// </summary>
         internal static string MissingReferenceValueFormat {
             get {
@@ -124,7 +124,7 @@ namespace Miracle.Settings.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A value of type {0} has to be provided for Setting: {1}.
+        ///   Looks up a localized string similar to A value of type {0} has to be provided for Setting: [{1}].
         /// </summary>
         internal static string MissingValueFormat {
             get {
