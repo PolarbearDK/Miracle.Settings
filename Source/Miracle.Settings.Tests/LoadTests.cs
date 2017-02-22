@@ -13,7 +13,6 @@ namespace Miracle.Settings.Tests
     {
 	    public LoadTests()
 		    : base(new SettingsLoader()
-			    .AddTypeConverter(s => XmlConvert.ToDateTime(s, XmlDateTimeSerializationMode.Local))
 			    .AddProvider(new EnvironmentValueProvider()))
 	    {
 	    }
@@ -31,8 +30,9 @@ namespace Miracle.Settings.Tests
                     DefaultEnum = BindingFlags.Instance | BindingFlags.Public,
                     DefaultDateTime = new DateTime(1966, 6, 11, 13, 34, 56, DateTimeKind.Local).AddMilliseconds(789),
                     DefaultTimeSpan = new TimeSpan(1, 2, 3, 4),
-                    DefaultUri = new Uri("https://foo.bar"),
-                    DefaultGuid = Guid.Parse("EE58EE2B-4CE6-44A4-8773-EC4E283146EB"),
+					DefaultType = typeof(AccessViolationException),
+					DefaultUri = new Uri("https://foo.bar"),
+					DefaultGuid = Guid.Parse("EE58EE2B-4CE6-44A4-8773-EC4E283146EB"),
                     DefaultArray = new[] { "foo", "bar" },
                 })
                 .WithComparisonConfig(new ComparisonConfig() {IgnoreObjectTypes = true})
@@ -42,6 +42,9 @@ namespace Miracle.Settings.Tests
         [Test]
         public void SimpleLoadTest()
         {
+			Console.WriteLine(typeof(System.Data.SqlClient.SqlConnection).AssemblyQualifiedName);
+
+
             var settings = SettingsLoader.Create<SimpleSettings>();
 
             //Simple
@@ -49,8 +52,9 @@ namespace Miracle.Settings.Tests
             Assert.That(settings.String, Is.EqualTo("Hello world"));
             Assert.That(settings.DateTime, Is.EqualTo(new DateTime(2004, 07, 17, 9, 0, 0, DateTimeKind.Local)));
             Assert.That(settings.TimeSpan, Is.EqualTo(new TimeSpan(11, 22, 33, 44, 560)));
-            Assert.That(settings.Uri, Is.EqualTo(new Uri("Http://hello.eu")));
-            Assert.That(settings.Guid, Is.EqualTo(Guid.Parse("DCFA0942-0BEC-43E4-8D77-57BA63C7BF7B")));
+            Assert.That(settings.Type, Is.EqualTo(typeof(System.Data.SqlClient.SqlConnection)));
+			Assert.That(settings.Uri, Is.EqualTo(new Uri("Http://hello.eu")));
+			Assert.That(settings.Guid, Is.EqualTo(Guid.Parse("DCFA0942-0BEC-43E4-8D77-57BA63C7BF7B")));
         }
 
         [Test]
@@ -67,7 +71,35 @@ namespace Miracle.Settings.Tests
             Assert.That(settings.Guid6, Is.EqualTo(Guid.Parse("DCFA0942-0BEC-43E4-8D77-57BA63C7BF7B")));
         }
 
-        [Test]
+		[Test]
+		public void CustomDateTimeTest()
+		{
+			var key = "Christmas";
+
+			// Pick any type to use as test type
+			var date = new DateTime(2017, 12, 24);
+			var value = date.ToString("dd/MM/yyyy");
+
+			// Setup mock value provider with type
+			var valueProvider = new MockValueProvider(new Dictionary<string, string>
+			{
+				{key, value}
+			});
+			var settingsLoader = new SettingsLoader()
+				.AddTypeConverter<DateTime>(x => DateTime.Parse(x, System.Globalization.CultureInfo.GetCultureInfo("da-DK")));
+			settingsLoader.ValueProviders.Clear();
+			settingsLoader.ValueProviders.Add(valueProvider);
+
+
+			var result = settingsLoader.Create<DateTime>(key);
+
+			Assert.That(result, Is.Not.Null);
+			Assert.That(result, Is.EqualTo(date));
+		}
+
+
+
+		[Test]
         public void SettingReferenceLoadTest()
         {
             var settings = SettingsLoader.Create<ReferenceSettings>("SettingReference");

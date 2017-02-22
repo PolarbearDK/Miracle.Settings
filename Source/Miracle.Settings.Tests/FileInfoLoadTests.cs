@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using Miracle.Settings.Properties;
 using NUnit.Framework;
@@ -30,8 +33,8 @@ namespace Miracle.Settings.Tests
 
 			// Defaults
 			Assert.That(settings.SimpleFile.FullName, Is.EqualTo(Path.Combine(_basePath, "packages.config")));
-			Assert.That(settings.FullFileInfo.FullName, Is.EqualTo("c:\\Windows\\regedit.exe"));
-			Assert.That(settings.PartialFile.FullName, Is.EqualTo(Path.GetFullPath(Path.Combine(_basePath, "..\\Miracle.Settings.sln"))));
+			Assert.That(settings.FullFileInfo.FullName, Is.EqualTo(@"c:\Windows\regedit.exe"));
+			Assert.That(settings.PartialFile.FullName, Is.EqualTo(Path.GetFullPath(Path.Combine(_basePath, @"..\Miracle.Settings.sln"))));
 			Assert.That(settings.RelativeFileInfo.FullName, Is.EqualTo(Path.Combine(_basePath, "TestFolder", "TextFile1.txt")));
 		}
 
@@ -45,9 +48,31 @@ namespace Miracle.Settings.Tests
 
 			// Defaults
 			Assert.That(settings.Length, Is.EqualTo(2));
-			Assert.That(settings[0].FullName, Is.EqualTo(Path.GetFullPath(Path.Combine(_basePath, "..\\Miracle.Settings.sln"))));
-			Assert.That(settings[1].FullName, Is.EqualTo("c:\\Windows\\regedit.exe"));
+			Assert.That(settings[0].FullName, Is.EqualTo(Path.GetFullPath(Path.Combine(_basePath, @"..\Miracle.Settings.sln"))));
+			Assert.That(settings[1].FullName, Is.EqualTo(@"c:\Windows\regedit.exe"));
 		}
+
+		[Test]
+		public void FileAnnotationTest()
+		{
+			// Setup mock value provider with type
+			var valueProvider = new MockValueProvider(new Dictionary<string, string>
+			{
+				{"Drive", "C:\\"},
+				{"Folder", "Windows"},
+				{"FileName", "notepad.exe"},
+			});
+			var settingsLoader = new SettingsLoader();
+			settingsLoader.ValueProviders.Clear();
+			settingsLoader.ValueProviders.Add(valueProvider);
+			var settings = settingsLoader.Create<FileAnnotationSettings>();
+
+			// Defaults
+			Assert.That(settings.FullName, Is.Not.Null);
+			Assert.That(settings.FullName.FullName, Is.EqualTo(@"C:\Windows\notepad.exe"));
+		}
+
+
 
 		[Test]
 		public void FailTest1()

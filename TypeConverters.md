@@ -2,17 +2,23 @@
 
 Type converters controls how a value is constructed from one or more settings.
 
+## Add type converter
+Type converters can be added using fluid convenience methods:
+- __AddTypeConverter<T>(Func<string, T> convert)__ Add simple type converter for type T using converter function.
+- __AddTypeConverter(ITypeConverter typeConverter)__ Add type converter instance to front of list of type converters
+
+The full list of current type converters are available in property: __TypeConverters__.
+
 ## Custom Type Converter
 You can add custom type converters for types not supported out of the box.
 A good examle is DateTime where string representation varies with localization. 
-If you want a more "stable" representation you could use ISO 8601 format.
-
+The default converter expects ISO 8601 format converted to local. If you want to specifiy dates in a different format, this can be done like this:
 
 Sample:
 ```XML
 <configuration>
   <appSettings>
-    <add key="DateTime" value="2004-07-17T08:00:00.000000+01:00" />
+    <add key="Christmas" value="24/12-2016" />
   </appSettings>
 </configuration>
 ```
@@ -21,7 +27,7 @@ Type converters can be configured per setting instance.
 ```CSharp
 ISettingsLoader settingsLoader = new SettingsLoader()
     // Add converter from Xml date/time format to DateTime
-    .AddTypeConverter<DateTime>(x => XmlConvert.ToDateTime(x, XmlDateTimeSerializationMode.Local));
+    .AddTypeConverter<DateTime>(x => DateTime.Parse(x, System.Globalization.CultureInfo.GetCultureInfo("da-DK")));
 DateTime dateTime = settingsLoader.Create<DateTime>("DateTime");
 ```
 
@@ -29,7 +35,7 @@ Type converters can be specified in-line to only affect one property.
 ```CSharp
 public class FooSettings
 {
-    [Setting(TypeConverter = typeof(MyCustomDateTimeConverter))]
+    [Setting(TypeConverter = typeof(MyLocalDateTimeConverter))]
     public DateTime MyDateTimeProperty { get; set; }
 }
 ```
