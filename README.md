@@ -28,7 +28,6 @@ Advanced topics
 * [Controlling deserialization with annotations](Annotatons.md)
 * [Type converters](TypeConverters.md)
 * [Value providers](ValueProviders.md)
-* [Load property from multiple AppSetting values](Reference.md)
 * [Validating settings](Validation.md)
 
 ## Install
