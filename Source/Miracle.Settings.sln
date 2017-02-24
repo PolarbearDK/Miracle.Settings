@@ -9,8 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Miracle.Settings.Tests", "M
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{62D13A2A-4E97-4074-9C43-5629011FF035}"
 	ProjectSection(SolutionItems) = preProject
+		..\Annotatons.md = ..\Annotatons.md
 		..\README.md = ..\README.md
-		..\SettingAttribute.md = ..\SettingAttribute.md
 		..\TypeConverters.md = ..\TypeConverters.md
 		..\ValueProviders.md = ..\ValueProviders.md
 	EndProjectSection

@@ -90,7 +90,7 @@ namespace Miracle.Settings.Tests
 
     public class TypeSettings
     {
-		public Type Foo { get; private set; }
+		public Type MyType { get; private set; }
 	}
 
     public class DirectorySettings
@@ -113,12 +113,16 @@ namespace Miracle.Settings.Tests
         public string[] MySimpleArrayProperty { get; private set; }
         public decimal[] MyNumericArrayProperty { get; private set; }
         public Nested[] MyArrayProperty { get; private set; }
+        [Setting("LostNumbers", Separator =',')]
+        public int[] LostNumbersArray { get; private set; }
     }
 
     public class ListSettings
     {
         public IList<string> MySimpleListProperty { get; private set; }
         public List<Nested> MyListProperty { get; private set; }
+        [Setting("LostNumbers", Separator = ',')]
+        public List<int> LostNumbersList { get; private set; }
     }
 
     public class DictionarySettings

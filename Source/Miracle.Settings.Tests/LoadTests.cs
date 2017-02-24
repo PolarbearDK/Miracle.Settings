@@ -71,6 +71,8 @@ namespace Miracle.Settings.Tests
             Assert.That(settings.Guid6, Is.EqualTo(Guid.Parse("DCFA0942-0BEC-43E4-8D77-57BA63C7BF7B")));
         }
 
+        
+
 		[Test]
 		public void CustomDateTimeTest()
 		{
@@ -80,25 +82,19 @@ namespace Miracle.Settings.Tests
 			var date = new DateTime(2017, 12, 24);
 			var value = date.ToString("dd/MM/yyyy");
 
-			// Setup mock value provider with type
-			var valueProvider = new MockValueProvider(new Dictionary<string, string>
+            // Setup dictionary value provider 
+            var settingsLoader = DictionaryValueProvider.CreateSettingsLoader(new Dictionary<string, string>
 			{
 				{key, value}
 			});
-			var settingsLoader = new SettingsLoader()
-				.AddTypeConverter<DateTime>(x => DateTime.Parse(x, System.Globalization.CultureInfo.GetCultureInfo("da-DK")));
-			settingsLoader.ValueProviders.Clear();
-			settingsLoader.ValueProviders.Add(valueProvider);
+			settingsLoader.AddTypeConverter<DateTime>(x => DateTime.Parse(x, System.Globalization.CultureInfo.GetCultureInfo("da-DK")));
 
-
-			var result = settingsLoader.Create<DateTime>(key);
+            var result = settingsLoader.Create<DateTime>(key);
 
 			Assert.That(result, Is.Not.Null);
 			Assert.That(result, Is.EqualTo(date));
 		}
-
-
-
+        
 		[Test]
         public void SettingReferenceLoadTest()
         {
@@ -170,9 +166,14 @@ namespace Miracle.Settings.Tests
                     new Nested {Foo = "Foo 1", Bar = 421},
                     new Nested {Foo = "Foo 2", Bar = 422},
                 }));
+            Assert.That(settings.LostNumbersArray, Is.EqualTo(
+                new[]
+                {
+                    4, 8, 15, 16, 23, 42
+                }));
         }
 
-		[Test]
+        [Test]
         public void DirectStringArrayLoadTest()
         {
             var settings = SettingsLoader.CreateArray<string>("MySimpleArrayProperty");
@@ -185,7 +186,33 @@ namespace Miracle.Settings.Tests
                 }));
         }
 
-		[Test]
+        [Test]
+        public void DirectSplitStringArrayLoadTest()
+        {
+
+            var numbers = SettingsLoader.CreateArray<int>("LostNumbers", new[] {','});
+
+            Assert.That(numbers, Is.EqualTo(
+                new[]
+                {
+                    4, 8, 15, 16, 23, 42
+                }));
+        }
+
+        [Test]
+        public void DirectSplitListArrayLoadTest()
+        {
+
+            var numbers = SettingsLoader.CreateList<int>("LostNumbers", new[] {','});
+
+            Assert.That(numbers, Is.EqualTo(
+                new List<int>
+                {
+                    4, 8, 15, 16, 23, 42
+                }));
+        }
+
+        [Test]
         public void DirectNumericArrayLoadTest()
         {
             var settings = SettingsLoader.CreateArray<int>("MyNumericArrayProperty");
@@ -231,6 +258,11 @@ namespace Miracle.Settings.Tests
                 {
                     new Nested {Foo = "Foo 1", Bar = 421},
                     new Nested {Foo = "Foo 2", Bar = 422},
+                }));
+            Assert.That(settings.LostNumbersList, Is.EqualTo(
+                new[]
+                {
+                    4, 8, 15, 16, 23, 42
                 }));
         }
 

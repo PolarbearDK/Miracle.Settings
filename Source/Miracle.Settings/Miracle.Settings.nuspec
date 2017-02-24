@@ -10,16 +10,21 @@
     <projectUrl>https://github.com/PolarbearDK/Miracle.Settings</projectUrl>
     <iconUrl>https://github.com/PolarbearDK/Miracle.Settings/raw/master/nuget-icon.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Miracle.Settings replaces error prone local loading of AppSettings with strong typed objects. Load multiple settings into a strong typed object with two lines of codes:
+    <description>Load your application settings into strong typed objects with two lines of code.
 
-ISettingsLoader settingsLoader = new SettingsLoader();
-var settings = settingsLoader.Create&lt;MyCustomSettingsClass&gt;();
-
-Supports nested objects, arrays, lists and dictionaries. Custom converter system supporting Enum, Guid, DateTime, Timespan, Type and Uri out of the box. 
-Add your own converters with one line of code. 
+The advantages are many:
+  - It's super simple.
+  - No need to write code that load, convert and validate each appSetting.
+  - No "magic strings" and no defaults scattered around in your source files.
+  - Your application fails immediately upon bad configuration.
+  - Get detailed error messages describing exactly which setting has failed.
+  - Your settings are always valid.
+  - You can use DI to inject strong typed settings into your application.
+  - Supports nested objects, arrays, lists and dictionaries.
+  - Property validation.
 	</description>
-    <summary>Miracle.Settings replaces error prone local loading of AppSettings with strong typed objects with type checking.</summary>
-    <releaseNotes>Add support for System.Type.</releaseNotes>
+    <summary>Load your application settings into strong typed objects with two lines of code.</summary>
+    <releaseNotes>Add validation support. Added Separator to SettingAttribute to split strings into values.</releaseNotes>
     <copyright>Copyright 2016-2017</copyright>
     <tags>AppSetting AppSettings setting settings POCO class object strong type typed config configuration nested array list dictionary file directory type uri guid verified</tags>
   </metadata>

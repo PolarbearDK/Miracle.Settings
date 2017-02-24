@@ -1,10 +1,12 @@
 using System;
+using System.Configuration;
 using System.Diagnostics;
+using Miracle.Settings.Properties;
 
 namespace Miracle.Settings
 {
     /// <summary>
-    /// Simple type converter that handles conversion from a single string value
+    /// Simple type converter that handles conversion from a single string value using a converter function
     /// </summary>
     /// <typeparam name="T">Type to convert to</typeparam>
     public class SimpleTypeConverter<T> : ITypeConverter
@@ -16,17 +18,25 @@ namespace Miracle.Settings
             _convert = convert;
         }
 
-        public Type Type { get { return typeof (T); } }
+        public Type Type => typeof (T);
 
         public bool CanConvert(object[] values, Type conversionType)
         {
-            return conversionType == typeof(T) && values.Length == 1 && values[0] is string;
+            return conversionType == typeof(T) && values.Length == 1 && (values[0] is string || values[0].GetType() == conversionType);
         }
 
         public object ChangeType(object[] values, Type conversionType)
         {
             Debug.Assert(values.Length == 1);
-            return _convert((string)values[0]);
+
+            var s = values[0] as string;
+            if (s != null)
+                return _convert(s);
+
+            if (values[0].GetType() == conversionType)
+                return values[0];
+
+            return null;
         }
     }
 }

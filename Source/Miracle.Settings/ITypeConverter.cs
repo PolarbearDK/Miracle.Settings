@@ -17,7 +17,7 @@ namespace Miracle.Settings
         /// </summary>
         /// <param name="values">Values to convert</param>
         /// <param name="conversionType">Destination type to convert to</param>
-        /// <returns>Instance of type <param name="conversionType"/></returns>
+        /// <returns>Instance of type <param name="conversionType"/> or null if unable to convert</returns>
         object ChangeType(object[] values, Type conversionType);
     }
 }

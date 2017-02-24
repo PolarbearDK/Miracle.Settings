@@ -2,6 +2,7 @@ using System;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using Miracle.Settings.Properties;
 
 namespace Miracle.Settings
 {
@@ -21,7 +22,7 @@ namespace Miracle.Settings
         /// <param name="pathResolver">Function used to convert relative paths to absolute Directory paths. For a web site this could be HostingEnvironment.MapPath. For an application use a function like Path.GetFullPath.</param>
         /// <param name="required">The Directory must exist or an error is thrown.</param>
         /// <param name="create">Create the Directory if it doesnt exist.</param>
-        public DirectoryInfoTypeConverter(Func<string, string> pathResolver, bool required = false, bool create = false)
+        public DirectoryInfoTypeConverter(Func<string, string> pathResolver, bool required = true, bool create = false)
         {
             PathResolver = pathResolver;
             Required = required;
@@ -32,7 +33,14 @@ namespace Miracle.Settings
         {
 			if (values.Length > 0 && values.All(x => x is string) && !string.IsNullOrEmpty((string)values[0]))
 			{
-				return PathResolver(Path.Combine(values.Cast<string>().ToArray()));
+                try
+                {
+                    return PathResolver(Path.Combine(values.Cast<string>().ToArray()));
+                }
+                catch
+                {
+                    // ignored
+                }
             }
             return null;
         }
@@ -44,9 +52,7 @@ namespace Miracle.Settings
 
         public object ChangeType(object[] values, Type conversionType)
         {
-            if (values.Length == 0) throw new ConfigurationErrorsException("Wrong number of values provided for type converter.");
-            string path = MapPath(values);
-            if (path == null) throw new ConfigurationErrorsException("Unable to map path.");
+            var path = MapPath(values);
             DirectoryInfo fi = new DirectoryInfo(path);
             if (!fi.Exists)
             {

@@ -10,15 +10,6 @@ namespace Miracle.Settings.Tests
 	[TestFixture]
 	public class TypeLoadTests
 	{
-		private static SettingsLoader MockSettingsValues(IDictionary<string, string> values)
-		{
-			var valueProvider = new MockValueProvider(values);
-			var settingsLoader = new SettingsLoader();
-			settingsLoader.ValueProviders.Clear();
-			settingsLoader.ValueProviders.Add(valueProvider);
-			return settingsLoader;
-		}
-
 		[Test]
 		public void Test()
 		{
@@ -28,7 +19,7 @@ namespace Miracle.Settings.Tests
 			var someType = typeof(TestFixtureAttribute);
 
 			// Setup mock value provider with type
-			var settingsLoader = MockSettingsValues(new Dictionary<string, string>
+			var settingsLoader = DictionaryValueProvider.CreateSettingsLoader(new Dictionary<string, string>
 			{
 				{key, someType.AssemblyQualifiedName}
 			});
@@ -42,57 +33,57 @@ namespace Miracle.Settings.Tests
 		[Test]
 		public void NoValueTest1()
 		{
-			var key = "Foo.Type";
-
-			// Pick any type to use as test type
-			var someType = "Foo, Foo.Dll";
+			var key = "Foo";
 
 			// Setup mock value provider with type
-			var settingsLoader = MockSettingsValues(new Dictionary<string, string>());
+			var settingsLoader = DictionaryValueProvider.CreateSettingsLoader(new Dictionary<string, string>()) ;
 
-			Assert.Throws<ConfigurationErrorsException>(() =>
-			{
-				var type = settingsLoader.Create<Type>(key);
-			}, string.Format(Resources.ConvertValueErrorFormat, someType, key));
+			Assert.That(
+                () => settingsLoader.Create<Type>(key), 
+                Throws.Exception.TypeOf<ConfigurationErrorsException>()
+                .With.Message.EqualTo(string.Format(Resources.MissingValueFormat, typeof(Type).FullName, key)));
 		}
 
 
 		[Test]
 		public void NoValueTest2()
 		{
-			// Pick any type to use as test type
-			var someType = "Foo, Foo.Dll";
+            var key = "Foo";
+
+            // Pick any type to use as test type
+            var someType = "";
 
 			// Setup mock value provider with type
-			var settingsLoader = MockSettingsValues(new Dictionary<string, string>());
+		    var settingsLoader = DictionaryValueProvider.CreateSettingsLoader(new Dictionary<string, string>
+		    {
+		        {key, someType}
+		    });
 
-			Assert.Throws<ConfigurationErrorsException>(() =>
-			{
-				var type = settingsLoader.Create<TypeSettings>();
-			}, string.Format(Resources.ConvertValueErrorFormat, someType, nameof(TypeSettings.Foo)));
-		}
+
+		    Assert.That(
+		        () => settingsLoader.Create<TypeSettings>(key),
+		        Throws.Exception.TypeOf<ConfigurationErrorsException>()
+		            .With.Message.EqualTo(string.Format(Resources.MissingValueFormat, typeof(Type).FullName, key + "." + nameof(TypeSettings.MyType))));
+        }
 
 		[Test]
-		public void FailTest()
+		public void FailLoadTest()
 		{
 			var key = "Foo.Type";
 
 			// Pick any type to use as test type
-			var someType = "Foo, Foo.Dll";
+			var someType = "Foo, MyType.Dll";
 
 			// Setup mock value provider with type
-			var valueProvider = new MockValueProvider(new Dictionary<string, string>
+			var settingsLoader = DictionaryValueProvider.CreateSettingsLoader(new Dictionary<string, string>
 			{
 				{key, someType}
 			});
-			var settingsLoader = new SettingsLoader();
-			settingsLoader.ValueProviders.Clear();
-			settingsLoader.ValueProviders.Add(valueProvider);
 
-			Assert.Throws<ConfigurationErrorsException>(() =>
-			{
-				var type = settingsLoader.Create<Type>(key);
-			}, string.Format(Resources.ConvertValueErrorFormat, someType, key) );
+            Assert.That( 
+                () => settingsLoader.Create<Type>(key),
+                Throws.Exception.TypeOf<ConfigurationErrorsException>()
+                .With.Message.EqualTo(string.Format(Resources.ConvertValueErrorFormat, someType, typeof(Type).FullName)));
 		}
-	}
+    }
 }
