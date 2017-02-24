@@ -1,18 +1,19 @@
 # Miracle.Settings
 
-Load your application settings into strong typed objects. 
+Load your application settings into strong typed objects with two lines of code. 
 
 The advantages are many:
-* No need to write code that load each appSetting.
+* It's super simple.
+* No need to write code that load, convert and validate each appSetting.
 * No "magic strings" and no defaults scattered around in your source files.
 * Your application fails immediately upon bad configuration.
-* Detailed error messages describing exactly which setting is invalid. 
+* Get detailed error messages describing exactly which setting has failed. 
+* Your settings are always valid.
 * You can use DI to inject strong typed settings into your application.
-* Your settings are always valid, so no need to check each setting manually.
 * Supports nested objects, arrays, lists and dictionaries.
-* It's super simple.
+* Property validation.
 
-Wait you might say... You can du that with ConfigurationSections! Well you can but there are many drawbacks, and you have to write a LOT of code.
+Wait you might say... You can du that with ConfigurationSections! Well you can but there are many drawbacks, and you have to write a LOT of plumbing code.
 
 ## Table of content
 * [Install](#Install)
@@ -38,7 +39,7 @@ To install Miracle.Settings, run the following command in the Package Manager Co
 PM> Install-Package Miracle.Settings
 ```
 ## Usage
-A basic example on how to load a POCO object with settings.
+A basic example on how to load settings into a POCO object.
 ```XML
 <configuration>
   <appSettings>
@@ -51,8 +52,8 @@ The setting that you wish to load from app.config or web.config.
 ```CSharp
 public class FooBar
 {
-    public string Foo { get; }
-    public int Bar { get; }
+    public string Foo { get; private set; }
+    public int Bar { get; private set; }
 }
 ```
 The POCO (Plain Old CLR Object) that settings are serialized/loaded into.
@@ -77,9 +78,9 @@ If no value is provided for a property, then value is taken from DefaultValueAtt
 ```CSharp
 public class FooBar
 {
-    public string Foo { get; }
+    public string Foo { get; private set; }
     [DefaultValue(42)]
-    public int Bar { get; }
+    public int Bar { get; private set; }
 }
 ```
 ```CSharp
@@ -105,27 +106,26 @@ Nested objects are supported using "dot" notation.
 ```CSharp
 public class FooBar
 {
-    public string Foo { get; }
-    public Nested Nested { get; }
+    public string Foo { get; private set; }
+    public Nested Nested { get; private set; }
 }
 
 public class Nested
 {
-    public string Foo { get; }
-    public int Bar { get; }
+    public string Foo { get; private set; }
+    public int Bar { get; private set; }
 }
-```
 
-```CSharp
-ISettingsLoader settingsLoader = new SettingsLoader();
 // Get settings prefixed by "MyPrefix"
 var settings = settingsLoader.Create<FooBar>("MyPrefix");
 ```
 
 ## Arrays, Lists & Dictionaries
-Collections (Arrays, Lists & Dictionaries) can be loaded directly or as nested properties. 
-Keys must be unique, so collection keys must be suffixed by something to make them unique.
+Collections (Arrays, Lists & Dictionaries) can be loaded directly by calling CreateArray/CreateList/CreateDictionary or as properties in setting classes. 
 
+Simple arrays and lists can be loaded from a single string value containing separated values. See [Controlling deserialization with annotations](Annotatons.md)
+
+More advanced scenarios requires a separate value for each collection item. Keys must be unique, so collection keys must be suffixed by something to make them unique. 
 ```XML
 <configuration>
   <appSettings>
@@ -137,17 +137,18 @@ Keys must be unique, so collection keys must be suffixed by something to make th
 ```
 
 ```CSharp
-ISettingsLoader settingsLoader = new SettingsLoader();
 // Get the same settings as array, list & dictionary.
+
 // With array and list, the "key" path is lost. 
 string[] settings1 = settingsLoader.CreateArray<string>("MyPrefix");
 List<string> settings2 = settingsLoader.CreateList<string>("MyPrefix");
+
 // With dictionary, the part of the key after prefix is used as dictionary key. 
 // In this case this would produce keys: "1","2","x"
 Dictionary<string,string> settings3 = settingsLoader.CreateDictionary<string>("MyPrefix");
 ```
 ## Type support
-Settings can be loaded into all simple value types that implements IConvertible interface.
+Settings can be loaded into all simple value types that implement IConvertible interface.
 Support for additional types can be added by providing a type converter for the specific type.
 
 Miracle.Settings has built in support for these additional types:
@@ -160,7 +161,7 @@ TimeSpan|Any format that TimeSpan.Parse supports.
 Type|checks that type exist
 Uri|check that url is valid
 DirectoryInfo|check that directory exist
-FileInfo|check if file exist
+FileInfo|check that file exist
 
 ## Rules
 When loading a strong typed object, the following rules apply:
@@ -168,7 +169,7 @@ When loading a strong typed object, the following rules apply:
 1. A value MUST be provided for each public property with a setter, or an exception is thrown.
 2. Values are attempted loaded from value providers in the order they are specified. DefaultValueAttribute is always considered last.
 3. Values are converted to target type using custom "TypeConverters" with fallback to Convert.ChangeType. Add custom type converter using: AddTypeConverter.
-4. The key of the setting being loaded is calcualted as: (Prefix + PropertySeparator) + Name. No PropertySeparator is applied if Prefix is null (root). Name is the name of the property, but this can be overwritten by applying a SettingAttribute with "Name" property.
+4. The key of the setting being loaded is calcualted as: (Prefix + PropertySeparator) + Name. No PropertySeparator is applied if Prefix is null (root). Name is the name os the property-name, but this can be overwritten by applying a SettingAttribute with "Name" property.
 5. Elements in Arrays and Lists are returned in the same order as they are returned by the value provider. The AppSettings value proveider returns values in the same order as they are specified. 
 
 

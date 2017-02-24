@@ -45,3 +45,24 @@ Use a specific type converter for a single property.
 public MyFoo Foo { get; set; }
 ```
 
+## Split string value into array/list
+Simple arrays and lists can be loaded from a single string value containing separated values.
+```XML
+<configuration>
+  <appSettings>
+    <add key="My.Arr" value="Foo;Bar;Baz" />
+  </appSettings>
+</configuration>
+```
+Must specify Separator or Separators.
+```CSharp
+public class FooSetting
+{
+	[Setting(Separator=';')]
+    public string[] Arr { get; private set; }
+}
+
+// Load the 3 values Foo, Bar and Baz into Arr property
+var settings = settingsLoader.Create<FooSetting>("My");
+```
+

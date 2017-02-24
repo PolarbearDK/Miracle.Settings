@@ -166,9 +166,14 @@ namespace Miracle.Settings.Tests
                     new Nested {Foo = "Foo 1", Bar = 421},
                     new Nested {Foo = "Foo 2", Bar = 422},
                 }));
+            Assert.That(settings.LostNumbersArray, Is.EqualTo(
+                new[]
+                {
+                    4, 8, 15, 16, 23, 42
+                }));
         }
 
-		[Test]
+        [Test]
         public void DirectStringArrayLoadTest()
         {
             var settings = SettingsLoader.CreateArray<string>("MySimpleArrayProperty");
@@ -181,7 +186,33 @@ namespace Miracle.Settings.Tests
                 }));
         }
 
-		[Test]
+        [Test]
+        public void DirectSplitStringArrayLoadTest()
+        {
+
+            var numbers = SettingsLoader.CreateArray<int>("LostNumbers", new[] {','});
+
+            Assert.That(numbers, Is.EqualTo(
+                new[]
+                {
+                    4, 8, 15, 16, 23, 42
+                }));
+        }
+
+        [Test]
+        public void DirectSplitListArrayLoadTest()
+        {
+
+            var numbers = SettingsLoader.CreateList<int>("LostNumbers", new[] {','});
+
+            Assert.That(numbers, Is.EqualTo(
+                new List<int>
+                {
+                    4, 8, 15, 16, 23, 42
+                }));
+        }
+
+        [Test]
         public void DirectNumericArrayLoadTest()
         {
             var settings = SettingsLoader.CreateArray<int>("MyNumericArrayProperty");
@@ -227,6 +258,11 @@ namespace Miracle.Settings.Tests
                 {
                     new Nested {Foo = "Foo 1", Bar = 421},
                     new Nested {Foo = "Foo 2", Bar = 422},
+                }));
+            Assert.That(settings.LostNumbersList, Is.EqualTo(
+                new[]
+                {
+                    4, 8, 15, 16, 23, 42
                 }));
         }
 

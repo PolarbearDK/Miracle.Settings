@@ -19,10 +19,10 @@ namespace Miracle.Settings
         {
             return new List<TypeHandlerDelegate>
             {
-                DirectGet,
                 ArrayHandler,
                 ListHandler,
                 DictionaryHandler,
+                DirectGet,
                 NestedClassHandler,
             };
         }
@@ -55,11 +55,15 @@ namespace Miracle.Settings
             var propertyType = propertyInfo.PropertyType;
             if (propertyType.IsArray)
             {
-                Type elementType = propertyType.GetElementType();
+                SettingAttribute attribute = propertyInfo.GetCustomAttributes(typeof(SettingAttribute), false).FirstOrDefault() as SettingAttribute;
+                var arguments = attribute?.Separators != null
+                    ? new object[] { key, attribute.Separators, attribute.StringSplitOptions }
+                    : new object[] { key + PropertySeparator };
+
                 value = GetType()
-                    .GetMethod(nameof(CreateArray))
-                    .MakeGenericMethod(elementType)
-                    .Invoke(this, new object[] { key + PropertySeparator });
+                    .GetMethod(nameof(CreateArray), arguments.Select(x=>x.GetType()).ToArray())
+                    .MakeGenericMethod(propertyType.GetElementType())
+                    .Invoke(this, arguments);
 
                 if (value != null)
                     return true;
@@ -78,11 +82,16 @@ namespace Miracle.Settings
             var propertyType = propertyInfo.PropertyType;
             if (propertyType.IsGenericType && propertyType.GetGenericTypeDefinition().IsGenericTypeDefinitionAssignableFrom(typeof(List<>)))
             {
+                SettingAttribute attribute = propertyInfo.GetCustomAttributes(typeof(SettingAttribute), false).FirstOrDefault() as SettingAttribute;
+                var arguments = attribute?.Separators != null 
+                    ? new object[] { key, attribute.Separators, attribute.StringSplitOptions } 
+                    : new object[] {key + PropertySeparator};
+
                 value =
                     GetType()
-                        .GetMethod(nameof(CreateList))
+                        .GetMethod(nameof(CreateList), arguments.Select(x => x.GetType()).ToArray())
                         .MakeGenericMethod(propertyType.GetGenericArguments())
-                        .Invoke(this, new object[] { key + PropertySeparator });
+                        .Invoke(this, arguments);
 
                 if (value != null)
                     return true;

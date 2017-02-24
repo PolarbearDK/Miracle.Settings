@@ -112,6 +112,18 @@ namespace Miracle.Settings
         }
 
         /// <summary>
+        /// Create array of type T from setting with key <param name="key"/> and split into string array using <param name="separator"/> and <param name="options"/>.
+        /// </summary>
+        /// <param name="key">The key of the setting containing separated values</param>
+        /// <param name="separator">the separator(s) used to split string value</param>
+        /// <param name="options">the option used to split string value</param>
+        public T[] CreateArray<T>(string key, char[] separator, StringSplitOptions options = StringSplitOptions.RemoveEmptyEntries)
+        {
+            return CreateList<T>(key, separator, options)?
+                .ToArray();
+        }
+
+        /// <summary>
         /// Create a list with elements of type <typeparam name="T" /> from settings prefixed by <param name="prefix"/>
         /// </summary>
         /// <param name="prefix">The prefix of all settings in the list</param>
@@ -120,6 +132,36 @@ namespace Miracle.Settings
             return GetCollectionPrefixes(ToCollectionPrefix(prefix))?
                 .Select(Create<T>)
                 .ToList();
+        }
+
+        /// <summary>
+        /// Create list of type T from setting with key <param name="key"/> and split into string array using <param name="separator"/> and <param name="options"/>.
+        /// </summary>
+        /// <param name="key">The key of the setting containing separated values</param>
+        /// <param name="separator">the separator(s) used to split string value</param>
+        /// <param name="options">the option used to split string value</param>
+        public List<T> CreateList<T>(string key, char[] separator, StringSplitOptions options)
+        {
+            if (!string.IsNullOrEmpty(key))
+            {
+                string stringValue;
+                TryGetValue(key, out stringValue);
+
+                if (stringValue != null)
+                {
+                    return stringValue
+                        .Split(separator, options)
+                        .Select(value =>
+                        {
+                            // Attempt to convert directly
+                            if (CanChangeType(new object[] {value}, typeof(T)))
+                                return (T) ChangeType(value, typeof(T));
+
+                            throw new ConfigurationErrorsException(string.Format(Resources.ConvertValueErrorFormat, value, typeof(T)));
+                        }).ToList();
+                }
+            }
+            return null;
         }
 
         /// <summary>
