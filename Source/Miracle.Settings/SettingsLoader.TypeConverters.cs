@@ -26,12 +26,13 @@ namespace Miracle.Settings
             {
                 new SimpleTypeConverter<Guid>(Guid.Parse),
 				new SimpleTypeConverter<TimeSpan>(TimeSpan.Parse),
+                // Note on FileInfo/DirectoryInfo type converters. First try to map using HostingEnvironment (Web). If null is returned, then use Path.GetFullPath (App)
                 new FileInfoTypeConverter(HostingEnvironment.MapPath, required:true),
                 new FileInfoTypeConverter(Path.GetFullPath, required:true),
                 new DirectoryInfoTypeConverter(HostingEnvironment.MapPath, required:true),
                 new DirectoryInfoTypeConverter(Path.GetFullPath, required:true),
 				new SimpleTypeConverter<DateTime>(s => XmlConvert.ToDateTime(s, XmlDateTimeSerializationMode.Local)),
-				new TypeTypeConverter(),
+                new SimpleTypeConverter<Type>(s => Type.GetType(s, true)),
 				new UriTypeConverter(),
 				new EnumTypeConverter(),
                 new DefaultChangeTypeConverter(),

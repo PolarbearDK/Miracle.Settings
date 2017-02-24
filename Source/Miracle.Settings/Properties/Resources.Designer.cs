@@ -131,5 +131,14 @@ namespace Miracle.Settings.Properties {
                 return ResourceManager.GetString("MissingValueFormat", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Setting [{0}] failed to validate with error: {1}.
+        /// </summary>
+        internal static string ValidationError {
+            get {
+                return ResourceManager.GetString("ValidationError", resourceCulture);
+            }
+        }
     }
 }

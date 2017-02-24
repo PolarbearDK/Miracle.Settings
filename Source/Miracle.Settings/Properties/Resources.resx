@@ -141,4 +141,7 @@
   <data name="MissingValueFormat" xml:space="preserve">
     <value>A value of type {0} has to be provided for Setting: [{1}]</value>
   </data>
+  <data name="ValidationError" xml:space="preserve">
+    <value>Setting [{0}] failed to validate with error: {1}</value>
+  </data>
 </root>

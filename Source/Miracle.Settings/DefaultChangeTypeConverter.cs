@@ -20,7 +20,6 @@ namespace Miracle.Settings
             typeof (Single),
             typeof (Double),
             typeof (Decimal),
-            //typeof (DateTime),
             typeof (String),
             typeof (Object),
         };

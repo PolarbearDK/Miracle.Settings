@@ -1,6 +1,4 @@
 using System;
-using System.Configuration;
-using Miracle.Settings.Properties;
 
 namespace Miracle.Settings
 {
@@ -8,13 +6,14 @@ namespace Miracle.Settings
     {
         public object ChangeType(object[] values, Type conversionType)
         {
-            if(values[0] is string)
-                return Enum.Parse(conversionType, (String)values[0], true);
+            var s = values[0] as string;
+            if(s != null)
+                return Enum.Parse(conversionType, s, true);
 
             if (values[0].GetType() == conversionType)
                 return values[0];
 
-            throw new ConfigurationErrorsException(string.Format(Resources.ConvertValueErrorFormat, values[0], conversionType));
+            return null;
         }
 
         public bool CanConvert(object[] values, Type conversionType)

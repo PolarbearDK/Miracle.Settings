@@ -90,7 +90,7 @@ namespace Miracle.Settings.Tests
 
     public class TypeSettings
     {
-		public Type Foo { get; private set; }
+		public Type MyType { get; private set; }
 	}
 
     public class DirectorySettings

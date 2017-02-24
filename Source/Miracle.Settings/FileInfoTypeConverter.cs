@@ -2,6 +2,7 @@ using System;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using Miracle.Settings.Properties;
 
 namespace Miracle.Settings
 {
@@ -32,7 +33,14 @@ namespace Miracle.Settings
         {
             if (values.Length > 0 && values.All(x => x is string) && !string.IsNullOrEmpty((string) values[0]))
             {
-                return PathResolver(Path.Combine(values.Cast<string>().ToArray()));
+                try
+                {
+                    return PathResolver(Path.Combine(values.Cast<string>().ToArray()));
+                }
+                catch
+                {
+                    // ignored
+                }
             }
             return null;
         }
@@ -44,10 +52,8 @@ namespace Miracle.Settings
 
         public object ChangeType(object[] values, Type conversionType)
         {
-            if (values.Length == 0) throw new ConfigurationErrorsException("Wrong number of values provided for type converter.");
-            string path = MapPath(values);
-            if(path == null) throw new ConfigurationErrorsException("Unable to map path.");
-            FileInfo fi = new FileInfo(path);
+            var fileName = MapPath(values);
+            FileInfo fi = new FileInfo(fileName);
             if (!fi.Exists)
             {
                 if (Create)
@@ -59,7 +65,7 @@ namespace Miracle.Settings
                 }
                 if (Required)
                 {
-                    throw new FileNotFoundException(path);
+                    throw new FileNotFoundException(fileName);
                 }
             }
             return fi;

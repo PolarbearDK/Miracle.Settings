@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using Miracle.Settings.Properties;
@@ -55,24 +56,19 @@ namespace Miracle.Settings.Tests
 		[Test]
 		public void FileAnnotationTest()
 		{
-			// Setup mock value provider with type
-			var valueProvider = new MockValueProvider(new Dictionary<string, string>
+            // Setup mock value provider with type
+            var settingsLoader = DictionaryValueProvider.CreateSettingsLoader(new Dictionary<string, string>
 			{
 				{"Drive", "C:\\"},
 				{"Folder", "Windows"},
 				{"FileName", "notepad.exe"},
 			});
-			var settingsLoader = new SettingsLoader();
-			settingsLoader.ValueProviders.Clear();
-			settingsLoader.ValueProviders.Add(valueProvider);
 			var settings = settingsLoader.Create<FileAnnotationSettings>();
 
 			// Defaults
 			Assert.That(settings.FullName, Is.Not.Null);
 			Assert.That(settings.FullName.FullName, Is.EqualTo(@"C:\Windows\notepad.exe"));
 		}
-
-
 
 		[Test]
 		public void FailTest1()
@@ -81,12 +77,19 @@ namespace Miracle.Settings.Tests
 				Resources.MissingValueFormat, typeof(FileInfo), GetKey(NotFoundPrefix, nameof(FileSettings.SimpleFile)));
 		}
 
-		[Test]
-		public void FailTest2()
-		{
-			AssertThrowsConfigurationErrorsExceptionMessageTest<FileInfo>(
-				Resources.MissingValueFormat, typeof(FileInfo), GetKey(NotFoundPrefix));
-		}
+        [Test]
+        public void FailTest2()
+        {
+            AssertThrowsConfigurationErrorsExceptionMessageTest<FileInfo>(
+                Resources.MissingValueFormat, typeof(FileInfo), GetKey(NotFoundPrefix));
+        }
 
-	}
+        [Test]
+        public void FailTest3()
+        {
+            Assert.That(() => new SettingsLoader().Create<FileInfo>(nameof(SimpleSettings.Uri)), 
+                Throws.Exception.TypeOf<ConfigurationErrorsException>()
+                .With.Message.EqualTo(string.Format(Resources.CreateErrorFormat, typeof(FileInfo), nameof(SimpleSettings.Uri))));
+        }
+    }
 }

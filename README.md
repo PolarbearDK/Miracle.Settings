@@ -1,48 +1,43 @@
 # Miracle.Settings
 
-Deserialize/Load settings into strong typed object (POCO).
+Load your application settings into strong typed objects. 
 
-Features:
-* Load settings from config file, environment variables or custom source (Database is an obvious scenario)
-* Load settings prefixed by a specific prefix, or from root (prefix=null)
-* Throws exception in case of missing setting.
+The advantages are many:
+* No need to write code that load each appSetting.
+* No "magic strings" and no defaults scattered around in your source files.
+* Your application fails immediately upon bad configuration.
+* Detailed error messages describing exactly which setting is invalid. 
+* You can use DI to inject strong typed settings into your application.
+* Your settings are always valid, so no need to check each setting manually.
 * Supports nested objects, arrays, lists and dictionaries.
-* Construct property from more than one value (reference).
-* Extendable type convertion system
-* Built-in type converters for most common types with error checking:
-  * All System.* simple value types.
-  * System.String
-  * System.Enum (incl. flags enum)
-  * System.Guid
-  * System.DateTime (ISO8601 converted to local date/time)
-  * System.Timespan
-  * System.Type (throws if type is not found)
-  * System.Uri (throws if invalid uri)
-  * DirectoryInfo (throws if directory does not exist)
-  * FileInfo (throws if directory does not exist)
+* It's super simple.
+
+Wait you might say... You can du that with ConfigurationSections! Well you can but there are many drawbacks, and you have to write a LOT of code.
 
 ## Table of content
-* [Usage](#usage)
-* [Simple Example](#simple-example)
+* [Install](#Install)
+* [Usage](#Usage)
 * [Using default value](#using-default-value)
 * [Nested object](#Nested-object)
 * [Arrays, Lists & Dictionaries](#arrays-lists--dictionaries)
+* [Type support](#Type-support)
+* [Rules](#Rules)
 
 Advanced topics
 * [Controlling deserialization with annotations](Annotatons.md)
 * [Type converters](TypeConverters.md)
 * [Value providers](ValueProviders.md)
+* [Load property from multiple AppSetting values](Reference.md)
+* [Validating settings](Validation.md)
 
-## Usage
+## Install
 Available as a NuGet package: [Miracle.Settings](https://www.nuget.org/packages/Miracle.Settings/)
 
 To install Miracle.Settings, run the following command in the Package Manager Console
 ```Powershell
 PM> Install-Package Miracle.Settings
 ```
-
-
-## Simple example
+## Usage
 A basic example on how to load a POCO object with settings.
 ```XML
 <configuration>
@@ -52,23 +47,26 @@ A basic example on how to load a POCO object with settings.
   </appSettings>
 </configuration>
 ```
+The setting that you wish to load from app.config or web.config.
 ```CSharp
 public class FooBar
 {
-    public string Foo { get; set; }
-    public int Bar { get; set; }
+    public string Foo { get; }
+    public int Bar { get; }
 }
 ```
+The POCO (Plain Old CLR Object) that settings are serialized/loaded into.
 ```CSharp
 ISettingsLoader settingsLoader = new SettingsLoader();
 // Get settings at "root" level (without a prefix) 
 var settings = settingsLoader.Create<FooBar>();
 ```
+This code loads settings of type of type FooBar into settings variable. Put this code somewhere in your application startup code.
+Note! Load settings ONCE, and expose the initialized setting object to the rest of your code.
 
 ## Using default value
 If no value is provided for a property, then value is taken from DefaultValueAttribute.
 
-Sample:
 ```XML
 <configuration>
   <appSettings>
@@ -79,9 +77,9 @@ Sample:
 ```CSharp
 public class FooBar
 {
-    public string Foo { get; set; }
+    public string Foo { get; }
     [DefaultValue(42)]
-    public int Bar { get; set; }
+    public int Bar { get; }
 }
 ```
 ```CSharp
@@ -107,14 +105,14 @@ Nested objects are supported using "dot" notation.
 ```CSharp
 public class FooBar
 {
-    public string Foo { get; set; }
-    public Nested Nested { get; set; }
+    public string Foo { get; }
+    public Nested Nested { get; }
 }
 
 public class Nested
 {
-    public string Foo { get; set; }
-    public int Bar { get; set; }
+    public string Foo { get; }
+    public int Bar { get; }
 }
 ```
 
@@ -148,6 +146,21 @@ List<string> settings2 = settingsLoader.CreateList<string>("MyPrefix");
 // In this case this would produce keys: "1","2","x"
 Dictionary<string,string> settings3 = settingsLoader.CreateDictionary<string>("MyPrefix");
 ```
+## Type support
+Settings can be loaded into all simple value types that implements IConvertible interface.
+Support for additional types can be added by providing a type converter for the specific type.
+
+Miracle.Settings has built in support for these additional types:
+Type|Comment
+----|-------
+Enum|incl. flags enum
+Guid|Any format that Guid.Parse supports.
+DateTime|ISO8601 converted to local date/time
+TimeSpan|Any format that TimeSpan.Parse supports.
+Type|checks that type exist
+Uri|check that url is valid
+DirectoryInfo|check that directory exist
+FileInfo|check if file exist
 
 ## Rules
 When loading a strong typed object, the following rules apply:
