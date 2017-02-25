@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Linq;
 
 namespace Miracle.Settings
@@ -24,9 +25,9 @@ namespace Miracle.Settings
             typeof (Object),
         };
 
-        public object ChangeType(object[] values, Type conversionType)
+        public object ChangeType(object[] values, Type conversionType, IFormatProvider formatProvider)
         {
-            return Convert.ChangeType(values[0], conversionType);
+            return Convert.ChangeType(values[0], conversionType, formatProvider);
         }
 
         public bool CanConvert(object[] values, Type conversionType)

@@ -1,7 +1,5 @@
 using System;
-using System.Configuration;
 using System.Diagnostics;
-using Miracle.Settings.Properties;
 
 namespace Miracle.Settings
 {
@@ -25,7 +23,7 @@ namespace Miracle.Settings
             return conversionType == typeof(T) && values.Length == 1 && (values[0] is string || values[0].GetType() == conversionType);
         }
 
-        public object ChangeType(object[] values, Type conversionType)
+        public object ChangeType(object[] values, Type conversionType, IFormatProvider formatProvider)
         {
             Debug.Assert(values.Length == 1);
 

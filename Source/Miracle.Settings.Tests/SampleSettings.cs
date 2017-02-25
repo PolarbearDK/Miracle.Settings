@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Net;
 using System.Reflection;
 // ReSharper disable ClassNeverInstantiated.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Local
@@ -36,8 +37,11 @@ namespace Miracle.Settings.Tests
 		[DefaultValue("https://foo.bar")]
 		public Uri DefaultUri { get; private set; }
 
-		[DefaultValue("EE58EE2B-4CE6-44A4-8773-EC4E283146EB")]
+        [DefaultValue("EE58EE2B-4CE6-44A4-8773-EC4E283146EB")]
         public Guid DefaultGuid { get; private set; }
+
+        [DefaultValue("10.42.42.42")]
+        public IPAddress DefaultIp { get; private set; }
 
         [DefaultValue(new[] {"foo","bar"})]
         public string[] DefaultArray { get; private set; }
@@ -53,6 +57,7 @@ namespace Miracle.Settings.Tests
 	    public Type Type { get; private set; }
 	    public Uri Uri { get; private set; }
 	    public Guid Guid { get; private set; }
+	    public IPAddress IPAddress { get; private set; }
     }
 
     public class SimpleSettingsWithSettingName

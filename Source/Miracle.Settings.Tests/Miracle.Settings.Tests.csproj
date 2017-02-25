@@ -75,6 +75,7 @@
     <Compile Include="Movie.cs" />
     <Compile Include="SampleSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="IpAddressTests.cs" />
     <Compile Include="TypeLoadTests.cs" />
     <Compile Include="ValidationTests.cs" />
   </ItemGroup>

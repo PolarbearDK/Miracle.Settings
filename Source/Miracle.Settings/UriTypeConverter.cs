@@ -10,7 +10,7 @@ namespace Miracle.Settings
             return conversionType == typeof(Uri) && values.Length > 0 && values.Length <= 2 && values[0] is string;
         }
 
-        public object ChangeType(object[] values, Type conversionType)
+        public object ChangeType(object[] values, Type conversionType, IFormatProvider formatProvider)
         {
             switch (values.Length)
             {

@@ -13,8 +13,14 @@ namespace Miracle.Settings
     /// </summary>
     public partial class SettingsLoader : ISettingsLoader
     {
-        public string PropertySeparator = ".";
+        /// <summary>
+        /// The separator between appSetting key fragments
+        /// </summary>
+        public string PropertySeparator { get; set; } = ".";
 
+        /// <summary>
+        /// Construct SettingsLoader
+        /// </summary>
         public SettingsLoader()
         {
             ValueProviders = GetDefaultValueProviders();

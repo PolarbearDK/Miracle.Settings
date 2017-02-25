@@ -50,7 +50,7 @@ namespace Miracle.Settings
             return conversionType == typeof(FileInfo) && MapPath(values) != null;
         }
 
-        public object ChangeType(object[] values, Type conversionType)
+        public object ChangeType(object[] values, Type conversionType, IFormatProvider formatProvider)
         {
             var fileName = MapPath(values);
             FileInfo fi = new FileInfo(fileName);
