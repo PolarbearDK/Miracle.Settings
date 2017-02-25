@@ -2,6 +2,7 @@ using System;
 
 namespace Miracle.Settings
 {
+
     public class EnumTypeConverter : ITypeConverter
     {
         public bool CanConvert(object[] values, Type conversionType)

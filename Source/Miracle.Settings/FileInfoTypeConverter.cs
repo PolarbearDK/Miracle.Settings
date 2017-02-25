@@ -1,8 +1,6 @@
 using System;
-using System.Configuration;
 using System.IO;
 using System.Linq;
-using Miracle.Settings.Properties;
 
 namespace Miracle.Settings
 {

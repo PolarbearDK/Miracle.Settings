@@ -1,5 +1,4 @@
 using System;
-using System.Globalization;
 using System.Linq;
 
 namespace Miracle.Settings
@@ -8,21 +7,21 @@ namespace Miracle.Settings
     {
         private readonly Type[] _handledTypes =
         {
-            typeof (Boolean),
-            typeof (Char),
-            typeof (SByte),
-            typeof (Byte),
-            typeof (Int16),
-            typeof (UInt16),
-            typeof (Int32),
-            typeof (UInt32),
-            typeof (Int64),
-            typeof (UInt64),
-            typeof (Single),
-            typeof (Double),
-            typeof (Decimal),
-            typeof (String),
-            typeof (Object),
+            typeof (bool),
+            typeof (char),
+            typeof (sbyte),
+            typeof (byte),
+            typeof (short),
+            typeof (ushort),
+            typeof (int),
+            typeof (uint),
+            typeof (long),
+            typeof (ulong),
+            typeof (float),
+            typeof (double),
+            typeof (decimal),
+            typeof (string),
+            typeof (object),
         };
 
         public object ChangeType(object[] values, Type conversionType, IFormatProvider formatProvider)

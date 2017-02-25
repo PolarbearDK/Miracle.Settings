@@ -16,7 +16,7 @@ namespace Miracle.Settings
             _convert = convert;
         }
 
-        public Type Type => typeof (T);
+        public Type Type => typeof(T);
 
         public bool CanConvert(object[] values, Type conversionType)
         {
