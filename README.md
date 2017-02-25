@@ -62,6 +62,7 @@ ISettingsLoader settingsLoader = new SettingsLoader();
 var settings = settingsLoader.Create<FooBar>();
 ```
 This code loads settings of type of type FooBar into settings variable. Put this code somewhere in your application startup code.
+
 Note! Load settings ONCE, and expose the initialized setting object to the rest of your code.
 
 ## Using default value
@@ -151,17 +152,18 @@ Settings can be loaded into all simple value types that implement IConvertible i
 Support for additional types can be added by providing a type converter for the specific type.
 
 Miracle.Settings has built in support for these additional types:
-Type|Comment
-----|-------
-DateTime|ISO8601 converted to local date/time
-DirectoryInfo|check that directory exist
-Enum|incl. flags enum
-FileInfo|check that file exist
-Guid|Any format that [Guid.Parse](https://msdn.microsoft.com/en-us/library/system.guid.parse.aspx) supports.
-IPAddress|Any format that [IPAddress.Parse](https://msdn.microsoft.com/en-us/library/system.net.ipaddress.parse.aspx) supports.
-TimeSpan|Any format that [TimeSpan.Parse](https://msdn.microsoft.com/en-us/library/system.timespan.parse.aspx) supports.
-Type|checks that type exist
-Uri|check that url is valid
+
+| Type | Comment |
+| --- | --- |
+| DateTime | ISO8601 converted to local date/time |
+| DirectoryInfo | check that directory exist |
+| Enum | incl. flags enum |
+| FileInfo | check that file exist |
+| Guid|Any format that [Guid.Parse](https://msdn.microsoft.com/en-us/library/system.guid.parse.aspx) supports. |
+| IPAddress | Any format that [IPAddress.Parse](https://msdn.microsoft.com/en-us/library/system.net.ipaddress.parse.aspx) supports. |
+| TimeSpan | Any format that [TimeSpan.Parse](https://msdn.microsoft.com/en-us/library/system.timespan.parse.aspx) supports. |
+| Type | checks that type exist |
+| Uri | check that url is valid |
 
 ## Rules
 When loading a strong typed object, the following rules apply:
