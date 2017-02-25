@@ -16,13 +16,13 @@ The advantages are many:
 Wait you might say... You can du that with ConfigurationSections! Well you can but there are many drawbacks, and you have to write a LOT of plumbing code.
 
 ## Table of content
-* [Install](#Install)
-* [Usage](#Usage)
+* [Install](#install)
+* [Usage](#usage)
 * [Using default value](#using-default-value)
-* [Nested object](#Nested-object)
+* [Nested object](#nested-object)
 * [Arrays, Lists & Dictionaries](#arrays-lists--dictionaries)
-* [Type support](#Type-support)
-* [Rules](#Rules)
+* [Type support](#type-support)
+* [Rules](#rules)
 
 Advanced topics
 * [Controlling deserialization with annotations](Annotatons.md)
@@ -153,14 +153,15 @@ Support for additional types can be added by providing a type converter for the 
 Miracle.Settings has built in support for these additional types:
 Type|Comment
 ----|-------
-Enum|incl. flags enum
-Guid|Any format that Guid.Parse supports.
 DateTime|ISO8601 converted to local date/time
-TimeSpan|Any format that TimeSpan.Parse supports.
+DirectoryInfo|check that directory exist
+Enum|incl. flags enum
+FileInfo|check that file exist
+Guid|Any format that [Guid.Parse](https://msdn.microsoft.com/en-us/library/system.guid.parse.aspx) supports.
+IPAddress|Any format that [IPAddress.Parse](https://msdn.microsoft.com/en-us/library/system.net.ipaddress.parse.aspx) supports.
+TimeSpan|Any format that [TimeSpan.Parse](https://msdn.microsoft.com/en-us/library/system.timespan.parse.aspx) supports.
 Type|checks that type exist
 Uri|check that url is valid
-DirectoryInfo|check that directory exist
-FileInfo|check that file exist
 
 ## Rules
 When loading a strong typed object, the following rules apply:

@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Miracle.Settings.Tests
 {
+    /// <summary>
+    /// Sample class more or less taken from Microsoft documentation.
+    /// </summary>
     public class Movie
     {
         public int ID { get; set; }

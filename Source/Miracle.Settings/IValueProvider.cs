@@ -14,6 +14,7 @@ namespace Miracle.Settings
         /// <param name="value">Output parameter: value found</param>
         /// <returns>True if value was found, otherwise false</returns>
         bool TryGetValue(string key, out string value);
+
         /// <summary>
         /// Get all keys prefixed by <param name="prefix" />
         /// </summary>

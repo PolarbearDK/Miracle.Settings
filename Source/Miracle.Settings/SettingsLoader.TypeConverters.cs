@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Web.Hosting;
 using System.Xml;
 using Miracle.Settings.Properties;
@@ -17,6 +19,11 @@ namespace Miracle.Settings
         public List<ITypeConverter> TypeConverters { get; }
 
         /// <summary>
+        /// The culture used in conversions
+        /// </summary>
+        public CultureInfo CultureInfo { get; set; } = CultureInfo.InvariantCulture;
+
+        /// <summary>
         /// Get default type converters
         /// </summary>
         /// <returns></returns>
@@ -25,38 +32,41 @@ namespace Miracle.Settings
             return new List<ITypeConverter>()
             {
                 new SimpleTypeConverter<Guid>(Guid.Parse),
-				new SimpleTypeConverter<TimeSpan>(TimeSpan.Parse),
-                // Note on FileInfo/DirectoryInfo type converters. First try to map using HostingEnvironment (Web). If null is returned, then use Path.GetFullPath (App)
-                new FileInfoTypeConverter(HostingEnvironment.MapPath, required:true),
-                new FileInfoTypeConverter(Path.GetFullPath, required:true),
-                new DirectoryInfoTypeConverter(HostingEnvironment.MapPath, required:true),
-                new DirectoryInfoTypeConverter(Path.GetFullPath, required:true),
-				new SimpleTypeConverter<DateTime>(s => XmlConvert.ToDateTime(s, XmlDateTimeSerializationMode.Local)),
+                new SimpleTypeConverter<TimeSpan>(s => TimeSpan.Parse(s, CultureInfo)),
+                new SimpleTypeConverter<DateTime>(s => XmlConvert.ToDateTime(s, XmlDateTimeSerializationMode.Local)),
+                new SimpleTypeConverter<IPAddress>(IPAddress.Parse),
                 new SimpleTypeConverter<Type>(s => Type.GetType(s, true)),
-				new UriTypeConverter(),
-				new EnumTypeConverter(),
+
+                // Note on FileInfo/DirectoryInfo type converters. First try to map using HostingEnvironment (Web). If null is returned, then use Path.GetFullPath (App)
+                new FileInfoTypeConverter(HostingEnvironment.MapPath, required: true),
+                new FileInfoTypeConverter(Path.GetFullPath, required: true),
+                new DirectoryInfoTypeConverter(HostingEnvironment.MapPath, required: true),
+                new DirectoryInfoTypeConverter(Path.GetFullPath, required: true),
+
+                new UriTypeConverter(),
+                new EnumTypeConverter(),
                 new DefaultChangeTypeConverter(),
             };
         }
 
-		/// <summary>
-		/// Convert value into instance of type conversionType
-		/// </summary>
-		/// <param name="values">the values to convert</param>
-		/// <param name="conversionType">The type to convert to</param>
-		/// <returns></returns>
-		private bool CanChangeType(object[] values, Type conversionType)
-		{
-			return TypeConverters.Any(typeConverter => typeConverter.CanConvert(values, conversionType));
-		}
+        /// <summary>
+        /// Convert value into instance of type conversionType
+        /// </summary>
+        /// <param name="values">the values to convert</param>
+        /// <param name="conversionType">The type to convert to</param>
+        /// <returns></returns>
+        private bool CanChangeType(object[] values, Type conversionType)
+        {
+            return TypeConverters.Any(typeConverter => typeConverter.CanConvert(values, conversionType));
+        }
 
-		/// <summary>
-		/// Convert value into instance of type conversionType
-		/// </summary>
-		/// <param name="value">the value to convert</param>
-		/// <param name="conversionType">The type to convert to</param>
-		/// <returns></returns>
-		private object ChangeType(object value, Type conversionType)
+        /// <summary>
+        /// Convert value into instance of type conversionType
+        /// </summary>
+        /// <param name="value">the value to convert</param>
+        /// <param name="conversionType">The type to convert to</param>
+        /// <returns></returns>
+        private object ChangeType(object value, Type conversionType)
         {
             return ChangeType(new[] {value}, conversionType);
         }
@@ -69,7 +79,7 @@ namespace Miracle.Settings
         /// <returns></returns>
         private object ChangeType(object[] values, Type conversionType)
         {
-            if(values.Length == 1 && conversionType.IsInstanceOfType(values[0]))
+            if (values.Length == 1 && conversionType.IsInstanceOfType(values[0]))
             {
                 return values[0];
             }
@@ -91,11 +101,11 @@ namespace Miracle.Settings
                     conversionType));
         }
 
-        private static object ChangeType(object[] values, Type conversionType, ITypeConverter typeConverter)
+        private object ChangeType(object[] values, Type conversionType, ITypeConverter typeConverter)
         {
             try
             {
-                return typeConverter.ChangeType(values, conversionType);
+                return typeConverter.ChangeType(values, conversionType, this.CultureInfo);
             }
             catch (ConfigurationErrorsException)
             {

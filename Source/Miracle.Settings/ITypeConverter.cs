@@ -16,8 +16,9 @@ namespace Miracle.Settings
         /// Convert <param name="values"/> into instance of type <param name="conversionType"/>
         /// </summary>
         /// <param name="values">Values to convert</param>
-        /// <param name="conversionType">Destination type to convert to</param>
+        /// <param name="conversionType">The type of object to return.</param>
+        /// <param name="formatProvider">An object that supplies culture-specific formatting information.</param>
         /// <returns>Instance of type <param name="conversionType"/> or null if unable to convert</returns>
-        object ChangeType(object[] values, Type conversionType);
+        object ChangeType(object[] values, Type conversionType, IFormatProvider formatProvider);
     }
 }

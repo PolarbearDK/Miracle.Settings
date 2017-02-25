@@ -1,8 +1,6 @@
 using System;
-using System.Configuration;
 using System.IO;
 using System.Linq;
-using Miracle.Settings.Properties;
 
 namespace Miracle.Settings
 {
@@ -31,8 +29,8 @@ namespace Miracle.Settings
 
         private string MapPath(object[] values)
         {
-			if (values.Length > 0 && values.All(x => x is string) && !string.IsNullOrEmpty((string)values[0]))
-			{
+            if (values.Length > 0 && values.All(x => x is string) && !string.IsNullOrEmpty((string) values[0]))
+            {
                 try
                 {
                     return PathResolver(Path.Combine(values.Cast<string>().ToArray()));
@@ -50,7 +48,7 @@ namespace Miracle.Settings
             return conversionType == typeof(DirectoryInfo) && MapPath(values) != null;
         }
 
-        public object ChangeType(object[] values, Type conversionType)
+        public object ChangeType(object[] values, Type conversionType, IFormatProvider formatProvider)
         {
             var path = MapPath(values);
             DirectoryInfo fi = new DirectoryInfo(path);

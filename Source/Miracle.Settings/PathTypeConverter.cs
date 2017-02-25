@@ -11,12 +11,12 @@ namespace Miracle.Settings
     {
         public bool CanConvert(object[] values, Type conversionType)
         {
-            return conversionType == typeof(string) && values.Length > 0 && values.All(x=>x is string);
+            return conversionType == typeof(string) && values.Length > 0 && values.All(x => x is string);
         }
 
-        public object ChangeType(object[] values, Type conversionType)
+        public object ChangeType(object[] values, Type conversionType, IFormatProvider formatProvider)
         {
-           return Path.Combine(values.Cast<string>().ToArray());
+            return Path.Combine(values.Cast<string>().ToArray());
         }
     }
 }

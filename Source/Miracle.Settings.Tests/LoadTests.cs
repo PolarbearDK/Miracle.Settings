@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Reflection;
 using System.Xml;
 using KellermanSoftware.CompareNetObjects;
@@ -17,26 +18,21 @@ namespace Miracle.Settings.Tests
 	    {
 	    }
 
-	    [Test]
+        [Test]
         public void DefaultLoadTest()
         {
             var settings = SettingsLoader.Create<DefaultSettings>();
 
             // Defaults
-            Assert.That(settings, Is.DeepEqualTo(
-                new
-                {
-                    DefaultString = "Default Hello World",
-                    DefaultEnum = BindingFlags.Instance | BindingFlags.Public,
-                    DefaultDateTime = new DateTime(1966, 6, 11, 13, 34, 56, DateTimeKind.Local).AddMilliseconds(789),
-                    DefaultTimeSpan = new TimeSpan(1, 2, 3, 4),
-					DefaultType = typeof(AccessViolationException),
-					DefaultUri = new Uri("https://foo.bar"),
-					DefaultGuid = Guid.Parse("EE58EE2B-4CE6-44A4-8773-EC4E283146EB"),
-                    DefaultArray = new[] { "foo", "bar" },
-                })
-                .WithComparisonConfig(new ComparisonConfig() {IgnoreObjectTypes = true})
-                );
+            Assert.That(settings.DefaultString, Is.EqualTo("Default Hello World"));
+            Assert.That(settings.DefaultEnum, Is.EqualTo(BindingFlags.Instance | BindingFlags.Public));
+            Assert.That(settings.DefaultDateTime, Is.EqualTo(new DateTime(1966, 6, 11, 13, 34, 56, DateTimeKind.Local).AddMilliseconds(789)));
+            Assert.That(settings.DefaultTimeSpan, Is.EqualTo(new TimeSpan(1, 2, 3, 4)));
+            Assert.That(settings.DefaultType, Is.EqualTo(typeof(AccessViolationException)));
+            Assert.That(settings.DefaultUri, Is.EqualTo(new Uri("https://foo.bar")));
+            Assert.That(settings.DefaultGuid, Is.EqualTo(Guid.Parse("EE58EE2B-4CE6-44A4-8773-EC4E283146EB")));
+            Assert.That(settings.DefaultIp, Is.EqualTo(IPAddress.Parse("10.42.42.42")));
+            Assert.That(settings.DefaultArray, Is.EqualTo(new[] {"foo", "bar"}));
         }
 
         [Test]
@@ -55,6 +51,7 @@ namespace Miracle.Settings.Tests
             Assert.That(settings.Type, Is.EqualTo(typeof(System.Data.SqlClient.SqlConnection)));
 			Assert.That(settings.Uri, Is.EqualTo(new Uri("Http://hello.eu")));
 			Assert.That(settings.Guid, Is.EqualTo(Guid.Parse("DCFA0942-0BEC-43E4-8D77-57BA63C7BF7B")));
+			Assert.That(settings.IPAddress, Is.EqualTo(IPAddress.Parse("192.168.0.42")));
         }
 
         [Test]
