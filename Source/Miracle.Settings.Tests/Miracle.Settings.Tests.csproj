@@ -66,6 +66,7 @@
     <Compile Include="DatabaseTest\SampleSqlValueProviderTests.cs" />
     <Compile Include="DirectoryInfoLoadTests.cs" />
     <Compile Include="GenericTests.cs" />
+    <Compile Include="InterfaceMappingTests.cs" />
     <Compile Include="LoadFailTestBase.cs" />
     <Compile Include="LoadFailTests.cs" />
     <Compile Include="LoadTestBase.cs" />
@@ -73,10 +74,12 @@
     <Compile Include="LoadTests.cs" />
     <Compile Include="DictionaryValueProvider.cs" />
     <Compile Include="Movie.cs" />
+    <Compile Include="OptionalSettingTests.cs" />
     <Compile Include="SampleSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IpAddressTests.cs" />
     <Compile Include="TypeLoadTests.cs" />
+    <Compile Include="IgnoreSettingTests.cs" />
     <Compile Include="ValidationTests.cs" />
   </ItemGroup>
   <ItemGroup>

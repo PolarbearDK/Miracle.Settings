@@ -9,14 +9,6 @@ namespace Miracle.Settings
         /// </summary>
         public List<IValueProvider> ValueProviders { get; }
 
-        private static List<IValueProvider> GetDefaultValueProviders()
-        {
-            return new List<IValueProvider>
-            {
-                new AppSettingsValueProvider()
-            };
-        }
-
         public SettingsLoader AddProvider(IValueProvider provider)
         {
             ValueProviders.Add(provider);
@@ -57,6 +49,12 @@ namespace Miracle.Settings
             }
             keys = null;
             return false;
+        }
+
+        private bool HasKeys(string prefix)
+        {
+            IEnumerable<string> keys;
+            return GetKeys(prefix, out keys);
         }
     }
 }

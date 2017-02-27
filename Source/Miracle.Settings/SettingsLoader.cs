@@ -19,11 +19,20 @@ namespace Miracle.Settings
         public string PropertySeparator { get; set; } = ".";
 
         /// <summary>
-        /// Construct SettingsLoader
+        /// Construct SettingsLoader using AppSettings as value provider
         /// </summary>
         public SettingsLoader()
+            : this(new AppSettingsValueProvider())
         {
-            ValueProviders = GetDefaultValueProviders();
+        }
+
+        /// <summary>
+        /// Construct SettingsLoader using specific Value provider
+        /// </summary>
+        /// <param name="valueProviders">List of value providers to use for this SettingLoader instance</param>
+        public SettingsLoader(params IValueProvider[] valueProviders)
+        {
+            ValueProviders = new List<IValueProvider>(valueProviders);
             _typeHandlers = GetTypeHandlers();
             TypeConverters = GetDefaultTypeConverters();
         }
@@ -45,9 +54,14 @@ namespace Miracle.Settings
                 object value = null;
                 if (_typeHandlers.Any(typeHandler => typeHandler(propertyInfo, prefix, key, out value)))
                 {
-                    propertyInfo.SetValue(instance, value, null);
+                    if (value != null)
+                    {
+                        propertyInfo.SetValue(instance, value, null);
+                        continue;
+                    }
                 }
-                else
+
+                if (!propertyInfo.GetCustomAttributes(typeof(OptionalAttribute), false).Any())
                 {
                     throw new ConfigurationErrorsException(string.Format(Resources.MissingValueFormat, propertyInfo.PropertyType, key));
                 }
@@ -55,8 +69,8 @@ namespace Miracle.Settings
 
             // Validate model using System.ComponentModel.DataAnnotations;
             var validationResults = new List<ValidationResult>();
-            var context = new ValidationContext(instance, serviceProvider: null, items: null);
-            if (!Validator.TryValidateObject(instance, context, validationResults, validateAllProperties: true))
+            var context = new ValidationContext(instance, null, null);
+            if (!Validator.TryValidateObject(instance, context, validationResults, true))
             {
                 var validationResult = validationResults.First();
                 throw new ConfigurationErrorsException(string.Format(Resources.ValidationError, prefix + validationResult.MemberNames.First(), validationResult.ErrorMessage));
@@ -93,7 +107,7 @@ namespace Miracle.Settings
                 }
                 catch (Exception ex)
                 {
-                    // Error could be caused by missing value.
+                    // Error could be caused by missing value and for that reason no matching type converter.
                     if (stringValue == null)
                     {
                         throw new ConfigurationErrorsException(string.Format(Resources.MissingValueFormat, typeof(T), prefix));
@@ -250,7 +264,8 @@ namespace Miracle.Settings
         {
             return typeof(T)
                 .GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                .Where(x => x.CanWrite);
+                .Where(x => x.CanWrite)
+                .Where(x => !x.GetCustomAttributes(typeof(IgnoreAttribute), false).Any());
         }
 
         /// <summary>

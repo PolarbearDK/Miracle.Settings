@@ -12,20 +12,11 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Load your application settings into strong typed objects with two lines of code.
 
-The advantages are many:
-  - It's super simple.
-  - No need to write code that load, convert and validate each appSetting.
-  - No "magic strings" and no defaults scattered around in your source files.
-  - Your application fails immediately upon bad configuration.
-  - Get detailed error messages describing exactly which setting has failed.
-  - Your settings are always valid.
-  - You can use DI to inject strong typed settings into your application.
-  - Supports nested objects, arrays, lists and dictionaries.
-  - Property validation.
+Supports validation, nested objects, arrays, lists and dictionaries.
 	</description>
     <summary>Load your application settings into strong typed objects with two lines of code.</summary>
-    <releaseNotes>Add validation support. Added Separator to SettingAttribute to split strings into values.</releaseNotes>
+    <releaseNotes>Added IgnoreAttribute, OptionalAttribute and ConcreteType.</releaseNotes>
     <copyright>Copyright 2016-2017</copyright>
-    <tags>AppSetting AppSettings setting settings POCO class object strong type typed config configuration nested array list dictionary file directory type uri guid verified</tags>
+    <tags>AppSettings AppSetting strong type typed nested class array list dictionary validate POCO settings setting config configuration</tags>
   </metadata>
 </package>

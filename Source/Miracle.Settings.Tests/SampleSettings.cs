@@ -46,7 +46,7 @@ namespace Miracle.Settings.Tests
         [DefaultValue(new[] {"foo","bar"})]
         public string[] DefaultArray { get; private set; }
     }
-
+    
     public class SimpleSettings
     {
         // -- Simple values --
@@ -58,6 +58,36 @@ namespace Miracle.Settings.Tests
 	    public Uri Uri { get; private set; }
 	    public Guid Guid { get; private set; }
 	    public IPAddress IPAddress { get; private set; }
+    }
+
+    public class IgnoreSettings
+    {
+        // Required
+        public string String { get; private set; }
+        [Ignore]
+        public string Ignored { get; private set; }
+        [Ignore]
+        public Nested NestedIgnored { get; private set; }
+        [Ignore]
+        public string[] NestedIgnoredArray { get; private set; }
+    }
+
+    public class OptionalSettings
+    {
+        // Required
+        public string String { get; private set; }
+        [Optional]
+        public string OptionalPresent { get; private set; }
+        [Optional]
+        public string OptionalMissing { get; private set; }
+        [Optional]
+        public Nested OptionalNestedPresent { get; private set; }
+        [Optional]
+        public Nested OptionalNestedMissing { get; private set; }
+        [Optional]
+        public string[] OptionalArrayPresent { get; private set; }
+        [Optional]
+        public string[] OptionalArrayMissing { get; private set; }
     }
 
     public class SimpleSettingsWithSettingName
@@ -110,7 +140,7 @@ namespace Miracle.Settings.Tests
 
 	public class NestedSettings
     {
-        public Nested MyNestedProperty { get; set; }
+        public Nested MyNestedProperty { get; internal set; }
     }
 
     public class ArraySettings
@@ -141,8 +171,8 @@ namespace Miracle.Settings.Tests
 
     class Animal
     {
-        public string Name { get; set; }
-        public bool Talks { get; set; }
+        public string Name { get; internal set; }
+        public bool Talks { get; internal set; }
     }
 
     public class ReferenceSettings
@@ -171,56 +201,81 @@ namespace Miracle.Settings.Tests
 
     public class MissingStringSetting
     {
-        public string MissingString { get; set; }
+        public string MissingString { get; private set; }
     }
 
     public class MissingDateTimeSetting
     {
-        public DateTime MissingDateTime { get; set; }
+        public DateTime MissingDateTime { get; private set; }
     }
 
     public class MissingIntSetting
     {
-        public int MissingInt { get; set; }
+        public int MissingInt { get; private set; }
     }
 
     public class MissingTimeSpanSetting
     {
-        public TimeSpan MissingTimeSpan { get; set; }
+        public TimeSpan MissingTimeSpan { get; private set; }
     }
 
     public class MissingUriSetting
     {
-        public Uri MissingUri { get; set; }
+        public Uri MissingUri { get; private set; }
     }
 
 	public class MissingFileInfoSetting
 	{
-		public FileInfo MissingFile { get; set; }
+		public FileInfo MissingFile { get; private set; }
 	}
 
 	public class MissingDirectoryInfoSetting
 	{
-		public DirectoryInfo MissingDir { get; set; }
+		public DirectoryInfo MissingDir { get; private set; }
 	}
 
 	public class BadTypeConverterSetting
     {
         [Setting(TypeConverter = typeof(string))]
         [DefaultValue("Bar")]
-        public string Foo { get; set; }
+        public string Foo { get; private set; }
     }
 
     public class TypeConversionFailureSetting
     {
         [DefaultValue("XYZ")]
-        public int Foo { get; set; }
+        public int Foo { get; private set; }
     }
 
     public class ExplicitTypeConversionFailureSetting
     {
         [DefaultValue("http://XYZ")]
         [Setting(TypeConverter = typeof(UriTypeConverter))]
-        public int Foo { get; set; }
+        public int Foo { get; private set; }
+    }
+
+    public interface IMyInterface
+    {
+        string Foo { get;  }
+        int Bar { get; }
+    }
+
+    public class MyConcreteImplementation: IMyInterface
+    {
+        public string Foo { get; private set; }
+        public int Bar { get; private set; }
+    }
+
+
+    public class InterfaceMapping
+    {
+        [Setting(ConcreteType = typeof(MyConcreteImplementation))]
+        public IMyInterface Prop { get; private set; }
+    }
+
+    public class BadInterfaceMapping
+    {
+        [Setting(ConcreteType = typeof(Nested))]
+        public IMyInterface Prop { get; private set; }
     }
 }

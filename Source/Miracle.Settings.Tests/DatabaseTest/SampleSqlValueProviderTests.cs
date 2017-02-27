@@ -27,9 +27,7 @@ namespace Miracle.Settings.Tests.DatabaseTest
 		}
 
 		public SampleSqlValueProviderTests(IDbConnection connection)
-			: base(new SettingsLoader()
-				.ClearProviders()
-				.AddProvider(new SampleSqlValueProvider(connection)))
+			: base(new SettingsLoader(new SampleSqlValueProvider(connection)))
 		{
 			_connection = connection;
 		}

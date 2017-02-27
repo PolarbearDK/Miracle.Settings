@@ -26,11 +26,7 @@ namespace Miracle.Settings.Tests
 	    public static SettingsLoader CreateSettingsLoader(IDictionary<string, string> values)
 	    {
 	        var valueProvider = new DictionaryValueProvider(values);
-	        var settingsLoader = new SettingsLoader();
-	        settingsLoader.ValueProviders.Clear();
-	        settingsLoader.ValueProviders.Add(valueProvider);
-	        return settingsLoader;
+	        return new SettingsLoader(valueProvider);
 	    }
-
 	}
 }

@@ -3,6 +3,22 @@ using System;
 namespace Miracle.Settings
 {
     /// <summary>
+    /// Ignore property.
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
+    public class IgnoreAttribute : Attribute
+    {
+    }
+
+    /// <summary>
+    /// Make property optional.
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
+    public class OptionalAttribute : Attribute
+    {
+    }
+
+    /// <summary>
     /// Describe how to construct the value of a property
     /// </summary>
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
@@ -52,6 +68,12 @@ namespace Miracle.Settings
         /// Used with Separators. Default: RemoveEmptyEntries
         /// </summary>
         public StringSplitOptions StringSplitOptions { get; set; } = StringSplitOptions.RemoveEmptyEntries;
+
+        /// <summary>
+        /// The concrete type to use when creating a property of interface or abstract type.
+        /// </summary>
+        /// <remarks>Type must have an empty constructor</remarks>
+        public Type ConcreteType { get; set; }
 
         /// <summary>
         /// Construct setting attribute

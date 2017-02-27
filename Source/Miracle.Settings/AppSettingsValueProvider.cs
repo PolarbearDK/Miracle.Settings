@@ -17,7 +17,7 @@ namespace Miracle.Settings
 
         public bool TryGetKeys(string prefix, out IEnumerable<string> keys)
         {
-            keys = ConfigurationManager.AppSettings.AllKeys.Where(x => x.StartsWith(prefix)).ToArray();
+            keys = ConfigurationManager.AppSettings.AllKeys.Where(x => prefix == null || x.StartsWith(prefix)).ToArray();
             return keys.Any();
         }
     }

@@ -38,14 +38,6 @@ namespace Miracle.Settings
                 if (TryConstructPropertyValue(propertyInfo, list.ToArray(), out value))
                     return true;
             }
-            else
-            {
-                // No value provided. Throw an error if any of the type converters can handle this property.
-                list.Add(string.Empty);
-                var values = list.ToArray();
-                if (TypeConverters.Any(x => x.CanConvert(values, propertyInfo.PropertyType)))
-                    throw new ConfigurationErrorsException(string.Format(Resources.MissingValueFormat, propertyInfo.PropertyType, key));
-            }
             value = null;
             return false;
         }
@@ -71,7 +63,8 @@ namespace Miracle.Settings
                 if (TryGetPropertyValue(propertyInfo, key, out value))
                     return true;
 
-                throw new ConfigurationErrorsException(string.Format(Resources.MissingValueFormat, propertyType, key));
+                value = null;
+                return true;
             }
             value = null;
             return false;
@@ -99,7 +92,8 @@ namespace Miracle.Settings
                 if (TryGetPropertyValue(propertyInfo, key, out value))
                     return true;
 
-                throw new ConfigurationErrorsException(string.Format(Resources.MissingValueFormat, propertyType, key));
+                value = null;
+                return true;
             }
             value = null;
             return false;
@@ -122,7 +116,8 @@ namespace Miracle.Settings
                 if (TryGetPropertyValue(propertyInfo, key, out value))
                     return true;
 
-                throw new ConfigurationErrorsException(string.Format(Resources.MissingValueFormat, propertyType, key));
+                value = null;
+                return true;
             }
             value = null;
             return false;
@@ -130,9 +125,20 @@ namespace Miracle.Settings
 
         private bool NestedClassHandler(PropertyInfo propertyInfo, string prefix, string key, out object value)
         {
-            var propertyType = propertyInfo.PropertyType;
+            SettingAttribute settingAttribute = propertyInfo.GetCustomAttributes(typeof(SettingAttribute), false).FirstOrDefault() as SettingAttribute;
+            var propertyType = settingAttribute?.ConcreteType ?? propertyInfo.PropertyType;
             if (propertyType.IsClass && propertyType != typeof(string))
             {
+                if (propertyInfo.GetCustomAttributes(typeof(OptionalAttribute), false).Any())
+                { 
+                    var nestedPrefix = string.IsNullOrEmpty(key) ? key : key + PropertySeparator;
+                    if (!HasKeys(nestedPrefix))
+                    {
+                        value = null;
+                        return false;
+                    }
+                }
+
                 try
                 {
                     value =
@@ -157,7 +163,7 @@ namespace Miracle.Settings
             var list = new List<object>();
 
             SettingAttribute attribute = propertyInfo.GetCustomAttributes(typeof (SettingAttribute), false).FirstOrDefault() as SettingAttribute;
-            if (attribute != null && attribute.References != null)
+            if (attribute?.References != null)
             {
                 foreach (var reference in attribute.References)
                 {

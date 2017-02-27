@@ -43,7 +43,7 @@ namespace Miracle.Settings.Tests
 			// Important for test that current directory is the test project folder
 			Directory.SetCurrentDirectory(_basePath);
 
-			var settings = SettingsLoader.CreateArray<DirectoryInfo>("DirectoryArray");
+			var settings = settingsLoader.CreateArray<DirectoryInfo>("DirectoryArray");
 
 			// Defaults
 			Assert.That(settings.Length, Is.EqualTo(3));
