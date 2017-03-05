@@ -2,6 +2,9 @@
 
 namespace Miracle.Settings
 {
+    /// <summary>
+    /// SerringsLoader use this interface to query if a type converter can handle a type conversion, and eventually do the type conversion.
+    /// </summary>
     public interface ITypeConverter
     {
         /// <summary>

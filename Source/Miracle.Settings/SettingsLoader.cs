@@ -185,7 +185,7 @@ namespace Miracle.Settings
         }
 
         /// <summary>
-        /// Create dictionary from settings prefixed by <param name="prefix"/>
+        /// Create dictionary from settings prefixed by <param name="prefix"/>.
         /// </summary>
         /// <param name="prefix">The prefix of all settings in the dictionary</param>
         /// <param name="comparer">Optional dictionary key comparer</param>

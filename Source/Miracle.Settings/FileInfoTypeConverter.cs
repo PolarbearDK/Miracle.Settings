@@ -10,9 +10,9 @@ namespace Miracle.Settings
     /// </summary>
     public class FileInfoTypeConverter : ITypeConverter
     {
-        public Func<string, string> PathResolver { get; }
-        public bool Required { get; }
-        public bool Create { get; }
+        private readonly Func<string, string> _pathResolver;
+        private readonly bool _required;
+        private readonly bool _create;
 
         /// <summary>
         /// Create instance of converter
@@ -22,18 +22,23 @@ namespace Miracle.Settings
         /// <param name="create">Create the file if it doesnt exist.</param>
         public FileInfoTypeConverter(Func<string, string> pathResolver, bool required = false, bool create = false)
         {
-            PathResolver = pathResolver;
-            Required = required;
-            Create = create;
+            _pathResolver = pathResolver;
+            _required = required;
+            _create = create;
         }
 
+        /// <summary>
+        /// Attempt to map a relative path to a full path using path resolver.
+        /// </summary>
+        /// <param name="values"></param>
+        /// <returns></returns>
         private string MapPath(object[] values)
         {
             if (values.Length > 0 && values.All(x => x is string) && !string.IsNullOrEmpty((string) values[0]))
             {
                 try
                 {
-                    return PathResolver(Path.Combine(values.Cast<string>().ToArray()));
+                    return _pathResolver(Path.Combine(values.Cast<string>().ToArray()));
                 }
                 catch
                 {
@@ -43,25 +48,38 @@ namespace Miracle.Settings
             return null;
         }
 
+        /// <summary>
+        /// Check if <param name="values"/> can be converted to type <param name="conversionType"/>
+        /// </summary>
+        /// <param name="values">Values to convert</param>
+        /// <param name="conversionType">Destination type to convert to</param>
+        /// <returns>True if type converter is able to convert values to desired type, otherwise false</returns>
         public bool CanConvert(object[] values, Type conversionType)
         {
             return conversionType == typeof(FileInfo) && MapPath(values) != null;
         }
 
+        /// <summary>
+        /// Convert <param name="values"/> into instance of type <param name="conversionType"/>
+        /// </summary>
+        /// <param name="values">Values to convert</param>
+        /// <param name="conversionType">The type of object to return.</param>
+        /// <param name="formatProvider">An object that supplies culture-specific formatting information.</param>
+        /// <returns>Instance of type <param name="conversionType"/> or null if unable to convert</returns>
         public object ChangeType(object[] values, Type conversionType, IFormatProvider formatProvider)
         {
             var fileName = MapPath(values);
             FileInfo fi = new FileInfo(fileName);
             if (!fi.Exists)
             {
-                if (Create)
+                if (_create)
                 {
                     // Create file and close it immediately
                     using (fi.Create())
                     {
                     }
                 }
-                if (Required)
+                if (_required)
                 {
                     throw new FileNotFoundException(fileName);
                 }

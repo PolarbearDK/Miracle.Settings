@@ -9,12 +9,21 @@ namespace Miracle.Settings
         /// </summary>
         public List<IValueProvider> ValueProviders { get; }
 
+        /// <summary>
+        /// Add value provider to list of value providers
+        /// </summary>
+        /// <param name="provider"></param>
+        /// <returns></returns>
         public SettingsLoader AddProvider(IValueProvider provider)
         {
             ValueProviders.Add(provider);
             return this;
         }
 
+        /// <summary>
+        /// Remove all value providers.
+        /// </summary>
+        /// <returns></returns>
         public SettingsLoader ClearProviders()
         {
             ValueProviders.Clear();

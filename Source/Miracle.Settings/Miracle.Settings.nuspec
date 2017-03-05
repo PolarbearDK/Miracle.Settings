@@ -15,8 +15,16 @@
 Supports validation, nested objects, arrays, lists and dictionaries.
 	</description>
     <summary>Load your application settings into strong typed objects with two lines of code.</summary>
-    <releaseNotes>Added IgnoreAttribute, OptionalAttribute and ConcreteType.</releaseNotes>
+    <releaseNotes>Add support for .NET framework 4.0 and .NET 4.6.</releaseNotes>
     <copyright>Copyright 2016-2017</copyright>
-    <tags>AppSettings AppSetting strong type typed nested class array list dictionary validate POCO settings setting config configuration</tags>
+    <tags>appsetting strong type setting config configuration</tags>
   </metadata>
+	<files>
+		<file src="bin\Release\net40\Miracle.Settings.dll" target="lib\net4\Miracle.Settings.dll" />
+		<file src="bin\Release\net40\Miracle.Settings.xml" target="lib\net4\Miracle.Settings.xml" />
+		<file src="bin\Release\net452\Miracle.Settings.dll" target="lib\net452\Miracle.Settings.dll" />
+		<file src="bin\Release\net452\Miracle.Settings.xml" target="lib\net452\Miracle.Settings.xml" />
+		<file src="bin\Release\net46\Miracle.Settings.dll" target="lib\net46\Miracle.Settings.dll" />
+		<file src="bin\Release\net46\Miracle.Settings.xml" target="lib\net46\Miracle.Settings.xml" />
+	</files>
 </package>

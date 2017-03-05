@@ -130,7 +130,7 @@ namespace Miracle.Settings
             if (propertyType.IsClass && propertyType != typeof(string))
             {
                 if (propertyInfo.GetCustomAttributes(typeof(OptionalAttribute), false).Any())
-                { 
+                {
                     var nestedPrefix = string.IsNullOrEmpty(key) ? key : key + PropertySeparator;
                     if (!HasKeys(nestedPrefix))
                     {
@@ -138,6 +138,7 @@ namespace Miracle.Settings
                         return false;
                     }
                 }
+
 
                 try
                 {
@@ -148,10 +149,16 @@ namespace Miracle.Settings
                             .Invoke(this, new object[] {key});
                     return true;
                 }
-                // Remove the awfull TargetInvocationException
+                    // Remove the awfull TargetInvocationException
                 catch (System.Reflection.TargetInvocationException ex)
                 {
+#if !NET40 // ExceptionDispatchInfo not available before .NET 4.5
                     ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+#else
+                    // In .NET 4.0 just throw innerexception (but loose stack trace)
+                    if (ex.InnerException != null) throw ex.InnerException;
+                    throw;
+#endif
                 }
             }
             value = null;

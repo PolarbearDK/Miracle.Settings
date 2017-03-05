@@ -10,9 +10,9 @@ namespace Miracle.Settings
     /// </summary>
     public class DirectoryInfoTypeConverter : ITypeConverter
     {
-        public Func<string, string> PathResolver { get; }
-        public bool Required { get; }
-        public bool Create { get; }
+        private readonly Func<string, string> _pathResolver;
+        private readonly bool _required;
+        private readonly bool _create;
 
         /// <summary>
         /// Create instance of converter
@@ -22,9 +22,9 @@ namespace Miracle.Settings
         /// <param name="create">Create the Directory if it doesnt exist.</param>
         public DirectoryInfoTypeConverter(Func<string, string> pathResolver, bool required = true, bool create = false)
         {
-            PathResolver = pathResolver;
-            Required = required;
-            Create = create;
+            _pathResolver = pathResolver;
+            _required = required;
+            _create = create;
         }
 
         private string MapPath(object[] values)
@@ -33,7 +33,7 @@ namespace Miracle.Settings
             {
                 try
                 {
-                    return PathResolver(Path.Combine(values.Cast<string>().ToArray()));
+                    return _pathResolver(Path.Combine(values.Cast<string>().ToArray()));
                 }
                 catch
                 {
@@ -43,23 +43,36 @@ namespace Miracle.Settings
             return null;
         }
 
+        /// <summary>
+        /// Check if <param name="values"/> can be converted to type <param name="conversionType"/>
+        /// </summary>
+        /// <param name="values">Values to convert</param>
+        /// <param name="conversionType">Destination type to convert to</param>
+        /// <returns>True if type converter is able to convert values to desired type, otherwise false</returns>
         public bool CanConvert(object[] values, Type conversionType)
         {
             return conversionType == typeof(DirectoryInfo) && MapPath(values) != null;
         }
 
+        /// <summary>
+        /// Convert <param name="values"/> into instance of type <param name="conversionType"/>
+        /// </summary>
+        /// <param name="values">Values to convert</param>
+        /// <param name="conversionType">The type of object to return.</param>
+        /// <param name="formatProvider">An object that supplies culture-specific formatting information.</param>
+        /// <returns>Instance of type <param name="conversionType"/> or null if unable to convert</returns>
         public object ChangeType(object[] values, Type conversionType, IFormatProvider formatProvider)
         {
             var path = MapPath(values);
             DirectoryInfo fi = new DirectoryInfo(path);
             if (!fi.Exists)
             {
-                if (Create)
+                if (_create)
                 {
                     // Create Directory
                     fi.Create();
                 }
-                if (Required)
+                if (_required)
                 {
                     throw new DirectoryNotFoundException(path);
                 }

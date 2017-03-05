@@ -3,6 +3,9 @@ using System.Linq;
 
 namespace Miracle.Settings
 {
+    /// <summary>
+    /// Extensions for generic type assignment.
+    /// </summary>
     public static class GenericTypeExtensions
     {
         /// <summary>
