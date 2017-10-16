@@ -9,25 +9,25 @@ namespace Miracle.Settings
     /// </summary>
     public class UriTypeConverter : ITypeConverter
     {
-        /// <summary>
-        /// Check if <param name="values"/> can be converted to type <param name="conversionType"/>
-        /// </summary>
-        /// <param name="values">Values to convert</param>
-        /// <param name="conversionType">Destination type to convert to</param>
-        /// <returns>True if type converter is able to convert values to desired type, otherwise false</returns>
-        public bool CanConvert(object[] values, Type conversionType)
+		/// <summary>
+		/// Check if <paramref name="values"/> can be converted to type <paramref name="conversionType"/>
+		/// </summary>
+		/// <param name="values">Values to convert</param>
+		/// <param name="conversionType">Destination type to convert to</param>
+		/// <returns>True if type converter is able to convert values to desired type, otherwise false</returns>
+		public bool CanConvert(object[] values, Type conversionType)
         {
             return conversionType == typeof(Uri) && values.Length > 0 && values.Length <= 2 && values[0] is string;
         }
 
-        /// <summary>
-        /// Convert <param name="values"/> into instance of type <param name="conversionType"/>
-        /// </summary>
-        /// <param name="values">Values to convert</param>
-        /// <param name="conversionType">The type of object to return.</param>
-        /// <param name="formatProvider">An object that supplies culture-specific formatting information.</param>
-        /// <returns>Instance of type <param name="conversionType"/> or null if unable to convert</returns>
-        public object ChangeType(object[] values, Type conversionType, IFormatProvider formatProvider)
+		/// <summary>
+		/// Convert <paramref name="values"/> into instance of type <paramref name="conversionType"/>
+		/// </summary>
+		/// <param name="values">Values to convert</param>
+		/// <param name="conversionType">The type of object to return.</param>
+		/// <param name="formatProvider">An object that supplies culture-specific formatting information.</param>
+		/// <returns>Instance of type <paramref name="conversionType"/> or null if unable to convert</returns>
+		public object ChangeType(object[] values, Type conversionType, IFormatProvider formatProvider)
         {
             switch (values.Length)
             {

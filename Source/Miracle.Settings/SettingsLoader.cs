@@ -80,7 +80,7 @@ namespace Miracle.Settings
         }
 
         /// <summary>
-        /// Create an object of type <typeparam name="T" /> initialized with settings prefixed by <param name="prefix"/>
+        /// Create an object of type <typeparam name="T" /> initialized with settings prefixed by <paramref name="prefix"/>
         /// </summary>
         /// <param name="prefix">The prefix of all properties</param>
         public T Create<T>(string prefix = null)
@@ -122,7 +122,7 @@ namespace Miracle.Settings
         }
 
         /// <summary>
-        /// Create array with elements of type <typeparam name="T" /> from settings prefixed by <param name="prefix"/>
+        /// Create array with elements of type <typeparam name="T" /> from settings prefixed by <paramref name="prefix"/>
         /// </summary>
         /// <param name="prefix">The prefix of all settings in the array</param>
         public T[] CreateArray<T>(string prefix)
@@ -132,7 +132,7 @@ namespace Miracle.Settings
         }
 
         /// <summary>
-        /// Create array of type T from setting with key <param name="key"/> and split into string array using <param name="separator"/> and <param name="options"/>.
+        /// Create array of type T from setting with key <paramref name="key"/> and split into string array using <paramref name="separator"/> and <paramref name="options"/>.
         /// </summary>
         /// <param name="key">The key of the setting containing separated values</param>
         /// <param name="separator">the separator(s) used to split string value</param>
@@ -144,7 +144,7 @@ namespace Miracle.Settings
         }
 
         /// <summary>
-        /// Create a list with elements of type <typeparam name="T" /> from settings prefixed by <param name="prefix"/>
+        /// Create a list with elements of type <typeparam name="T" /> from settings prefixed by <paramref name="prefix"/>
         /// </summary>
         /// <param name="prefix">The prefix of all settings in the list</param>
         public List<T> CreateList<T>(string prefix)
@@ -155,7 +155,7 @@ namespace Miracle.Settings
         }
 
         /// <summary>
-        /// Create list of type T from setting with key <param name="key"/> and split into string array using <param name="separator"/> and <param name="options"/>.
+        /// Create list of type T from setting with key <paramref name="key"/> and split into string array using <paramref name="separator"/> and <paramref name="options"/>.
         /// </summary>
         /// <param name="key">The key of the setting containing separated values</param>
         /// <param name="separator">the separator(s) used to split string value</param>
@@ -185,7 +185,7 @@ namespace Miracle.Settings
         }
 
         /// <summary>
-        /// Create dictionary from settings prefixed by <param name="prefix"/>.
+        /// Create dictionary from settings prefixed by <paramref name="prefix"/>.
         /// </summary>
         /// <param name="prefix">The prefix of all settings in the dictionary</param>
         /// <param name="comparer">Optional dictionary key comparer</param>
@@ -256,10 +256,10 @@ namespace Miracle.Settings
         }
 
         /// <summary>
-        /// Return list of properties that are to be loaded on class <typeparam name="T" />
+        /// Return list of properties that are to be loaded on class <typeparamref name="T" />
         /// </summary>
         /// <typeparam name="T">The class type that are being loaded with settings</typeparam>
-        /// <returns>properties that are to be loaded on type <typeparam name="T" /></returns>
+        /// <returns>properties that are to be loaded on type <typeparamref name="T" /></returns>
         protected virtual IEnumerable<PropertyInfo> GetLoadableProperties<T>()
         {
             return typeof(T)
