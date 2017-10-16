@@ -18,7 +18,7 @@ if($pack) {
 	& msbuild Miracle.Settings.csproj /p:Configuration='Release 4.6'
 	if(!$?){throw "msbuild returned exit code $LASTEXITCODE"}
 
-	& ..\.NuGet\NuGet.exe pack Miracle.Settings.csproj -IncludeReferencedProjects -Prop Configuration=Release
+	& ..\.NuGet\NuGet.exe pack Miracle.Settings.csproj -IncludeReferencedProjects -Prop Configuration='Release 4.6'
 	if(!$?){throw "NuGet pack returned exit code $LASTEXITCODE"}
 }
 
