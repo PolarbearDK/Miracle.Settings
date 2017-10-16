@@ -10,8 +10,16 @@ public int Port { get; set; }
 public Type ConnectionType { get; set; }
 ```
 
+## Ignore values 
+Ignore specific values and treat them as "not present" by specifying an __IgnoreValue/IgnoreValues__ property (Miracle.Settings.SettingAttribute)
+```CSharp
+[Setting(IgnoreValue = "N/A")]
+[Optional]
+public IPAddress IPAddress { get; set; }
+```
+
 ## Ignore properties
-Ignore property by applying an __Ignore__ attribute (Miracle.Setings.IgnoreAttribute)
+Ignore property by applying an __Ignore__ attribute (Miracle.Settings.IgnoreAttribute)
 ```CSharp
 [Ignore]
 public string MyIgnoredProperty { get; set; }
@@ -19,14 +27,14 @@ public string MyIgnoredProperty { get; set; }
 Note! that properties without settters are ignored by default.
 
 ## Optional properties
-A simple property can be made optional an __Optional__ attribute (Miracle.Setings.OptionalAttribute)
+A simple property can be made optional with an __Optional__ attribute (Miracle.Settings.OptionalAttribute)
 ```CSharp
 [Optional]
 public string MyOptionalValue { get; set; }
 ```
 
 ## Change the name of the property key loaded
-Use Miracle.Setings.SettingAttribute to customize deserialization.
+Use Miracle.Settings.SettingAttribute to customize deserialization.
 ```CSharp
 [Setting("Bar")]
 public string Foo { get; set; }

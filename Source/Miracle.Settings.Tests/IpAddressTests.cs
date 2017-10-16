@@ -55,7 +55,7 @@ namespace Miracle.Settings.Tests
         {
             var key = "Foo";
 
-            // Setup mock value provider 
+            // Setup mock value provider
             var settingsLoader = DictionaryValueProvider.CreateSettingsLoader(new Dictionary<string, string>());
 
             Assert.That(
@@ -63,5 +63,98 @@ namespace Miracle.Settings.Tests
                 Throws.Exception.TypeOf<ConfigurationErrorsException>()
                 .With.Message.EqualTo(string.Format(Resources.MissingValueFormat, typeof(IPAddress).FullName, key)));
         }
-    }
+
+        [Test]
+        public void EmptyValueTest1()
+        {
+            var key = "Foo";
+
+            // Setup mock value provider
+            var settingsLoader = DictionaryValueProvider.CreateSettingsLoader(new Dictionary<string, string>()
+            {
+	            {key, ""}
+            });
+
+            Assert.That(
+                () => settingsLoader.Create<IPAddress>(key),
+                Throws.Exception.TypeOf<ConfigurationErrorsException>()
+                .With.Message.EqualTo(string.Format(Resources.ConvertValueErrorFormat, "", typeof(IPAddress).FullName)));
+        }
+
+	    [Test]
+	    public void IpSettingOneValueTest()
+	    {
+		    var ip = "192.168.1.42";
+		    // Setup mock value provider
+		    var settingsLoader = DictionaryValueProvider.CreateSettingsLoader(new Dictionary<string, string>()
+		    {
+			    {nameof(IPSettingTest.IpAddress), ip},
+		    });
+
+		    var result = settingsLoader.Create<IPSettingTest>();
+		    Assert.That(result.IpAddress, Is.EqualTo(IPAddress.Parse(ip)));
+		    Assert.That(result.OptionalIpAddress, Is.Null);
+	    }
+
+	    [Test]
+	    public void IpSettingOneValueFilledTest()
+	    {
+		    var ip1 = "192.168.1.42";
+		    var ip2 = "";
+		    // Setup mock value provider
+		    var settingsLoader = DictionaryValueProvider.CreateSettingsLoader(new Dictionary<string, string>()
+		    {
+			    {nameof(IPSettingTest.IpAddress), ip1},
+			    {nameof(IPSettingTest.OptionalIpAddress), ip2},
+		    });
+
+		    var result = settingsLoader.Create<IPSettingTest>();
+		    Assert.That(result.IpAddress, Is.EqualTo(IPAddress.Parse(ip1)));
+		    Assert.That(result.OptionalIpAddress, Is.Null);
+	    }
+
+	    [Test]
+	    public void IpSettingTwoValuesTest()
+	    {
+		    var ip1 = "192.168.1.42";
+		    var ip2 = "87.65.43.210";
+		    // Setup mock value provider
+		    var settingsLoader = DictionaryValueProvider.CreateSettingsLoader(new Dictionary<string, string>()
+		    {
+			    {nameof(IPSettingTest.IpAddress), ip1},
+			    {nameof(IPSettingTest.OptionalIpAddress), ip2},
+		    });
+
+		    var result = settingsLoader.Create<IPSettingTest>();
+		    Assert.That(result.IpAddress, Is.EqualTo(IPAddress.Parse(ip1)));
+		    Assert.That(result.OptionalIpAddress, Is.EqualTo(IPAddress.Parse(ip2)));
+	    }
+
+		[Test]
+	    public void IpSettingEmptyNoValueTest()
+	    {
+		    var ip = "";
+		    // Setup mock value provider
+		    var settingsLoader = DictionaryValueProvider.CreateSettingsLoader(new Dictionary<string, string>()
+		    {
+			    {nameof(IPSettingTest.IpAddress), ip},
+			    {nameof(IPSettingTest.OptionalIpAddress), ip}
+		    });
+
+		    Assert.That(
+			    () => settingsLoader.Create<IPSettingTest>(),
+			    Throws.Exception.TypeOf<ConfigurationErrorsException>()
+				    .With.Message.EqualTo(string.Format(Resources.MissingValueFormat, typeof(IPAddress).FullName, nameof(IPSettingTest.IpAddress))));
+	    }
+
+		internal class IPSettingTest
+	    {
+		    [Setting(IgnoreValue = "")]
+		    public IPAddress IpAddress { get; set; }
+
+		    [Setting(IgnoreValue = "")]
+			[Optional]
+		    public IPAddress OptionalIpAddress { get; set; }
+		}
+	}
 }

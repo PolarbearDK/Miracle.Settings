@@ -87,7 +87,6 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="AppReadme\Compare-NET-Objects-Help.chm" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

@@ -139,7 +139,6 @@ namespace Miracle.Settings
                     }
                 }
 
-
                 try
                 {
                     value =
@@ -213,34 +212,46 @@ namespace Miracle.Settings
         private bool TryConstructPropertyValue(PropertyInfo propertyInfo, object[] values, out object value)
         {
             SettingAttribute attribute = propertyInfo.GetCustomAttributes(typeof(SettingAttribute), false).FirstOrDefault() as SettingAttribute;
-            if (attribute != null && attribute.TypeConverter != null)
-            {
-                ITypeConverter typeConverter;
-                try
-                {
-                    typeConverter = Activator.CreateInstance(attribute.TypeConverter) as ITypeConverter;
-                }
-                catch (Exception ex)
-                {
-                    throw new ConfigurationErrorsException(string.Format(Resources.CreateTypeConverterErrorFormat, attribute.TypeConverter), ex);
-                }
+	        if (attribute != null)
+	        {
+		        if (attribute.IgnoreValues != null && attribute.IgnoreValues.Any())
+		        {
+			        var lastValue = values.Last() as string;
+					if(attribute.IgnoreValues.Any(x=>x.Equals(lastValue)))
+					{
+						value = null;
+						return true;
+					}
+		        }
+		        if (attribute.TypeConverter != null)
+		        {
+			        ITypeConverter typeConverter;
+			        try
+			        {
+				        typeConverter = Activator.CreateInstance(attribute.TypeConverter) as ITypeConverter;
+			        }
+			        catch (Exception ex)
+			        {
+				        throw new ConfigurationErrorsException(string.Format(Resources.CreateTypeConverterErrorFormat, attribute.TypeConverter), ex);
+			        }
 
-                if (typeConverter == null)
-                    throw new ConfigurationErrorsException(string.Format(Resources.BadExplicitTypeConverterTypeFormat,typeof (ITypeConverter)));
+			        if (typeConverter == null)
+				        throw new ConfigurationErrorsException(string.Format(Resources.BadExplicitTypeConverterTypeFormat, typeof(ITypeConverter)));
 
-                if (typeConverter.CanConvert(values, propertyInfo.PropertyType))
-                {
-                    value = ChangeType(values, propertyInfo.PropertyType, typeConverter);
-                    return true;
-                }
-                throw new ConfigurationErrorsException(
-                    string.Format(
-                        Resources.ExplicitTypeConverterErrorFormat,
-                        string.Join(",", values.Select(x => x.ToString())),
-                        propertyInfo.PropertyType));
-            }
+			        if (typeConverter.CanConvert(values, propertyInfo.PropertyType))
+			        {
+				        value = ChangeType(values, propertyInfo.PropertyType, typeConverter);
+				        return true;
+			        }
+			        throw new ConfigurationErrorsException(
+				        string.Format(
+					        Resources.ExplicitTypeConverterErrorFormat,
+					        string.Join(",", values.Select(x => x.ToString())),
+					        propertyInfo.PropertyType));
+		        }
+	        }
 
-            value = ChangeType(values, propertyInfo.PropertyType);
+	        value = ChangeType(values, propertyInfo.PropertyType);
             return true;
         }
     }

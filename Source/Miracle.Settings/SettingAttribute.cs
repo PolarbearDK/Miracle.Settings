@@ -49,7 +49,7 @@ namespace Miracle.Settings
         public Type TypeConverter { get; set; }
 
         /// <summary>
-        /// Split string into string array before converting into Array or List 
+        /// Split string into string array before converting into Array or List
         /// Ignored for other properties.
         /// </summary>
         public char Separator
@@ -59,7 +59,7 @@ namespace Miracle.Settings
         }
 
         /// <summary>
-        /// Split string into string array before converting into Array or List 
+        /// Split string into string array before converting into Array or List
         /// Ignored for other properties.
         /// </summary>
         public char[] Separators { get; set; }
@@ -75,10 +75,24 @@ namespace Miracle.Settings
         /// <remarks>Type must have an empty constructor</remarks>
         public Type ConcreteType { get; set; }
 
-        /// <summary>
-        /// Construct setting attribute
-        /// </summary>
-        public SettingAttribute()
+		/// <summary>
+		/// Value to ignore (treat as null)
+	    /// </summary>
+		public string IgnoreValue
+	    {
+		    get { throw new NotImplementedException(); }
+		    set { IgnoreValues = new[] { value }; }
+	    }
+
+		/// <summary>
+		/// Values to ignore (treat as null)
+	    /// </summary>
+		public string[] IgnoreValues { get; set; }
+
+		/// <summary>
+		/// Construct setting attribute
+		/// </summary>
+		public SettingAttribute()
         {
         }
 
