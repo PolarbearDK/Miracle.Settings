@@ -61,7 +61,7 @@ namespace Miracle.Settings
                     }
                 }
 
-                if (!propertyInfo.GetCustomAttributes(typeof(OptionalAttribute), false).Any())
+                if (!IsPropertyOptional(propertyInfo))
                 {
                     throw new ConfigurationErrorsException(string.Format(Resources.MissingValueFormat, propertyInfo.PropertyType, key));
                 }
@@ -255,12 +255,26 @@ namespace Miracle.Settings
             return pos == -1 ? key : key.Substring(0, pos);
         }
 
-        /// <summary>
-        /// Return list of properties that are to be loaded on class <typeparamref name="T" />
-        /// </summary>
-        /// <typeparam name="T">The class type that are being loaded with settings</typeparam>
-        /// <returns>properties that are to be loaded on type <typeparamref name="T" /></returns>
-        protected virtual IEnumerable<PropertyInfo> GetLoadableProperties<T>()
+		/// <summary>
+		/// Check if property is optional, by convention og by attribute.
+		/// </summary>
+		/// <param name="propertyInfo"></param>
+		/// <returns>true if property is optional</returns>
+	    private bool IsPropertyOptional(PropertyInfo propertyInfo)
+		{
+			return
+				// Has Optional attribute
+				propertyInfo.GetCustomAttributes(typeof(OptionalAttribute), false).Any()
+				// or is nullable type
+				|| Nullable.GetUnderlyingType(propertyInfo.PropertyType) != null;
+		}
+
+		/// <summary>
+		/// Return list of properties that are to be loaded on class <typeparamref name="T" />
+		/// </summary>
+		/// <typeparam name="T">The class type that are being loaded with settings</typeparam>
+		/// <returns>properties that are to be loaded on type <typeparamref name="T" /></returns>
+		protected virtual IEnumerable<PropertyInfo> GetLoadableProperties<T>()
         {
             return typeof(T)
                 .GetProperties(BindingFlags.Instance | BindingFlags.Public)

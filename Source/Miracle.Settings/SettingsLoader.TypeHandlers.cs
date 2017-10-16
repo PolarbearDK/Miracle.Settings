@@ -76,8 +76,8 @@ namespace Miracle.Settings
             if (propertyType.IsGenericType && propertyType.GetGenericTypeDefinition().IsGenericTypeDefinitionAssignableFrom(typeof(List<>)))
             {
                 SettingAttribute attribute = propertyInfo.GetCustomAttributes(typeof(SettingAttribute), false).FirstOrDefault() as SettingAttribute;
-                var arguments = attribute?.Separators != null 
-                    ? new object[] { key, attribute.Separators, attribute.StringSplitOptions } 
+                var arguments = attribute?.Separators != null
+                    ? new object[] { key, attribute.Separators, attribute.StringSplitOptions }
                     : new object[] {key + PropertySeparator};
 
                 value =
@@ -129,7 +129,7 @@ namespace Miracle.Settings
             var propertyType = settingAttribute?.ConcreteType ?? propertyInfo.PropertyType;
             if (propertyType.IsClass && propertyType != typeof(string))
             {
-                if (propertyInfo.GetCustomAttributes(typeof(OptionalAttribute), false).Any())
+                if (IsPropertyOptional(propertyInfo))
                 {
                     var nestedPrefix = string.IsNullOrEmpty(key) ? key : key + PropertySeparator;
                     if (!HasKeys(nestedPrefix))
@@ -164,7 +164,7 @@ namespace Miracle.Settings
             return false;
         }
 
-        private List<object> GetReferencesList(PropertyInfo propertyInfo, string prefix)
+	    private List<object> GetReferencesList(PropertyInfo propertyInfo, string prefix)
         {
             var list = new List<object>();
 

@@ -25,7 +25,7 @@ Wait you might say... You can du that with ConfigurationSections! Well you can b
 * [Rules](#rules)
 
 Advanced topics
-* [Controlling deserialization with annotations](Annotatons.md)
+* [Controlling deserialization with annotations](Annotations.md)
 * [Type converters](TypeConverters.md)
 * [Value providers](ValueProviders.md)
 * [Validating settings](Validation.md)
@@ -123,7 +123,7 @@ var settings = settingsLoader.Create<FooBar>("MyPrefix");
 ## Arrays, Lists & Dictionaries
 Collections (Arrays, Lists & Dictionaries) can be loaded directly by calling CreateArray/CreateList/CreateDictionary or as properties in setting classes. 
 
-Simple arrays and lists can be loaded from a single string value containing separated values. See [Controlling deserialization with annotations](Annotatons.md)
+Simple arrays and lists can be loaded from a single string value containing separated values. See [Controlling deserialization with annotations](Annotations.md)
 
 More advanced scenarios requires a separate value for each collection item. Keys must be unique, so collection keys must be suffixed by something to make them unique. 
 ```XML

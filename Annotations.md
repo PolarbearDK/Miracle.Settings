@@ -27,7 +27,12 @@ public string MyIgnoredProperty { get; set; }
 Note! that properties without settters are ignored by default.
 
 ## Optional properties
-A simple property can be made optional with an __Optional__ attribute (Miracle.Settings.OptionalAttribute)
+All nullable value types are by convension optional.
+```CSharp
+public TimeSpan? TTL { get; set; }
+public Nullable<int> MyOptionalInt { get; set; }
+```
+Reference type properties can be made optional with an __Optional__ attribute (Miracle.Settings.OptionalAttribute)
 ```CSharp
 [Optional]
 public string MyOptionalValue { get; set; }

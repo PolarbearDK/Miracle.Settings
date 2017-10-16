@@ -46,7 +46,7 @@ namespace Miracle.Settings.Tests
         [DefaultValue(new[] {"foo","bar"})]
         public string[] DefaultArray { get; private set; }
     }
-    
+
     public class SimpleSettings
     {
         // -- Simple values --
@@ -64,15 +64,20 @@ namespace Miracle.Settings.Tests
     {
         // Required
         public string String { get; private set; }
+
+		// Ignored using IgnoreAttribute
         [Ignore]
         public string Ignored { get; private set; }
         [Ignore]
         public Nested NestedIgnored { get; private set; }
         [Ignore]
         public string[] NestedIgnoredArray { get; private set; }
-    }
 
-    public class OptionalSettings
+		// Ignored by convension
+	    public TimeSpan? TimeSpanIgnored { get; private set; }
+	}
+
+	public class OptionalSettings
     {
         // Required
         public string String { get; private set; }
