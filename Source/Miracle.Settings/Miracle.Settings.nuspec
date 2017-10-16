@@ -15,7 +15,7 @@
 Supports validation, nested objects, arrays, lists and dictionaries.
 	</description>
     <summary>Load your application settings into strong typed objects with two lines of code.</summary>
-    <releaseNotes>Add support for .NET framework 4.0 and .NET 4.6.</releaseNotes>
+    <releaseNotes>Add IgnoreValue(s) and Nullable support.</releaseNotes>
     <copyright>Copyright 2016-2017</copyright>
     <tags>appsetting strong type setting config configuration</tags>
   </metadata>
