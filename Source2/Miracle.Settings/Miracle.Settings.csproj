@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net452;netstandard2.0;net462;net40</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net452;net462;net40</TargetFrameworks>
     <LangVersion>latest</LangVersion>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Miracle.Settings.xml</DocumentationFile>
     
@@ -51,7 +51,7 @@ Supports validation, nested objects, arrays, lists and dictionaries.</Descriptio
 		<DefineConstants>NETFULL;NET45</DefineConstants>
 	</PropertyGroup>
   
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net452'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'net452'">
   	<Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
@@ -66,7 +66,7 @@ Supports validation, nested objects, arrays, lists and dictionaries.</Descriptio
 		<DefineConstants>NETFULL;NET40</DefineConstants>
 	</PropertyGroup>
   
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net40'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'net40'">
   	<Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
@@ -85,7 +85,7 @@ Supports validation, nested objects, arrays, lists and dictionaries.</Descriptio
 	</ItemGroup>
 	<ItemGroup>
 	  <EmbeddedResource Update="Properties\Resources.resx">
-	    <Generator>PublicResXFileCodeGenerator</Generator>
+	    <Generator>ResXFileCodeGenerator</Generator>
 	    <LastGenOutput>Resources.Designer.cs</LastGenOutput>
 	  </EmbeddedResource>
 	</ItemGroup>

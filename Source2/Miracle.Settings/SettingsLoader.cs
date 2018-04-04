@@ -6,6 +6,9 @@ using System.Linq;
 using System.Reflection;
 using Miracle.Settings.Properties;
 
+using System.Runtime.CompilerServices;
+[assembly: InternalsVisibleTo("Miracle.Settings.Tests")]
+
 namespace Miracle.Settings
 {
 	/// <summary>
@@ -30,8 +33,17 @@ namespace Miracle.Settings
 		/// <summary>
 		/// Construct SettingsLoader using specific Value provider
 		/// </summary>
-		/// <param name="valueProviders">List of value providers to use for this SettingLoader instance</param>
-		public SettingsLoader(params IValueProvider[] valueProviders)
+		/// <param name="valueProvider">value providers to use for this SettingLoader instance</param>
+		public SettingsLoader(IValueProvider valueProvider)
+			: this(new [] { valueProvider })
+	    {
+        }
+
+		/// <summary>
+		/// Construct SettingsLoader using specific Value providers
+		/// </summary>
+		/// <param name="valueProviders">Enumeration of value providers to use for this SettingLoader instance</param>
+		public SettingsLoader(IEnumerable<IValueProvider> valueProviders)
         {
             ValueProviders = new List<IValueProvider>(valueProviders);
             _typeHandlers = GetTypeHandlers();

@@ -1,4 +1,7 @@
+using System;
+using System.IO;
 using System.Xml;
+using NUnit.Framework;
 
 namespace Miracle.Settings.Tests
 {
@@ -11,12 +14,18 @@ namespace Miracle.Settings.Tests
 			SettingsLoader = settingsLoader;
 		}
 
-		//protected LoadTestBase()
-		//	: this(new SettingsLoader()
-		//		.AddTypeConverter(s => XmlConvert.ToDateTime(s, XmlDateTimeSerializationMode.Local))
-		//		.AddProvider(new EnvironmentValueProvider()))
-  //      {
-  //      }
+	    protected string GetProjectDirectory()
+	    {
+		    var directory = TestContext.CurrentContext.TestDirectory;
+		    string folder = null;
+		    do
+		    {
+			    folder = Path.GetFileName(directory);
+			    directory = Path.GetDirectoryName(directory);
+		    } while (folder != null && !folder.Equals("bin", StringComparison.InvariantCultureIgnoreCase));
+
+		    return directory;
+	    }
 
 		protected void AssertThrowsSettingsExceptionMessageTest<T>(string format, params object[] args)
 		{

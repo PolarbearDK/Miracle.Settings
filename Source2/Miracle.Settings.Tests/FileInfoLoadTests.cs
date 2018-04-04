@@ -21,7 +21,7 @@ namespace Miracle.Settings.Tests
 		[SetUp]
 		public void Setup()
 		{
-			_basePath = Path.GetDirectoryName(Path.GetDirectoryName(TestContext.CurrentContext.TestDirectory));
+			_basePath = GetProjectDirectory();
 		}
 
 		[Test]
@@ -33,7 +33,7 @@ namespace Miracle.Settings.Tests
 			var settings = SettingsLoader.Create<FileSettings>();
 
 			// Defaults
-			Assert.That(settings.SimpleFile.FullName, Is.EqualTo(Path.Combine(_basePath, "packages.config")));
+			Assert.That(settings.SimpleFile.FullName, Is.EqualTo(Path.Combine(_basePath, "App.config")));
 			Assert.That(settings.FullFileInfo.FullName, Is.EqualTo(@"c:\Windows\regedit.exe"));
 			Assert.That(settings.PartialFile.FullName, Is.EqualTo(Path.GetFullPath(Path.Combine(_basePath, @"..\Miracle.Settings.sln"))));
 			Assert.That(settings.RelativeFileInfo.FullName, Is.EqualTo(Path.Combine(_basePath, "TestFolder", "TextFile1.txt")));

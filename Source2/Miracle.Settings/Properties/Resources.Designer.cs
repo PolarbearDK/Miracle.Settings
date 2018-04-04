@@ -22,7 +22,7 @@ namespace Miracle.Settings.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class Resources {
+    internal class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace Miracle.Settings.Properties {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
+        internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Miracle.Settings.Properties.Resources", typeof(Resources).Assembly);
@@ -51,7 +51,7 @@ namespace Miracle.Settings.Properties {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
+        internal static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace Miracle.Settings.Properties {
         /// <summary>
         ///   Looks up a localized string similar to TypeConverters must implement {0}.
         /// </summary>
-        public static string BadExplicitTypeConverterTypeFormat {
+        internal static string BadExplicitTypeConverterTypeFormat {
             get {
                 return ResourceManager.GetString("BadExplicitTypeConverterTypeFormat", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace Miracle.Settings.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Unable to convert value [{0}] to type {1}.
         /// </summary>
-        public static string ConvertValueErrorFormat {
+        internal static string ConvertValueErrorFormat {
             get {
                 return ResourceManager.GetString("ConvertValueErrorFormat", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace Miracle.Settings.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Unable to convert values [{0}] into type {1}.
         /// </summary>
-        public static string ConvertValuesErrorFormat {
+        internal static string ConvertValuesErrorFormat {
             get {
                 return ResourceManager.GetString("ConvertValuesErrorFormat", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace Miracle.Settings.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Unable to create settings instance of type {0} while loading settings prefixed by: [{1}].
         /// </summary>
-        public static string CreateErrorFormat {
+        internal static string CreateErrorFormat {
             get {
                 return ResourceManager.GetString("CreateErrorFormat", resourceCulture);
             }
@@ -99,7 +99,7 @@ namespace Miracle.Settings.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Unable to create instance of type converter: {0}.
         /// </summary>
-        public static string CreateTypeConverterErrorFormat {
+        internal static string CreateTypeConverterErrorFormat {
             get {
                 return ResourceManager.GetString("CreateTypeConverterErrorFormat", resourceCulture);
             }
@@ -108,7 +108,7 @@ namespace Miracle.Settings.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Unable to convert values: [{0}] into type {1} using specified type converter.
         /// </summary>
-        public static string ExplicitTypeConverterErrorFormat {
+        internal static string ExplicitTypeConverterErrorFormat {
             get {
                 return ResourceManager.GetString("ExplicitTypeConverterErrorFormat", resourceCulture);
             }
@@ -117,7 +117,7 @@ namespace Miracle.Settings.Properties {
         /// <summary>
         ///   Looks up a localized string similar to A value has to be provided for referenced Setting: [{0}].
         /// </summary>
-        public static string MissingReferenceValueFormat {
+        internal static string MissingReferenceValueFormat {
             get {
                 return ResourceManager.GetString("MissingReferenceValueFormat", resourceCulture);
             }
@@ -126,7 +126,7 @@ namespace Miracle.Settings.Properties {
         /// <summary>
         ///   Looks up a localized string similar to A value of type {0} has to be provided for Setting: [{1}].
         /// </summary>
-        public static string MissingValueFormat {
+        internal static string MissingValueFormat {
             get {
                 return ResourceManager.GetString("MissingValueFormat", resourceCulture);
             }
@@ -135,7 +135,7 @@ namespace Miracle.Settings.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Setting [{0}] failed to validate with error: {1}.
         /// </summary>
-        public static string ValidationError {
+        internal static string ValidationError {
             get {
                 return ResourceManager.GetString("ValidationError", resourceCulture);
             }
