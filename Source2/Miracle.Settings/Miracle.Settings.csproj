@@ -1,0 +1,92 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net452;netstandard2.0;net462;net40</TargetFrameworks>
+    <LangVersion>latest</LangVersion>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Miracle.Settings.xml</DocumentationFile>
+    
+    <Version>3.0.0-beta1</Version>
+    <Authors>Philip Hoppe</Authors>
+    <Company>Miracle A/S</Company>
+    <PackageLicenseUrl>https://github.com/PolarbearDK/Miracle.Settings/blob/master/LICENSE.txt</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/PolarbearDK/Miracle.Settings</PackageProjectUrl>
+    <Description>Load application settings into strong typed objects with two lines of code.
+
+Supports validation, nested objects, arrays, lists and dictionaries.</Description>
+    <Copyright>Copyright 2016-2018</Copyright>
+    <PackageTags>appsetting strong type setting config configuration POCO</PackageTags>
+    <PackageReleaseNotes>Convert to .net standard 2.0</PackageReleaseNotes>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageIconUrl>https://github.com/PolarbearDK/Miracle.Settings/raw/master/nuget-icon.png</PackageIconUrl>
+    <RepositoryUrl>https://github.com/PolarbearDK/Miracle.Settings</RepositoryUrl>
+    <RepositoryType>GitHub</RepositoryType>
+  </PropertyGroup>
+
+		<!-- .NET Standard 2.0 references, compilation flags and build options -->
+	<PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+		<DefineConstants>NETCORE;NETSTANDARD;NETSTANDARD2_0</DefineConstants>
+	</PropertyGroup>
+  
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <PackageReference Include="System.ComponentModel.Annotations" Version="4.4.1" />
+  </ItemGroup>
+
+  <!-- .NET 4.6.x references, compilation flags and build options -->
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net462'">
+		<DefineConstants>NETFULL;NET46</DefineConstants>
+	</PropertyGroup>
+	
+  <ItemGroup Condition="'$(TargetFramework)' == 'net462'">
+  	<Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Web" />
+  </ItemGroup>
+	
+	<!-- .NET 4.5.x references, compilation flags and build options -->
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net452'">
+		<DefineConstants>NETFULL;NET45</DefineConstants>
+	</PropertyGroup>
+  
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net452'">
+  	<Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Web" />
+  </ItemGroup>
+  
+	<!-- .NET 4.0 references, compilation flags and build options -->
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net40'">
+		<DefineConstants>NETFULL;NET40</DefineConstants>
+	</PropertyGroup>
+  
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net40'">
+  	<Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Web" />
+  </ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="Properties\Resources.Designer.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>Resources.resx</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+	<ItemGroup>
+	  <EmbeddedResource Update="Properties\Resources.resx">
+	    <Generator>PublicResXFileCodeGenerator</Generator>
+	    <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+	  </EmbeddedResource>
+	</ItemGroup>
+</Project>
