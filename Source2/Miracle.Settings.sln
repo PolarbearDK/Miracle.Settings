@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27428.2015
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Miracle.Settings", "Miracle.Settings\Miracle.Settings.csproj", "{B743B82E-301E-4D38-8602-571A68AF4605}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Miracle.Settings.Tests", "Miracle.Settings.Tests\Miracle.Settings.Tests.csproj", "{844CED7E-7489-4D9C-A9C6-BEC7AA4835C3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{B743B82E-301E-4D38-8602-571A68AF4605}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B743B82E-301E-4D38-8602-571A68AF4605}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B743B82E-301E-4D38-8602-571A68AF4605}.Release|Any CPU.Build.0 = Release|Any CPU
+		{844CED7E-7489-4D9C-A9C6-BEC7AA4835C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{844CED7E-7489-4D9C-A9C6-BEC7AA4835C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{844CED7E-7489-4D9C-A9C6-BEC7AA4835C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{844CED7E-7489-4D9C-A9C6-BEC7AA4835C3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
