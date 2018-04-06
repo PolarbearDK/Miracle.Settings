@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Reflection;
-using System.Xml;
-using KellermanSoftware.CompareNetObjects;
 using NUnit.Framework;
 using Is = NUnit.DeepObjectCompare.Is;
 
@@ -13,12 +11,13 @@ namespace Miracle.Settings.Tests
     public class LoadTests : LoadTestBase
     {
 	    public LoadTests()
-		    : base(new SettingsLoader()
+		    : base(TestSettingsLoader
+			    .GetSettingsLoader()
 			    .AddProvider(new EnvironmentValueProvider()))
 	    {
 	    }
 
-        [Test]
+	    [Test]
         public void DefaultLoadTest()
         {
             var settings = SettingsLoader.Create<DefaultSettings>();
@@ -38,8 +37,6 @@ namespace Miracle.Settings.Tests
         [Test]
         public void SimpleLoadTest()
         {
-			//Console.WriteLine(typeof(System.Data.SqlClient.SqlConnection).AssemblyQualifiedName);
-
             var settings = SettingsLoader.Create<SimpleSettings>();
 
             //Simple
@@ -290,7 +287,7 @@ namespace Miracle.Settings.Tests
 
 
         [Test]
-        public void CreateDictionaryLoadTest()
+        public void EnumDictionaryLoadTest()
         {
             var settings = SettingsLoader.CreateDictionary<AnimalType, Animal>("Animals");
 

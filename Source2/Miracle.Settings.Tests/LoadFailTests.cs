@@ -10,7 +10,7 @@ namespace Miracle.Settings.Tests
     public class LoadFailTests : LoadTestBase
     {
 		public LoadFailTests()
-			: base(new SettingsLoader())
+			: base(TestSettingsLoader.GetSettingsLoader())
 		{
 		}
 

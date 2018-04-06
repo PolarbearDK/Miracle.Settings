@@ -28,6 +28,8 @@ Supports validation, nested objects, arrays, lists and dictionaries.</Descriptio
 	</PropertyGroup>
   
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="2.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.0.1" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.4.1" />
   </ItemGroup>
 
@@ -75,7 +77,7 @@ Supports validation, nested objects, arrays, lists and dictionaries.</Descriptio
     <Reference Include="System.Data" />
     <Reference Include="System.Web" />
   </ItemGroup>
-
+  
 	<ItemGroup>
 	  <Compile Update="Properties\Resources.Designer.cs">
 	    <DesignTime>True</DesignTime>

@@ -8,13 +8,16 @@ namespace Miracle.Settings.Tests
     public abstract class LoadTestBase: LoadFailTestBase
     {
         protected readonly ISettingsLoader SettingsLoader;
+	    public string TestProjectFolder { get; private set; }
 
 		protected LoadTestBase(ISettingsLoader settingsLoader)
 		{
 			SettingsLoader = settingsLoader;
+			TestProjectFolder = GetProjectDirectory();
+			Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
 		}
 
-	    protected string GetProjectDirectory()
+		private string GetProjectDirectory()
 	    {
 		    var directory = TestContext.CurrentContext.TestDirectory;
 		    string folder = null;
