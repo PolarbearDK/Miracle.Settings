@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Reflection;
+using KellermanSoftware.CompareNetObjects;
 using NUnit.Framework;
 using Is = NUnit.DeepObjectCompare.Is;
 
@@ -142,7 +143,7 @@ namespace Miracle.Settings.Tests
             var settings = SettingsLoader.Create<ArraySettings>();
 
             // Array
-            Assert.That(settings.MySimpleArrayProperty, Is.EqualTo(
+            Assert.That(settings.MySimpleArrayProperty, Is.EquivalentTo(
                 new[]
                 {
                     "Foo Primary", "Foo 1", "Foo 2"
@@ -152,13 +153,14 @@ namespace Miracle.Settings.Tests
                 {
                     1, 2, 3, 4
                 }));
-			Assert.That(settings.MyArrayProperty, Is.DeepEqualTo(
-                new[]
-                {
-                    new Nested {Foo = "Foo Primary", Bar = 420},
-                    new Nested {Foo = "Foo 1", Bar = 421},
-                    new Nested {Foo = "Foo 2", Bar = 422},
-                }));
+	        Assert.That(settings.MyArrayProperty, Is.DeepEqualTo(
+			        new[]
+			        {
+				        new Nested {Foo = "Foo Primary", Bar = 420},
+				        new Nested {Foo = "Foo 1", Bar = 421},
+				        new Nested {Foo = "Foo 2", Bar = 422},
+			        })
+		        .WithComparisonConfig(new ComparisonConfig() {IgnoreCollectionOrder = true}));
             Assert.That(settings.LostNumbersArray, Is.EqualTo(
                 new[]
                 {
@@ -172,7 +174,7 @@ namespace Miracle.Settings.Tests
             var settings = SettingsLoader.CreateArray<string>("MySimpleArrayProperty");
 
             // Array
-            Assert.That(settings, Is.EqualTo(
+            Assert.That(settings, Is.EquivalentTo(
                 new[]
                 {
                     "Foo Primary", "Foo 1", "Foo 2"
@@ -224,13 +226,13 @@ namespace Miracle.Settings.Tests
             var settings = SettingsLoader.CreateArray<Nested>("MyArrayProperty");
 
             // Array
-            Assert.That(settings, Is.DeepEqualTo(
-                new[]
-                {
-                    new Nested {Foo = "Foo Primary", Bar = 420},
-                    new Nested {Foo = "Foo 1", Bar = 421},
-                    new Nested {Foo = "Foo 2", Bar = 422},
-                }));
+	        Assert.That(settings, Is.DeepEqualTo(
+		        new[]
+		        {
+			        new Nested {Foo = "Foo Primary", Bar = 420},
+			        new Nested {Foo = "Foo 1", Bar = 421},
+			        new Nested {Foo = "Foo 2", Bar = 422},
+		        }).WithComparisonConfig(new ComparisonConfig() {IgnoreCollectionOrder = true}));
         }
 
 
@@ -260,29 +262,41 @@ namespace Miracle.Settings.Tests
         }
 
         [Test]
+        public void DirectDictionaryLoadTest()
+        {
+            var dict = SettingsLoader.CreateDictionary<string, Nested>(nameof(DictionarySettings.MyDictionaryProperty));
+	        Assert.That(dict, Is.DeepEqualTo(
+		        new Dictionary<string, Nested>
+		        {
+			        {"Key1", new Nested {Foo = "oof1", Bar = 421}},
+			        {"Key2", new Nested {Foo = "oof2", Bar = 422}}
+		        }).WithComparisonConfig(new ComparisonConfig() {IgnoreCollectionOrder = true}));
+        }
+
+        [Test]
         public void DictionaryLoadTest()
         {
             var settings = SettingsLoader.Create<DictionarySettings>();
 
             // Various Dictionarys
-            Assert.That(settings.MySimpleDictionaryProperty, Is.DeepEqualTo(
+            Assert.That(settings.MySimpleDictionaryProperty, Is.EquivalentTo(
                 new Dictionary<string, string>
                 {
                     {"Foo", "oof"},
                     {"Bar", "rab"}
                 }));
-            Assert.That(settings.MyNumericDictionaryProperty, Is.DeepEqualTo(
+            Assert.That(settings.MyNumericDictionaryProperty, Is.EquivalentTo(
                 new Dictionary<string, byte>
                 {
                     {"Foo", 14},
                     {"Bar", 42}
                 }));
-            Assert.That(settings.MyDictionaryProperty, Is.DeepEqualTo(
-                new Dictionary<string, Nested>
-                {
-                    {"Key1", new Nested {Foo = "oof1", Bar = 421}},
-                    {"Key2", new Nested {Foo = "oof2", Bar = 422}}
-                }));
+	        Assert.That(settings.MyDictionaryProperty, Is.DeepEqualTo(
+		        new Dictionary<string, Nested>
+		        {
+			        {"Key1", new Nested {Foo = "oof1", Bar = 421}},
+			        {"Key2", new Nested {Foo = "oof2", Bar = 422}}
+		        }).WithComparisonConfig(new ComparisonConfig() {IgnoreCollectionOrder = true}));
         }
 
 
@@ -292,13 +306,13 @@ namespace Miracle.Settings.Tests
             var settings = SettingsLoader.CreateDictionary<AnimalType, Animal>("Animals");
 
             // Dictionary with non string TKey
-            Assert.That(settings, Is.DeepEqualTo(
-                new Dictionary<AnimalType, Animal>
-                {
-                    {AnimalType.Parrot, new Animal {Name = "Polly", Talks = true}},
-                    {AnimalType.Rabbit, new Animal {Name = "Beatrice", Talks = false}},
-                    {AnimalType.Fox, new Animal {Name = "John", Talks = false}},
-                }));
+	        Assert.That(settings, Is.DeepEqualTo(
+		        new Dictionary<AnimalType, Animal>
+		        {
+			        {AnimalType.Parrot, new Animal {Name = "Polly", Talks = true}},
+			        {AnimalType.Rabbit, new Animal {Name = "Beatrice", Talks = false}},
+			        {AnimalType.Fox, new Animal {Name = "John", Talks = false}},
+		        }).WithComparisonConfig(new ComparisonConfig() {IgnoreCollectionOrder = true}));
         }
     }
 }

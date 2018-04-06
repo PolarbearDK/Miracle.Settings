@@ -18,90 +18,90 @@ namespace Miracle.Settings.Tests
 		public void CreateMissingStringTest()
 		{
 			AssertThrowsSettingsExceptionMessageTest<string>(
-				Resources.MissingValueFormat, typeof(string), GetKey(NotFoundPrefix));
+				Resources.MissingValueFormat, typeof(string), NotFoundPrefix);
 		}
 
 		[Test]
 		public void CreateMissingNumericTest()
 		{
 			AssertThrowsSettingsExceptionMessageTest<int>(
-				Resources.MissingValueFormat, typeof(int), GetKey(NotFoundPrefix));
+				Resources.MissingValueFormat, typeof(int), NotFoundPrefix);
 		}
 
 		[Test]
 		public void CreateMissingStringSettingTest()
 		{
 			AssertThrowsSettingsExceptionMessageTest<MissingStringSetting>(
-				Resources.MissingValueFormat, typeof(String), GetKey(NotFoundPrefix, nameof(MissingStringSetting.MissingString)));
+				Resources.MissingValueFormat, typeof(String), Settings.SettingsLoader.GetSettingKey(NotFoundPrefix, nameof(MissingStringSetting.MissingString)));
 		}
 
 		[Test]
         public void CreateMissingDateTimeSettingTest()
         {
             AssertThrowsSettingsExceptionMessageTest<MissingDateTimeSetting>(
-                Resources.MissingValueFormat, typeof(DateTime), GetKey(NotFoundPrefix, nameof(MissingDateTimeSetting.MissingDateTime)));
+                Resources.MissingValueFormat, typeof(DateTime), Settings.SettingsLoader.GetSettingKey(NotFoundPrefix, nameof(MissingDateTimeSetting.MissingDateTime)));
         }
 
         [Test]
         public void CreateMissingUriSettingTest()
         {
             AssertThrowsSettingsExceptionMessageTest<MissingUriSetting>(
-                Resources.MissingValueFormat, typeof(Uri), GetKey(NotFoundPrefix, nameof(MissingUriSetting.MissingUri)));
+                Resources.MissingValueFormat, typeof(Uri), Settings.SettingsLoader.GetSettingKey(NotFoundPrefix, nameof(MissingUriSetting.MissingUri)));
         }
 
         [Test]
         public void CreateMissingTimeSpanSettingTest()
         {
             AssertThrowsSettingsExceptionMessageTest<MissingTimeSpanSetting>(
-                Resources.MissingValueFormat, typeof(TimeSpan), GetKey(NotFoundPrefix, nameof(MissingTimeSpanSetting.MissingTimeSpan)));
+                Resources.MissingValueFormat, typeof(TimeSpan), Settings.SettingsLoader.GetSettingKey(NotFoundPrefix, nameof(MissingTimeSpanSetting.MissingTimeSpan)));
         }
 
         [Test]
         public void CreateMissingIntSettingTest()
         {
             AssertThrowsSettingsExceptionMessageTest<MissingIntSetting>(
-                Resources.MissingValueFormat, typeof(int), GetKey(NotFoundPrefix, nameof(MissingIntSetting.MissingInt)));
+                Resources.MissingValueFormat, typeof(int), Settings.SettingsLoader.GetSettingKey(NotFoundPrefix, nameof(MissingIntSetting.MissingInt)));
         }
 
 		[Test]
 		public void CreateMissingFileInfoSettingTest()
 		{
 			AssertThrowsSettingsExceptionMessageTest<MissingFileInfoSetting>(
-				Resources.MissingValueFormat, typeof(FileInfo), GetKey(NotFoundPrefix, nameof(MissingFileInfoSetting.MissingFile)));
+				Resources.MissingValueFormat, typeof(FileInfo), Settings.SettingsLoader.GetSettingKey(NotFoundPrefix, nameof(MissingFileInfoSetting.MissingFile)));
 		}
 		[Test]
 		public void CreateMissingDirectoryInfoSettingTest()
 		{
 			AssertThrowsSettingsExceptionMessageTest<MissingDirectoryInfoSetting>(
-				Resources.MissingValueFormat, typeof(DirectoryInfo), GetKey(NotFoundPrefix, nameof(MissingDirectoryInfoSetting.MissingDir)));
+				Resources.MissingValueFormat, typeof(DirectoryInfo), Settings.SettingsLoader.GetSettingKey(NotFoundPrefix, nameof(MissingDirectoryInfoSetting.MissingDir)));
 		}
 
 		[Test]
         public void CreateMissingArraySettingTest()
         {
             AssertThrowsSettingsExceptionMessageTest<ArraySettings>(
-                Resources.MissingValueFormat, typeof(string[]), GetKey(NotFoundPrefix, nameof(ArraySettings.MySimpleArrayProperty)));
+                Resources.MissingValueFormat, typeof(string[]), Settings.SettingsLoader.GetSettingKey(NotFoundPrefix, nameof(ArraySettings.MySimpleArrayProperty)));
         }
 
         [Test]
         public void CreateMissingListSettingTest()
         {
             AssertThrowsSettingsExceptionMessageTest<ListSettings>(
-                Resources.MissingValueFormat, typeof(IList<string>), GetKey(NotFoundPrefix, nameof(ListSettings.MySimpleListProperty)));
+                Resources.MissingValueFormat, typeof(IList<string>), Settings.SettingsLoader.GetSettingKey(NotFoundPrefix, nameof(ListSettings.MySimpleListProperty)));
         }
 
         [Test]
         public void CreateMissingDictionarySettingTest()
         {
             AssertThrowsSettingsExceptionMessageTest<DictionarySettings>(
-                Resources.MissingValueFormat, typeof(Dictionary<string, string>), GetKey(NotFoundPrefix, nameof(DictionarySettings.MySimpleDictionaryProperty)));
+                Resources.MissingValueFormat, typeof(Dictionary<string, string>), Settings.SettingsLoader.GetSettingKey(NotFoundPrefix, nameof(DictionarySettings.MySimpleDictionaryProperty)));
         }
 
 		[Test]
 		public void CreateMissingNestedSettingTest()
 		{
 			AssertThrowsSettingsExceptionMessageTest<NestedSettings>(
-				Resources.MissingValueFormat, typeof(string), GetKey(NotFoundPrefix, nameof(NestedSettings.MyNestedProperty), nameof(Nested.Foo)));
+				Resources.MissingValueFormat, typeof(string), Settings.SettingsLoader.GetSettingKey(NotFoundPrefix, nameof(NestedSettings.MyNestedProperty), nameof(Nested.Foo)));
 		}
 
 		[Test]

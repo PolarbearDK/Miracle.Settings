@@ -48,7 +48,7 @@ namespace Miracle.Settings
 
 				if (section != null)
 				{
-					keys = section.AsEnumerable().Select(x => section.Key + "." + x.Key);
+					keys = section.GetChildren().Select(x => x.Path);
 				}
 				else
 				{
@@ -57,7 +57,7 @@ namespace Miracle.Settings
 			}
 			else
 			{
-				keys = _configurationRoot.AsEnumerable().Select(x => x.Key);
+				keys = _configurationRoot.GetChildren().Select(x => x.Path);
 			}
 
 			return keys.Any();

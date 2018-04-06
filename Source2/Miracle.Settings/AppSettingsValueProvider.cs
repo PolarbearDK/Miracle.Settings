@@ -30,7 +30,19 @@ namespace Miracle.Settings
         /// <returns>True if values was found, otherwise false</returns>
         public bool TryGetKeys(string prefix, out IEnumerable<string> keys)
         {
-            keys = ConfigurationManager.AppSettings.AllKeys.Where(x => prefix == null || x.StartsWith(prefix)).ToArray();
+	        if (prefix != null)
+	        {
+		        var childPrefix = prefix + SettingsLoader.PropertySeparator;
+		        keys = ConfigurationManager.AppSettings
+			        .AllKeys
+			        .Where(x => x.Equals(prefix) || x.StartsWith(childPrefix))
+			        .ToArray();
+	        }
+	        else
+	        {
+		        keys = ConfigurationManager.AppSettings.AllKeys;
+	        }
+
             return keys.Any();
         }
     }

@@ -89,21 +89,21 @@ namespace Miracle.Settings.Tests.DatabaseTest
 		public void CreateMissingStringTest()
 		{
 			AssertThrowsSettingsExceptionMessageTest<string>(
-				Resources.MissingValueFormat, typeof(string), GetKey(NotFoundPrefix));
+				Resources.MissingValueFormat, typeof(string), NotFoundPrefix);
 		}
 
 		[Test]
 		public void CreateMissingNumericTest()
 		{
 			AssertThrowsSettingsExceptionMessageTest<int>(
-				Resources.MissingValueFormat, typeof(int), GetKey(NotFoundPrefix));
+				Resources.MissingValueFormat, typeof(int), NotFoundPrefix);
 		}
 
         [Test]
         public void GetNestedSettingsNotFoundTest()
         {
 			AssertThrowsSettingsExceptionMessageTest<NestedSettings>(
-				Resources.MissingValueFormat, typeof(string), GetKey(NotFoundPrefix, nameof(NestedSettings.MyNestedProperty), nameof(Nested.Foo)));
+				Resources.MissingValueFormat, typeof(string), Settings.SettingsLoader.GetSettingKey(NotFoundPrefix, nameof(NestedSettings.MyNestedProperty), nameof(Nested.Foo)));
         }
 	}
 

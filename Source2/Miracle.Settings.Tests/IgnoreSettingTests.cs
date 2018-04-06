@@ -16,7 +16,7 @@ namespace Miracle.Settings.Tests
 
             var settingsLoader = DictionaryValueProvider.CreateSettingsLoader(new Dictionary<string, string>
             {
-                { $"{prefix}.{nameof(IgnoreSettings.String)}", @string},
+                { SettingsLoader.GetSettingKey(prefix, nameof(IgnoreSettings.String)), @string},
             });
 
             var setting = settingsLoader.Create<IgnoreSettings>(prefix);

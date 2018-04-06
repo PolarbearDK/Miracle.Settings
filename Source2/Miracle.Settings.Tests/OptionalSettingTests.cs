@@ -12,18 +12,18 @@ namespace Miracle.Settings.Tests
         {
             const string @string = "My String foo";
             const string present = "World";
-            var nested = new Nested() {Foo= "Foo1", Bar = -15};
+            var nested = new Nested {Foo= "Foo1", Bar = -15};
             var prefix = "Hello";
             var array = new[] {" Mickey", "Mouse "};
 
             var settingsLoader = DictionaryValueProvider.CreateSettingsLoader(new Dictionary<string, string>
             {
-                { $"{prefix}.{nameof(OptionalSettings.String)}", @string},
-                { $"{prefix}.{nameof(OptionalSettings.OptionalPresent)}", present},
-                { $"{prefix}.{nameof(OptionalSettings.OptionalNestedPresent)}.{nameof(Nested.Foo)}", nested.Foo},
-                { $"{prefix}.{nameof(OptionalSettings.OptionalNestedPresent)}.{nameof(Nested.Bar)}", nested.Bar.ToString()},
-                { $"{prefix}.{nameof(OptionalSettings.OptionalArrayPresent)}.1", array[0]},
-                { $"{prefix}.{nameof(OptionalSettings.OptionalArrayPresent)}.2", array[1]},
+                { SettingsLoader.GetSettingKey(prefix,nameof(OptionalSettings.String)), @string},
+                { SettingsLoader.GetSettingKey(prefix,nameof(OptionalSettings.OptionalPresent)), present},
+                { SettingsLoader.GetSettingKey(prefix,nameof(OptionalSettings.OptionalNestedPresent),nameof(Nested.Foo)), nested.Foo},
+                { SettingsLoader.GetSettingKey(prefix,nameof(OptionalSettings.OptionalNestedPresent),nameof(Nested.Bar)), nested.Bar.ToString()},
+                { SettingsLoader.GetSettingKey(prefix,nameof(OptionalSettings.OptionalArrayPresent),"1"), array[0]},
+                { SettingsLoader.GetSettingKey(prefix,nameof(OptionalSettings.OptionalArrayPresent),"2"), array[1]}
             });
 
             var setting = settingsLoader.Create<OptionalSettings>(prefix);

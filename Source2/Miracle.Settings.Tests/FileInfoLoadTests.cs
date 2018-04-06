@@ -26,6 +26,8 @@ namespace Miracle.Settings.Tests
 		[Test]
 		public void BasicFileInfoTest()
 		{
+			Console.WriteLine(Directory.GetCurrentDirectory());
+
 			var settings = SettingsLoader.Create<FileSettings>();
 
 			// Defaults
@@ -67,14 +69,14 @@ namespace Miracle.Settings.Tests
 		public void FailTest1()
 		{
 			AssertThrowsSettingsExceptionMessageTest<FileSettings>(
-				Resources.MissingValueFormat, typeof(FileInfo), GetKey(NotFoundPrefix, nameof(FileSettings.SimpleFile)));
+				Resources.MissingValueFormat, typeof(FileInfo), Settings.SettingsLoader.GetSettingKey(NotFoundPrefix, nameof(FileSettings.SimpleFile)));
 		}
 
 		[Test]
 		public void FailTest2()
 		{
 			AssertThrowsSettingsExceptionMessageTest<FileInfo>(
-				Resources.MissingValueFormat, typeof(FileInfo), GetKey(NotFoundPrefix));
+				Resources.MissingValueFormat, typeof(FileInfo), Settings.SettingsLoader.GetSettingKey(NotFoundPrefix));
 		}
 
 		[Test]

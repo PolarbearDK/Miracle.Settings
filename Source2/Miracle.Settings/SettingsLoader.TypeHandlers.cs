@@ -47,9 +47,9 @@ namespace Miracle.Settings
             if (propertyType.IsArray)
             {
                 SettingAttribute attribute = propertyInfo.GetCustomAttributes(typeof(SettingAttribute), false).FirstOrDefault() as SettingAttribute;
-                var arguments = attribute?.Separators != null
-                    ? new object[] { key, attribute.Separators, attribute.StringSplitOptions }
-                    : new object[] { key + PropertySeparator };
+	            var arguments = attribute?.Separators != null
+		            ? new object[] {key, attribute.Separators, attribute.StringSplitOptions}
+		            : new object[] {key};
 
                 value = GetType()
                     .GetMethod(nameof(CreateArray), arguments.Select(x=>x.GetType()).ToArray())
@@ -75,9 +75,9 @@ namespace Miracle.Settings
             if (propertyType.IsGenericType && propertyType.GetGenericTypeDefinition().IsGenericTypeDefinitionAssignableFrom(typeof(List<>)))
             {
                 SettingAttribute attribute = propertyInfo.GetCustomAttributes(typeof(SettingAttribute), false).FirstOrDefault() as SettingAttribute;
-                var arguments = attribute?.Separators != null
-                    ? new object[] { key, attribute.Separators, attribute.StringSplitOptions }
-                    : new object[] {key + PropertySeparator};
+	            var arguments = attribute?.Separators != null
+		            ? new object[] {key, attribute.Separators, attribute.StringSplitOptions}
+		            : new object[] {key};
 
                 value =
                     GetType()
@@ -107,7 +107,7 @@ namespace Miracle.Settings
                     GetType()
                         .GetMethod(nameof(CreateDictionary))
                         .MakeGenericMethod(propertyType.GetGenericArguments())
-                        .Invoke(this, new object[] { key + PropertySeparator, null });
+                        .Invoke(this, new object[] { key, null });
 
                 if (value != null)
                     return true;
@@ -172,7 +172,7 @@ namespace Miracle.Settings
             {
                 foreach (var reference in attribute.References)
                 {
-                    var referenceKey = prefix + reference;
+                    var referenceKey = GetSettingKey(prefix, reference);
                     string referenceValue;
                     if (TryGetValue(referenceKey, out referenceValue))
                     {

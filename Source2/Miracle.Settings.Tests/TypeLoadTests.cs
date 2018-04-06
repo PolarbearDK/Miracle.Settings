@@ -63,7 +63,7 @@ namespace Miracle.Settings.Tests
 		    Assert.That(
 		        () => settingsLoader.Create<TypeSettings>(key),
 		        Throws.Exception.TypeOf<SettingsException>()
-		            .With.Message.EqualTo(string.Format(Resources.MissingValueFormat, typeof(Type).FullName, key + "." + nameof(TypeSettings.MyType))));
+		            .With.Message.EqualTo(string.Format(Resources.MissingValueFormat, typeof(Type).FullName, SettingsLoader.GetSettingKey(key, nameof(TypeSettings.MyType)))));
         }
 
 		[Test]

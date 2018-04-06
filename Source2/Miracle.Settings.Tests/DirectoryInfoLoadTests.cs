@@ -78,7 +78,7 @@ namespace Miracle.Settings.Tests
 		public void FailTest1()
 		{
 			AssertThrowsSettingsExceptionMessageTest<DirectorySettings>(
-				string.Format(Resources.MissingValueFormat, typeof(DirectoryInfo), GetKey(NotFoundPrefix, nameof(DirectorySettings.SimpleDirectory)))
+				string.Format(Resources.MissingValueFormat, typeof(DirectoryInfo), Settings.SettingsLoader.GetSettingKey(NotFoundPrefix, nameof(DirectorySettings.SimpleDirectory)))
 				);
 		}
 
@@ -86,7 +86,7 @@ namespace Miracle.Settings.Tests
 		public void FailTest2()
 		{
 			AssertThrowsSettingsExceptionMessageTest<DirectoryInfo>(
-				Resources.MissingValueFormat, typeof(DirectoryInfo), GetKey(NotFoundPrefix));
+				Resources.MissingValueFormat, typeof(DirectoryInfo), Settings.SettingsLoader.GetSettingKey(NotFoundPrefix));
 		}
 	}
 }

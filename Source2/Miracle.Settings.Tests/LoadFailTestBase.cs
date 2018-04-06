@@ -8,11 +8,6 @@ namespace Miracle.Settings.Tests
 	{
 		public const string NotFoundPrefix = "Missing";
 
-		protected string GetKey(params string[] elements)
-		{
-			return string.Join(".", elements);
-		}
-
 		protected void AssertThrowsSettingsExceptionMessageTest(Action action, string format, params object[] args)
 		{
             var expectedMessage = string.Format(format, args);

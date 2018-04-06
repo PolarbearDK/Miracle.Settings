@@ -19,7 +19,7 @@ namespace Miracle.Settings
         /// <summary>
         /// The separator between appSetting key fragments
         /// </summary>
-        public string PropertySeparator { get; set; } = ".";
+        internal const string PropertySeparator = ":";
 
 #if NETFULL
 		/// <summary>
@@ -87,7 +87,7 @@ namespace Miracle.Settings
             if (!Validator.TryValidateObject(instance, context, validationResults, true))
             {
                 var validationResult = validationResults.First();
-                throw new SettingsException(string.Format(Resources.ValidationError, prefix + validationResult.MemberNames.First(), validationResult.ErrorMessage));
+                throw new SettingsException(string.Format(Resources.ValidationError, GetSettingKey(prefix, validationResult.MemberNames.First()), validationResult.ErrorMessage));
             }
 
             return this;
@@ -129,7 +129,7 @@ namespace Miracle.Settings
 
                     throw new SettingsException(string.Format(Resources.CreateErrorFormat, typeof(T), prefix), ex);
                 }
-                Load(instance, string.IsNullOrEmpty(prefix) ? prefix : prefix + PropertySeparator);
+                Load(instance, prefix);
                 return instance;
             }
             throw new SettingsException(string.Format(Resources.MissingValueFormat, typeof(T), prefix));
@@ -163,7 +163,7 @@ namespace Miracle.Settings
         /// <param name="prefix">The prefix of all settings in the list</param>
         public List<T> CreateList<T>(string prefix)
         {
-            return GetCollectionPrefixes(ToCollectionPrefix(prefix))?
+            return GetCollectionPrefixes(prefix)?
                 .Select(Create<T>)
                 .ToList();
         }
@@ -205,24 +205,11 @@ namespace Miracle.Settings
         /// <param name="comparer">Optional dictionary key comparer</param>
         public Dictionary<TKey, TValue> CreateDictionary<TKey, TValue>(string prefix, IEqualityComparer<TKey> comparer = null)
         {
-            // Ensure valid collection prefix (including .)
-            prefix = ToCollectionPrefix(prefix);
-
             return GetCollectionPrefixes(prefix)?
                 .ToDictionary(
-                    x => (TKey) ChangeType(prefix != null ? x.Substring(prefix.Length) : x, typeof(TKey)),
+                    x => (TKey) ChangeType(prefix != null ? x.Substring(prefix.Length+ PropertySeparator.Length) : x, typeof(TKey)),
                     Create<TValue>,
                     comparer);
-        }
-
-        /// <summary>
-        /// Ensure that a prefix is a collection prefix (must end with PropertySeparator)
-        /// </summary>
-        /// <param name="prefix"></param>
-        /// <returns></returns>
-        private string ToCollectionPrefix(string prefix)
-        {
-            return string.IsNullOrWhiteSpace(prefix) || prefix.EndsWith(PropertySeparator) ? prefix : prefix + PropertySeparator;
         }
 
         /// <summary>
@@ -305,9 +292,32 @@ namespace Miracle.Settings
         protected virtual string GetSettingKey(string prefix, PropertyInfo propertyInfo)
         {
             SettingAttribute attribute = propertyInfo.GetCustomAttributes(typeof(SettingAttribute), false).FirstOrDefault() as SettingAttribute;
-            if (attribute != null && attribute.Name != null)
-                return prefix + attribute.Name;
-            return prefix + propertyInfo.Name;
+            if (attribute?.Name != null)
+                return GetSettingKey(prefix, attribute.Name);
+            return GetSettingKey(prefix, propertyInfo.Name);
         }
+
+	    /// <summary>
+	    /// Get the setting key by combining prefix and name 
+	    /// </summary>
+	    /// <param name="prefix">The prefix of the setting</param>
+	    /// <param name="name">The name of the setting</param>
+	    /// <returns></returns>
+	    internal static string GetSettingKey(string prefix, string name)
+	    {
+		    return prefix != null
+			    ? prefix + PropertySeparator + name
+			    : name;
+	    }
+
+		/// <summary>
+	    /// Get the setting key by combining key parts
+	    /// </summary>
+	    /// <param name="parts">The parts to combine into setting key</param>
+	    /// <returns></returns>
+	    internal static string GetSettingKey(params string[] parts)
+	    {
+		    return string.Join(PropertySeparator, parts);
+	    }
     }
 }
