@@ -291,7 +291,7 @@ namespace Miracle.Settings.Tests
 
 
         [Test]
-        public void CreateDictionaryLoadTest()
+        public void EnumDictionaryLoadTest()
         {
             var settings = SettingsLoader.CreateDictionary<AnimalType, Animal>("Animals");
 
