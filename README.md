@@ -12,6 +12,7 @@ The advantages are many:
 * You can use DI to inject strong typed settings into your application.
 * Supports nested objects, arrays, lists and dictionaries.
 * Property validation.
+* Also works with .NET Core
 
 Wait you might say... You can du that with ConfigurationSections! Well you can but there are many drawbacks, and you have to write a LOT of plumbing code.
 
@@ -32,6 +33,14 @@ Advanced topics
 
 ## Install
 Available as a NuGet package: [Miracle.Settings](https://www.nuget.org/packages/Miracle.Settings/)
+
+```
+Note! Version 3.0.0 released! Breaking change: Default property separator are now colon (:), not dot (.).
+
+Configure SettingLoader.PropertySeparator or change separator in config files using regex search/replace
+Find: (key=\"[^\"]*)\.([^\"]*\")
+Replace $1:$2
+```
 
 To install Miracle.Settings, run the following command in the Package Manager Console
 ```Powershell
@@ -91,14 +100,14 @@ var settings = settingsLoader.Create<FooBar>();
 ```
 
 ## Nested object
-Nested objects are supported using "dot" notation.
+Nested objects are supported using property separator (configurable using: SettingLoader.PropertySeparator)
 
 ```XML
 <configuration>
   <appSettings>
-    <add key="MyPrefix.Foo" value="Foo string" />
-    <add key="MyPrefix.Nested.Foo" value="Foo" />
-    <add key="MyPrefix.Nested.Bar" value="42" />
+    <add key="MyPrefix:Foo" value="Foo string" />
+    <add key="MyPrefix:Nested:Foo" value="Foo" />
+    <add key="MyPrefix:Nested:Bar" value="42" />
   </appSettings>
 </configuration>
 ```

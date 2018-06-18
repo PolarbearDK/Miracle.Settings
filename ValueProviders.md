@@ -4,7 +4,8 @@ Value providers provides the string values that SettingLoader use to initialize 
 
 ## Built in ValueProviders
 - __AppSettingsValueProvider__ (Default) - Load string from AppSettings
-- __EnvironmentValueProvider__ - Load strings from Environment.
+- __EnvironmentValueProvider__ - Load strings from Environment variables.
+- __DictionaryValueProvider__ - Load strings from Dictionary<string,string> (great for unit tests).
 
 ## Register value provider
 Alter the list of value providers by using the following SettingLoader methods:
