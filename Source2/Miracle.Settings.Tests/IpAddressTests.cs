@@ -19,10 +19,10 @@ namespace Miracle.Settings.Tests
             var ip = "42.41.40.39";
 
             // Setup mock value provider
-            var settingsLoader = DictionaryValueProvider.CreateSettingsLoader(new Dictionary<string, string>
+            var settingsLoader = new SettingsLoader(new DictionaryValueProvider(new Dictionary<string, string>
             {
                 {key, ip}
-            });
+            }));
 
             var ipAddress = settingsLoader.Create<IPAddress>(key);
 
@@ -38,10 +38,10 @@ namespace Miracle.Settings.Tests
             var ip = string.Join(",", ips);
 
             // Setup mock value provider
-            var settingsLoader = DictionaryValueProvider.CreateSettingsLoader(new Dictionary<string, string>
+            var settingsLoader = new SettingsLoader(new DictionaryValueProvider(new Dictionary<string, string>
             {
                 {key, ip}
-            });
+            }));
 
             var ipAddresses = settingsLoader.CreateArray<IPAddress>(key, new[] { ',' });
 
@@ -56,7 +56,7 @@ namespace Miracle.Settings.Tests
             var key = "Foo";
 
             // Setup mock value provider
-            var settingsLoader = DictionaryValueProvider.CreateSettingsLoader(new Dictionary<string, string>());
+            var settingsLoader = new SettingsLoader(new DictionaryValueProvider(new Dictionary<string, string>()));
 
             Assert.That(
                 () => settingsLoader.Create<IPAddress>(key),
@@ -70,10 +70,10 @@ namespace Miracle.Settings.Tests
             var key = "Foo";
 
             // Setup mock value provider
-            var settingsLoader = DictionaryValueProvider.CreateSettingsLoader(new Dictionary<string, string>()
+            var settingsLoader = new SettingsLoader(new DictionaryValueProvider(new Dictionary<string, string>()
             {
 	            {key, ""}
-            });
+            }));
 
             Assert.That(
                 () => settingsLoader.Create<IPAddress>(key),
@@ -86,10 +86,10 @@ namespace Miracle.Settings.Tests
 	    {
 		    var ip = "192.168.1.42";
 		    // Setup mock value provider
-		    var settingsLoader = DictionaryValueProvider.CreateSettingsLoader(new Dictionary<string, string>()
+		    var settingsLoader = new SettingsLoader(new DictionaryValueProvider(new Dictionary<string, string>()
 		    {
 			    {nameof(IPSettingTest.IpAddress), ip},
-		    });
+		    }));
 
 		    var result = settingsLoader.Create<IPSettingTest>();
 		    Assert.That(result.IpAddress, Is.EqualTo(IPAddress.Parse(ip)));
@@ -102,11 +102,11 @@ namespace Miracle.Settings.Tests
 		    var ip1 = "192.168.1.42";
 		    var ip2 = "";
 		    // Setup mock value provider
-		    var settingsLoader = DictionaryValueProvider.CreateSettingsLoader(new Dictionary<string, string>()
+		    var settingsLoader = new SettingsLoader(new DictionaryValueProvider(new Dictionary<string, string>()
 		    {
 			    {nameof(IPSettingTest.IpAddress), ip1},
 			    {nameof(IPSettingTest.OptionalIpAddress), ip2},
-		    });
+		    }));
 
 		    var result = settingsLoader.Create<IPSettingTest>();
 		    Assert.That(result.IpAddress, Is.EqualTo(IPAddress.Parse(ip1)));
@@ -119,11 +119,11 @@ namespace Miracle.Settings.Tests
 		    var ip1 = "192.168.1.42";
 		    var ip2 = "87.65.43.210";
 		    // Setup mock value provider
-		    var settingsLoader = DictionaryValueProvider.CreateSettingsLoader(new Dictionary<string, string>()
+		    var settingsLoader = new SettingsLoader(new DictionaryValueProvider(new Dictionary<string, string>()
 		    {
 			    {nameof(IPSettingTest.IpAddress), ip1},
 			    {nameof(IPSettingTest.OptionalIpAddress), ip2},
-		    });
+		    }));
 
 		    var result = settingsLoader.Create<IPSettingTest>();
 		    Assert.That(result.IpAddress, Is.EqualTo(IPAddress.Parse(ip1)));
@@ -135,11 +135,11 @@ namespace Miracle.Settings.Tests
 	    {
 		    var ip = "";
 		    // Setup mock value provider
-		    var settingsLoader = DictionaryValueProvider.CreateSettingsLoader(new Dictionary<string, string>()
+		    var settingsLoader = new SettingsLoader(new DictionaryValueProvider(new Dictionary<string, string>()
 		    {
 			    {nameof(IPSettingTest.IpAddress), ip},
 			    {nameof(IPSettingTest.OptionalIpAddress), ip}
-		    });
+		    }));
 
 		    Assert.That(
 			    () => settingsLoader.Create<IPSettingTest>(),

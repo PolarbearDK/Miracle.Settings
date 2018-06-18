@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Is = NUnit.DeepObjectCompare.Is;
 // ReSharper disable AccessToStaticMemberViaDerivedType
@@ -14,10 +14,10 @@ namespace Miracle.Settings.Tests
             const string @string = "My String";
             var prefix = "Hello";
 
-            var settingsLoader = DictionaryValueProvider.CreateSettingsLoader(new Dictionary<string, string>
+            var settingsLoader = new SettingsLoader(new DictionaryValueProvider(new Dictionary<string, string>
             {
                 { SettingsLoader.GetSettingKey(prefix, nameof(IgnoreSettings.String)), @string},
-            });
+            }));
 
             var setting = settingsLoader.Create<IgnoreSettings>(prefix);
 

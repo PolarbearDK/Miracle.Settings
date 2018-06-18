@@ -17,11 +17,11 @@ namespace Miracle.Settings.Tests
 		    var prefix = "MyPrefix";
 		    var propPrefix = SettingsLoader.GetSettingKey(prefix, nameof(InterfaceMapping.Prop));
 
-		    var settingsLoader = DictionaryValueProvider.CreateSettingsLoader(new Dictionary<string, string>
+		    var settingsLoader = new SettingsLoader(new DictionaryValueProvider(new Dictionary<string, string>
 		    {
 			    {SettingsLoader.GetSettingKey(propPrefix, nameof(IMyInterface.Foo)), foo},
 			    {SettingsLoader.GetSettingKey(propPrefix, nameof(IMyInterface.Bar)), bar.ToString()},
-		    });
+		    }));
 
 		    var setting = settingsLoader.Create<InterfaceMapping>(prefix);
 
@@ -41,11 +41,11 @@ namespace Miracle.Settings.Tests
             var prefix = "MyPrefix";
             var propPrefix = SettingsLoader.GetSettingKey(prefix, nameof(InterfaceMapping.Prop));
 
-	        var settingsLoader = DictionaryValueProvider.CreateSettingsLoader(new Dictionary<string, string>
+	        var settingsLoader = new SettingsLoader(new DictionaryValueProvider(new Dictionary<string, string>
 	        {
 		        {SettingsLoader.GetSettingKey(propPrefix, nameof(IMyInterface.Foo)), foo},
 		        {SettingsLoader.GetSettingKey(propPrefix, nameof(IMyInterface.Bar)), bar.ToString()},
-	        });
+	        }));
 
             Assert.That(() => { settingsLoader.Create<BadInterfaceMapping>(prefix);}, Throws.Exception.TypeOf<ArgumentException>());
         }

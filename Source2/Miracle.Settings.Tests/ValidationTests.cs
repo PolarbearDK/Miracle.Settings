@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Globalization;
@@ -22,7 +22,7 @@ namespace Miracle.Settings.Tests
             const decimal price = 50;
             const string rating = "R";
 
-            var settingsLoader = DictionaryValueProvider.CreateSettingsLoader(new Dictionary<string, string>
+            var settingsLoader = new SettingsLoader(new DictionaryValueProvider(new Dictionary<string, string>
             {
                 {nameof(Movie.ID), "10"},
                 {nameof(Movie.Title), title},
@@ -30,7 +30,7 @@ namespace Miracle.Settings.Tests
                 {nameof(Movie.Genre), genre},
                 {nameof(Movie.Price), price.ToString(CultureInfo.InvariantCulture)},
                 {nameof(Movie.Rating), rating},
-            });
+            }));
 
             var movie = settingsLoader.Create<Movie>();
 
@@ -52,7 +52,7 @@ namespace Miracle.Settings.Tests
             const decimal price = 50;
             const string rating = "12345R";
 
-            var settingsLoader = DictionaryValueProvider.CreateSettingsLoader(new Dictionary<string, string>
+            var settingsLoader = new SettingsLoader(new DictionaryValueProvider(new Dictionary<string, string>
             {
                 {nameof(Movie.ID), id.ToString()},
                 {nameof(Movie.Title), title},
@@ -60,7 +60,7 @@ namespace Miracle.Settings.Tests
                 {nameof(Movie.Genre), genre},
                 {nameof(Movie.Price), price.ToString(CultureInfo.InvariantCulture)},
                 {nameof(Movie.Rating), rating},
-            });
+            }));
 
             var ex = Assert.Throws<SettingsException>(() =>
             {

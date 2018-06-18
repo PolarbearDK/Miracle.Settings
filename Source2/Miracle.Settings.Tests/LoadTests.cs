@@ -77,10 +77,10 @@ namespace Miracle.Settings.Tests
 			var value = date.ToString("dd/MM/yyyy");
 
             // Setup dictionary value provider 
-            var settingsLoader = DictionaryValueProvider.CreateSettingsLoader(new Dictionary<string, string>
+            var settingsLoader = new SettingsLoader(new DictionaryValueProvider(new Dictionary<string, string>
 			{
 				{key, value}
-			});
+			}));
 			settingsLoader.AddTypeConverter<DateTime>(x => DateTime.Parse(x, System.Globalization.CultureInfo.GetCultureInfo("da-DK")));
 
             var result = settingsLoader.Create<DateTime>(key);

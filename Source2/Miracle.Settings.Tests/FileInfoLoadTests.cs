@@ -52,12 +52,12 @@ namespace Miracle.Settings.Tests
 		public void FileAnnotationTest()
 		{
 			// Setup mock value provider with type
-			var settingsLoader = DictionaryValueProvider.CreateSettingsLoader(new Dictionary<string, string>
+			var settingsLoader = new SettingsLoader(new DictionaryValueProvider(new Dictionary<string, string>
 			{
 				{"Drive", "C:\\"},
 				{"Folder", "Windows"},
 				{"FileName", "notepad.exe"},
-			});
+			}));
 			var settings = settingsLoader.Create<FileAnnotationSettings>();
 
 			// Defaults

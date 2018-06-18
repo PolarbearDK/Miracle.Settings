@@ -16,7 +16,7 @@ namespace Miracle.Settings.Tests
             var prefix = "Hello";
             var array = new[] {" Mickey", "Mouse "};
 
-            var settingsLoader = DictionaryValueProvider.CreateSettingsLoader(new Dictionary<string, string>
+            var settingsLoader = new SettingsLoader(new DictionaryValueProvider(new Dictionary<string, string>
             {
                 { SettingsLoader.GetSettingKey(prefix,nameof(OptionalSettings.String)), @string},
                 { SettingsLoader.GetSettingKey(prefix,nameof(OptionalSettings.OptionalPresent)), present},
@@ -24,7 +24,7 @@ namespace Miracle.Settings.Tests
                 { SettingsLoader.GetSettingKey(prefix,nameof(OptionalSettings.OptionalNestedPresent),nameof(Nested.Bar)), nested.Bar.ToString()},
                 { SettingsLoader.GetSettingKey(prefix,nameof(OptionalSettings.OptionalArrayPresent),"1"), array[0]},
                 { SettingsLoader.GetSettingKey(prefix,nameof(OptionalSettings.OptionalArrayPresent),"2"), array[1]}
-            });
+            }));
 
             var setting = settingsLoader.Create<OptionalSettings>(prefix);
 

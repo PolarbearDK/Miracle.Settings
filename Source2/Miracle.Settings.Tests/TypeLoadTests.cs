@@ -19,10 +19,10 @@ namespace Miracle.Settings.Tests
 			var someType = typeof(TestFixtureAttribute);
 
 			// Setup mock value provider with type
-			var settingsLoader = DictionaryValueProvider.CreateSettingsLoader(new Dictionary<string, string>
+			var settingsLoader = new SettingsLoader(new DictionaryValueProvider(new Dictionary<string, string>
 			{
 				{key, someType.AssemblyQualifiedName}
-			});
+			}));
 
 			var type = settingsLoader.Create<Type>(key);
 
@@ -36,7 +36,7 @@ namespace Miracle.Settings.Tests
 			var key = "Foo";
 
 			// Setup mock value provider with type
-			var settingsLoader = DictionaryValueProvider.CreateSettingsLoader(new Dictionary<string, string>()) ;
+			var settingsLoader = new SettingsLoader(new DictionaryValueProvider(new Dictionary<string, string>()));
 
 			Assert.That(
                 () => settingsLoader.Create<Type>(key), 
@@ -54,10 +54,10 @@ namespace Miracle.Settings.Tests
             var someType = "";
 
 			// Setup mock value provider with type
-		    var settingsLoader = DictionaryValueProvider.CreateSettingsLoader(new Dictionary<string, string>
+		    var settingsLoader = new SettingsLoader(new DictionaryValueProvider(new Dictionary<string, string>
 		    {
 		        {key, someType}
-		    });
+		    }));
 
 
 		    Assert.That(
@@ -75,10 +75,10 @@ namespace Miracle.Settings.Tests
 			var someType = "Foo, MyType.Dll";
 
 			// Setup mock value provider with type
-			var settingsLoader = DictionaryValueProvider.CreateSettingsLoader(new Dictionary<string, string>
+			var settingsLoader = new SettingsLoader(new DictionaryValueProvider(new Dictionary<string, string>
 			{
 				{key, someType}
-			});
+			}));
 
             Assert.That( 
                 () => settingsLoader.Create<Type>(key),
