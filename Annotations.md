@@ -1,8 +1,11 @@
 # Annotations
+
 Setting loading can be customized by applying annotations to properties.
 
 ## Default value
+
 Specify default values using System.ComponentModel.DefaultValueAttribute
+
 ```Csharp
 [DefaultValue(4200)]
 public int Port { get; set; }
@@ -10,8 +13,10 @@ public int Port { get; set; }
 public Type ConnectionType { get; set; }
 ```
 
-## Ignore values 
-Ignore specific values and treat them as "not present" by specifying an __IgnoreValue/IgnoreValues__ property (Miracle.Settings.SettingAttribute)
+## Ignore values
+
+Ignore specific values and treat them as "not present" by specifying an **IgnoreValue/IgnoreValues** property (Miracle.Settings.SettingAttribute)
+
 ```CSharp
 [Setting(IgnoreValue = "N/A")]
 [Optional]
@@ -19,43 +24,57 @@ public IPAddress IPAddress { get; set; }
 ```
 
 ## Ignore properties
-Ignore property by applying an __Ignore__ attribute (Miracle.Settings.IgnoreAttribute)
+
+Ignore property by applying an **Ignore** attribute (Miracle.Settings.IgnoreAttribute)
+
 ```CSharp
 [Ignore]
 public string MyIgnoredProperty { get; set; }
 ```
+
 Note! that properties without settters are ignored by default.
 
 ## Optional properties
+
 All nullable value types are by convension optional.
+
 ```CSharp
 public TimeSpan? TTL { get; set; }
 public Nullable<int> MyOptionalInt { get; set; }
 ```
-Reference type properties can be made optional with an __Optional__ attribute (Miracle.Settings.OptionalAttribute)
+
+Reference type properties can be made optional with an **Optional** attribute (Miracle.Settings.OptionalAttribute)
+
 ```CSharp
 [Optional]
 public string MyOptionalValue { get; set; }
 ```
 
 ## Change the name of the property key loaded
+
 Use Miracle.Settings.SettingAttribute to customize deserialization.
+
 ```CSharp
 [Setting("Bar")]
 public string Foo { get; set; }
 ```
+
 Result: The value of the "Bar" value is loaded into "Foo" property.
 
 ## Split string value into array/list
+
 Simple arrays and lists can be loaded from a single string value containing separated values.
+
 ```XML
 <configuration>
   <appSettings>
-    <add key="My.Arr" value="Foo;Bar;Baz" />
+    <add key="My:Arr" value="Foo;Bar;Baz" />
   </appSettings>
 </configuration>
 ```
+
 Must specify Separator or Separators.
+
 ```CSharp
 public class FooSetting
 {
@@ -68,33 +87,70 @@ var settings = settingsLoader.Create<FooSetting>("My");
 ```
 
 ## Per property type converter
-Use __TypeConverter__ to specify the type converter for a single property.
+
+Use **TypeConverter** argument to specify the type converter for a single property.
+
 ```Csharp
 [Setting(TypeConverter = typeof(MyFooTypeConverter))]
 public MyFoo Foo { get; private set; }
 ```
 
 ## Map interface or abstract class to implementation class
-Use __ConcreteType__ to specify the implementation class when the type of a property does not have a concrete implemetation.
+
+Use **ConcreteType** argument to specify the implementation class when the type of a property does not have a concrete implemetation.
+
 ```Csharp
 [Setting(ConcreteType = typeof(MyConcreteImplementation))]
 public IMyInterface Prop { get; private set; }
 ```
 
-## Combine several values into one. 
-Reference other values, and combine them into new values. The referenced value(s) are handed to the type converter first in the value array. The value of the setting value itself is the last element in the array.
+## Combine values.
 
-__Note!__ Values (from "value providers") are referenced, not properties. 
+The **Reference** and **References** attributes are used to combine several values from the value provider together at load time.
+
+When using the Referece(es) keyword the loader will
+
+- Load value of all **referenced keys** from value provider.
+- Load value of the **setting itself** from value provider.
+- Combine all loaded values into a array.
+- Convert values in array to final type using type converter.
+- The type converter must be able to handle the number of values in the array.
+
+Consider:
+
+```XML
+<configuration>
+  <appSettings>
+    <add key="Root" value="https://github.com/PolarbearDK" />
+    <add key="Partial" value="Miracle.Settings" />
+  </appSettings>
+</configuration>
+```
 
 ```Csharp
-[Setting(Reference="Bar")]
-public Uri Foo { get; set; }
+[Setting("Partial", Reference="Root")]
+public Uri CombinedUrl { get; set; }
 ```
-Result: the type converter is given an array of values containing the loaded value of "Bar" and "Foo". 
-Note! The type converter must be able to handle multiple values.
+
+In this example, SettingsLoader will:
+
+- load value of all referenced keys ("Root")
+- load value of the setting itself ("Partial").
+- The value provider gets the following array:
+
+```Csharp
+["https://github.com/PolarbearDK","Miracle.Settings"]
+```
+
+- The Url value provider combines the values resulting in a setting containing: "https://github.com/PolarbearDK/Miracle.Settings".
+
+**Note!** that in above example, "Root" and "Partial" refers to values (from "value providers"), and that there are no class properties called "Root" or "Partial".
+
+**Hint!** The FileInfo and DirectoryInfo type converters can combine several elements together.
 
 ```Csharp
 [Setting(Name = "FileName", References = new[] { "Drive", "Folder" })]
 public FileInfo File { get; set; }
 ```
-Result: A FileInfo object is created by combining the loaded value of "Drive", "Folder" and "FileName" (in that order). 
+
+Result: A FileInfo object is created by combining the loaded value of "Drive", "Folder" and "FileName" (in that order).

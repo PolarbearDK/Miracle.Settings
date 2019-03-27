@@ -22,10 +22,9 @@ namespace Miracle.Settings.Tests
         public string Genre { get; set; }
 
         [Range(1, 100)]
-        [DataType(DataType.Currency)]
         public decimal Price { get; set; }
 
-        [RegularExpression(@"^[A-Z]+[a-zA-Z''-'\s]*$")]
+        [RegularExpression(@"^[A-Z0-9]*$")]
         [StringLength(5)]
         public string Rating { get; set; }
     }
