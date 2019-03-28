@@ -73,7 +73,7 @@ namespace Miracle.Settings.Tests
         [Ignore]
         public string[] NestedIgnoredArray { get; private set; }
 
-		// Ignored by convension
+		// Optional by convension
 	    public TimeSpan? TimeSpanIgnored { get; private set; }
 	}
 

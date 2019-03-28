@@ -1,18 +1,32 @@
-# TypeConverters
+# Type Converters
 
-Type converters controls how a value is constructed from one or more settings.
+Values are converted to target type using a Type Converters. Type converters controls how a value is constructed from one or more settings. 
 
-## Add type converter
-Type converters can be added using fluid convenience methods:
-- __AddTypeConverter<T>(Func<string, T> convert)__ Add simple type converter for type T using converter function.
-- __AddTypeConverter(ITypeConverter typeConverter)__ Add type converter instance to front of list of type converters
 
-The full list of current type converters are available in property: __TypeConverters__.
+## Build in type support
+Miracle.Settings has build-in support for POCO (Plain old CLR objects) objects, and all types that implement IConvertible interface.
+
+Miracle.Settings also has custom type converters for these types:
+
+| Type          | Comment                                                                                                               | Multi value |
+| ------------- | --------------------------------------------------------------------------------------------------------------------- | ----------- |
+| DateTime      | ISO8601 converted to local date/time                                                                                  |             |
+| DirectoryInfo | check that directory exist                                                                                            | *           |
+| Enum          | incl. flags enum                                                                                                      |             |
+| FileInfo      | check that file exist                                                                                                 | *           |
+| Guid          | Any format that [Guid.Parse](https://msdn.microsoft.com/en-us/library/system.guid.parse.aspx) supports.               |             |
+| IPAddress     | Any format that [IPAddress.Parse](https://msdn.microsoft.com/en-us/library/system.net.ipaddress.parse.aspx) supports. |             |
+| TimeSpan      | Any format that [TimeSpan.Parse](https://msdn.microsoft.com/en-us/library/system.timespan.parse.aspx) supports.       |             |
+| Type          | checks that type exist                                                                                                |             |
+| Uri           | check that url is valid                                                                                               | 2           |
+
+Multi value is covered in [Section about Reference(s) attribute](Annotations.md) 
+
+## Add support for additional types
+Support for additional types can be added by providing a type converter for the specific type.
 
 ## Custom Type Converter
-You can add custom type converters for types not supported out of the box.
-A good examle is DateTime where string representation varies with localization. 
-The default converter expects ISO 8601 format converted to local. If you want to specifiy dates in a different format, this can be done like this:
+The default DateTime converter expects ISO 8601 format converted to local. This example creates a type converter for DateTime that accept dates in danish locale format:
 
 Sample:
 ```XML
@@ -23,7 +37,7 @@ Sample:
 </configuration>
 ```
 
-Type converters can be configured per setting instance.
+Type converters can be configured per setting loader instance.
 ```CSharp
 ISettingsLoader settingsLoader = new SettingsLoader()
     // Add converter from Xml date/time format to DateTime
@@ -31,7 +45,7 @@ ISettingsLoader settingsLoader = new SettingsLoader()
 DateTime dateTime = settingsLoader.Create<DateTime>("DateTime");
 ```
 
-Type converters can be specified in-line to only affect one property.
+Type converters can also be specified in-line to only affect one property.
 ```CSharp
 public class FooSettings
 {
@@ -81,3 +95,9 @@ public class PathTypeConverter : ITypeConverter
     }
 }
 ```
+## Add type converter
+Type converters can be added to SettingLoader using fluid convenience methods:
+- __AddTypeConverter<T>(Func<string, T> convert)__ Add simple type converter for type T using converter function.
+- __AddTypeConverter(ITypeConverter typeConverter)__ Add type converter instance to front of list of type converters
+
+The full list of current type converters are available in SettingLoader property: __TypeConverters__. This list can be manipulated to get full control over all type converting.
