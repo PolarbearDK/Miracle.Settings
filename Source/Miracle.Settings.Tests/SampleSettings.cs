@@ -283,4 +283,9 @@ namespace Miracle.Settings.Tests
         [Setting(ConcreteType = typeof(Nested))]
         public IMyInterface Prop { get; private set; }
     }
+
+    public class BadConversion
+    {
+        public Uri BadUri { get; set; }
+    }
 }

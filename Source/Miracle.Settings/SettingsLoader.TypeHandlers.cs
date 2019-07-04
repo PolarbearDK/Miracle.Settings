@@ -34,8 +34,15 @@ namespace Miracle.Settings
             {
                 list.Add(propertyValue);
 
-                if (TryConstructPropertyValue(propertyInfo, list.ToArray(), out value))
-                    return true;
+                try
+                {
+                    if (TryConstructPropertyValue(propertyInfo, list.ToArray(), out value))
+                        return true;
+                }
+                catch (SettingsException ex)
+                {
+                    throw new SettingsException(string.Format(Resources.ConversionErrorSuffix, ex.Message, key));
+                }
             }
             value = null;
             return false;

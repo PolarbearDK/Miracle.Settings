@@ -30,7 +30,36 @@ namespace Miracle.Settings.Tests
 			Assert.That(type, Is.EqualTo(someType));
 		}
 
-		[Test]
+        [Test]
+        public void BadUri()
+        {
+            var prefix = "FooPrefix";
+            var propPrefix = SettingsLoader.GetSettingKey(prefix, "foo");
+            var settingKey = SettingsLoader.GetSettingKey(propPrefix, nameof(BadConversion.BadUri));
+            var value = "[]";
+
+            var expectedMessage = string.Format(
+                Resources.ConversionErrorSuffix,
+                string.Format(
+                    Resources.ConvertValueErrorFormat,
+                    value,
+                    typeof(Uri).FullName),
+                settingKey);
+
+            var settingsLoader = new SettingsLoader(new DictionaryValueProvider(new Dictionary<string, string>
+            {
+                {settingKey, "[]"},
+            }));
+
+            Assert.That(() => { settingsLoader.Create<BadConversion>(propPrefix); },
+                Throws
+                .Exception.TypeOf<SettingsException>()
+                .With.Message.EqualTo(expectedMessage)
+                );
+        }
+
+
+        [Test]
 		public void NoValueTest1()
 		{
 			var key = "Foo";
