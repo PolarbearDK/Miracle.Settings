@@ -7,6 +7,7 @@ using System.Reflection;
 // ReSharper disable ClassNeverInstantiated.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Local
 // ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable UnusedMember.Global
 
 namespace Miracle.Settings.Tests
 {
@@ -143,9 +144,24 @@ namespace Miracle.Settings.Tests
 		public DirectoryInfo RelativeDirectoryInfo { get; private set; }
 	}
 
-	public class NestedSettings
+    public class NestedSettings
     {
         public Nested MyNestedProperty { get; internal set; }
+    }
+
+    public class InlineSettings
+    {
+        [Setting(Inline = true)]
+        public Nested MyNestedProperty { get; internal set; }
+        public TimeSpan Baz { get; set; }
+    }
+
+    public class OptionalInlineSettings
+    {
+        [Setting(Inline = true)]
+        [Optional]
+        public TypeSettings MyNestedProperty { get; internal set; }
+        public TimeSpan Baz { get; set; }
     }
 
     public class ArraySettings
@@ -239,7 +255,19 @@ namespace Miracle.Settings.Tests
 		public DirectoryInfo MissingDir { get; private set; }
 	}
 
-	public class BadTypeConverterSetting
+    public class MissingInlineSetting
+    {
+        [Setting(Inline = true)]
+        public Nested Inline { get; private set; }
+    }
+
+    public class InlineTypeConversionSetting
+    {
+        [Setting(Inline = true)]
+        public MissingIntSetting Inline { get; private set; }
+    }
+
+    public class BadTypeConverterSetting
     {
         [Setting(TypeConverter = typeof(string))]
         [DefaultValue("Bar")]
@@ -271,7 +299,6 @@ namespace Miracle.Settings.Tests
         public int Bar { get; private set; }
     }
 
-
     public class InterfaceMapping
     {
         [Setting(ConcreteType = typeof(MyConcreteImplementation))]
@@ -282,5 +309,27 @@ namespace Miracle.Settings.Tests
     {
         [Setting(ConcreteType = typeof(Nested))]
         public IMyInterface Prop { get; private set; }
+    }
+
+    public class BadConversion
+    {
+        public Uri BadUri { get; set; }
+    }
+
+    public class MultiLevel1
+    {
+        public string Foo { get; set; }
+        public MultiLevel2 Level2 { get; set; }
+    }
+
+    public class MultiLevel2
+    {
+        public string Bar { get; set; }
+        public MultiLevel3 Level3 { get; set; }
+    }
+
+    public class MultiLevel3
+    {
+        public string Baz { get; set; }
     }
 }

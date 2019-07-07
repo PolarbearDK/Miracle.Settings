@@ -1,25 +1,24 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net452;net462;net40</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net472;net462;net452;net40</TargetFrameworks>
     <LangVersion>latest</LangVersion>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Miracle.Settings.xml</DocumentationFile>
-    
-    <Version>3.0.0</Version>
+    <Version>3.0.3</Version>
     <Authors>Philip Hoppe</Authors>
     <Company>Danish Software Development</Company>
-    <PackageLicenseUrl>https://github.com/PolarbearDK/Miracle.Settings/blob/master/LICENSE.txt</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/PolarbearDK/Miracle.Settings</PackageProjectUrl>
     <Description>Load application settings into strong typed objects with two lines of code.
 
 Supports validation, nested objects, arrays, lists and dictionaries.</Description>
     <Copyright>Copyright 2016-2019</Copyright>
     <PackageTags>appsetting strong type setting config configuration POCO</PackageTags>
-    <PackageReleaseNotes>Convert to .net standard 2.0</PackageReleaseNotes>
+    <PackageReleaseNotes>Add support for Inline classes</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageIconUrl>https://github.com/PolarbearDK/Miracle.Settings/raw/master/nuget-icon.png</PackageIconUrl>
     <RepositoryUrl>https://github.com/PolarbearDK/Miracle.Settings</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
 		<!-- .NET Standard 2.0 references, compilation flags and build options -->
@@ -31,6 +30,21 @@ Supports validation, nested objects, arrays, lists and dictionaries.</Descriptio
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="2.0.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.0.1" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.4.1" />
+  </ItemGroup>
+
+  <!-- .NET 4.6.x references, compilation flags and build options -->
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net472'">
+		<DefineConstants>NETFULL;NET47</DefineConstants>
+	</PropertyGroup>
+	
+  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
+  	<Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Web" />
   </ItemGroup>
 
   <!-- .NET 4.6.x references, compilation flags and build options -->
@@ -76,13 +90,6 @@ Supports validation, nested objects, arrays, lists and dictionaries.</Descriptio
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Web" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <PackageReference Include="GitVersionTask" Version="4.0.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
   </ItemGroup>
   
 	<ItemGroup>

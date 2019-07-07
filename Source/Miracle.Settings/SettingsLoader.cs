@@ -52,6 +52,20 @@ namespace Miracle.Settings
         }
 
         /// <summary>
+        /// Check if settings matches any properties.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="prefix"></param>
+        /// <returns></returns>
+        public bool HasSettings<T>(string prefix = null)
+        {
+            // Initialize all properties of T with values provided by typehandlers using reflection
+            return GetLoadableProperties<T>()
+                .Select(propertyInfo => GetSettingKey(prefix, propertyInfo))
+                .Any(HasKeys);
+        }
+
+        /// <summary>
         /// Load an existing instance of type T with settings prefixed by prefix.
         /// </summary>
         /// <typeparam name="T"></typeparam>

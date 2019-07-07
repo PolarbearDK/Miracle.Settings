@@ -34,8 +34,15 @@ namespace Miracle.Settings
             {
                 list.Add(propertyValue);
 
-                if (TryConstructPropertyValue(propertyInfo, list.ToArray(), out value))
-                    return true;
+                try
+                {
+                    if (TryConstructPropertyValue(propertyInfo, list.ToArray(), out value))
+                        return true;
+                }
+                catch (SettingsException ex)
+                {
+                    throw new SettingsException(string.Format(Resources.ConversionErrorSuffix, ex.Message, key));
+                }
             }
             value = null;
             return false;
@@ -126,12 +133,19 @@ namespace Miracle.Settings
         {
             SettingAttribute settingAttribute = propertyInfo.GetCustomAttributes(typeof(SettingAttribute), false).FirstOrDefault() as SettingAttribute;
             var propertyType = settingAttribute?.ConcreteType ?? propertyInfo.PropertyType;
+            var inline = settingAttribute?.Inline ?? false;
             if (propertyType.IsClass && propertyType != typeof(string))
             {
+                var nestedKey = inline ? prefix : key;
                 if (IsPropertyOptional(propertyInfo))
                 {
-                    var nestedPrefix = string.IsNullOrEmpty(key) ? key : key + PropertySeparator;
-                    if (!HasKeys(nestedPrefix))
+                    var hasSettings = (bool)
+                        GetType()
+                            .GetMethod(nameof(HasSettings))
+                            .MakeGenericMethod(propertyType)
+                            .Invoke(this, new object[] { nestedKey });
+
+                    if (!hasSettings)
                     {
                         value = null;
                         return false;
@@ -144,19 +158,22 @@ namespace Miracle.Settings
                         GetType()
                             .GetMethod(nameof(Create))
                             .MakeGenericMethod(propertyType)
-                            .Invoke(this, new object[] {key});
+                            .Invoke(this, new object[] {nestedKey});
                     return true;
                 }
-                    // Remove the awfull TargetInvocationException
+                // Remove the awfull TargetInvocationException
                 catch (System.Reflection.TargetInvocationException ex)
                 {
+                    if (ex.InnerException != null)
+                    {
 #if !NET40 // ExceptionDispatchInfo not available before .NET 4.5
-                    ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
+                        ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
 #else
-                    // In .NET 4.0 just throw innerexception (but loose stack trace)
-                    if (ex.InnerException != null) throw ex.InnerException;
-                    throw;
+                        // In .NET 4.0 just throw innerexception (but loose stack trace)
+                        throw ex.InnerException;
 #endif
+                    }
+                    throw;
                 }
             }
             value = null;

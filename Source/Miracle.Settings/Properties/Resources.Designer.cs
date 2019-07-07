@@ -70,6 +70,15 @@ namespace Miracle.Settings.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} while loading setting with key {1}.
+        /// </summary>
+        internal static string ConversionErrorSuffix {
+            get {
+                return ResourceManager.GetString("ConversionErrorSuffix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unable to convert value [{0}] to type {1}.
         /// </summary>
         internal static string ConvertValueErrorFormat {
