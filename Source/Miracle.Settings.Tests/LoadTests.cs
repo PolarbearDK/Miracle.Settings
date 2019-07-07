@@ -65,8 +65,6 @@ namespace Miracle.Settings.Tests
             Assert.That(settings.Guid6, Is.EqualTo(Guid.Parse("DCFA0942-0BEC-43E4-8D77-57BA63C7BF7B")));
         }
 
-        
-
 		[Test]
 		public void CustomDateTimeTest()
 		{

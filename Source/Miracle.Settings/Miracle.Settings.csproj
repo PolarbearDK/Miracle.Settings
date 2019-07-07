@@ -5,7 +5,7 @@
     <LangVersion>latest</LangVersion>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Miracle.Settings.xml</DocumentationFile>
     
-    <Version>3.0.0</Version>
+    <Version>3.0.2</Version>
     <Authors>Philip Hoppe</Authors>
     <Company>Danish Software Development</Company>
     <PackageLicenseUrl>https://github.com/PolarbearDK/Miracle.Settings/blob/master/LICENSE.txt</PackageLicenseUrl>
@@ -76,13 +76,6 @@ Supports validation, nested objects, arrays, lists and dictionaries.</Descriptio
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Web" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <PackageReference Include="GitVersionTask" Version="4.0.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
   </ItemGroup>
   
 	<ItemGroup>

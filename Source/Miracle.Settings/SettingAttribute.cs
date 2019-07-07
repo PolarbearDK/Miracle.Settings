@@ -89,10 +89,15 @@ namespace Miracle.Settings
 	    /// </summary>
 		public string[] IgnoreValues { get; set; }
 
-		/// <summary>
-		/// Construct setting attribute
-		/// </summary>
-		public SettingAttribute()
+        /// <summary>
+        /// Inline structure/class (treat as if on same settings level)
+        /// </summary>
+        public bool Inline { get; set; } = false;
+
+        /// <summary>
+        /// Construct setting attribute
+        /// </summary>
+        public SettingAttribute()
         {
         }
 
