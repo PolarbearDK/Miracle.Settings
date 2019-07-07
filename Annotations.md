@@ -95,6 +95,33 @@ Use **TypeConverter** argument to specify the type converter for a single proper
 public MyFoo Foo { get; private set; }
 ```
 
+## Inline classes
+Use **Inline** argument to specify that the properties of a nested class should be loaded from the same setting level as the parent class. In other words, the name of the nested property is ignored.
+
+Example:
+```CSharp
+public class ParentSetting
+{
+  [Setting(Inline = true)]
+  public ChildSetting Child { get; private set; }
+
+  public string Foo { get; private set; }
+}
+
+public class ChildSetting
+{
+  public string Bar { get; private set; }
+}
+
+...
+var settings = settingsLoader.Create<ParentSetting>("My");
+```
+
+In above example "Foo" property is loaded from "My:Foo" and "Bar" property is loaded from "My:Bar".
+Without **Inline** the "Bar" parameter would be loaded from "My:Child:Bar"
+
+**Hint!** Use **Inline** to group properties that must be all specified or all left out, by making nested class optional, and leave all properties of nested class required.
+
 ## Map interface or abstract class to implementation class
 
 Use **ConcreteType** argument to specify the implementation class when the type of a property does not have a concrete implemetation.
@@ -108,13 +135,13 @@ public IMyInterface Prop { get; private set; }
 
 The **Reference** and **References** attributes are used to combine several values from the value provider together at load time.
 
-When using the Referece(es) keyword the loader will
+When using the Referece(s) keyword the loader will
 
 - Load value of all **referenced keys** from value provider.
 - Load value of the **setting itself** from value provider.
 - Combine all loaded values into a array.
 - Convert values in array to final type using type converter.
-- The type converter must be able to handle the number of values in the array.
+- The type converter matching the property type must be able to handle the number of values in the array.
 
 Consider:
 
