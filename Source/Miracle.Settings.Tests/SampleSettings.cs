@@ -160,7 +160,7 @@ namespace Miracle.Settings.Tests
     {
         [Setting(Inline = true)]
         [Optional]
-        public TypeSettings MyNestedProperty { get; internal set; }
+        public Nested MyNestedProperty { get; internal set; }
         public TimeSpan Baz { get; set; }
     }
 
