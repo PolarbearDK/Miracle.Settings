@@ -59,10 +59,10 @@ namespace Miracle.Settings
         /// <returns></returns>
         public bool HasSettings<T>(string prefix = null)
         {
-            // Initialize all properties of T with values provided by typehandlers using reflection
+            // Check each setting for presence of value
             return GetLoadableProperties<T>()
                 .Select(propertyInfo => GetSettingKey(prefix, propertyInfo))
-                .Any(HasKeys);
+                .Any(key => TryGetValue(key, out _));
         }
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace Miracle.Settings
                 }
             }
 
-            // Validate model using System.ComponentModel.DataAnnotations;
+            // Validate model using System.ComponentModel.DataAnnotations
             var validationResults = new List<ValidationResult>();
             var context = new ValidationContext(instance, null, null);
             if (!Validator.TryValidateObject(instance, context, validationResults, true))
