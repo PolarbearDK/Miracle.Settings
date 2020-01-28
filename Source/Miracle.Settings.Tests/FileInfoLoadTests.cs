@@ -1,5 +1,6 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Configuration;
 using System.Diagnostics;
 using System.IO;
@@ -81,11 +82,12 @@ namespace Miracle.Settings.Tests
 
 		[Test]
 		public void FailTest3()
-		{
-			Assert.That(() => TestSettingsLoader.GetSettingsLoader()
-					.Create<FileInfo>(nameof(SimpleSettings.Uri)),
+        {
+            Assert.That(() => TestSettingsLoader.GetSettingsLoader()
+                    .Create<FileInfo>("InvalidPath"),
 				Throws.Exception.TypeOf<SettingsException>()
-				.With.Message.EqualTo(string.Format(Resources.CreateErrorFormat, typeof(FileInfo), nameof(SimpleSettings.Uri))));
-		}
-	}
+                .With.Message.EqualTo(string.Format(Resources.ConvertValueErrorFormat, "*?", typeof(FileInfo)))
+            );
+        }
+    }
 }

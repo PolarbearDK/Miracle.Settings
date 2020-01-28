@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace Miracle.Settings
 {
@@ -16,7 +16,8 @@ namespace Miracle.Settings
 		/// <returns>True if type converter is able to convert values to desired type, otherwise false</returns>
 		public bool CanConvert(object[] values, Type conversionType)
         {
-            return conversionType.IsEnum && values.Length == 1 && (values[0] is string || values[0].GetType() == conversionType);
+            return (conversionType.IsEnum || Nullable.GetUnderlyingType(conversionType)?.IsEnum == true)
+                   && values.Length == 1 && (values[0] is string || values[0].GetType() == conversionType);
         }
 
 		/// <summary>

@@ -59,11 +59,5 @@ namespace Miracle.Settings
             keys = null;
             return false;
         }
-
-        private bool HasKeys(string prefix)
-        {
-            IEnumerable<string> keys;
-            return GetKeys(prefix, out keys);
-        }
     }
 }

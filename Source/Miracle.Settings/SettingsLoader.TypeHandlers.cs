@@ -53,7 +53,7 @@ namespace Miracle.Settings
             var propertyType = propertyInfo.PropertyType;
             if (propertyType.IsArray)
             {
-                SettingAttribute attribute = propertyInfo.GetCustomAttributes(typeof(SettingAttribute), false).FirstOrDefault() as SettingAttribute;
+                var attribute = propertyInfo.GetCustomAttributes(typeof(SettingAttribute), false).FirstOrDefault() as SettingAttribute;
 	            var arguments = attribute?.Separators != null
 		            ? new object[] {key, attribute.Separators, attribute.StringSplitOptions}
 		            : new object[] {key};
@@ -131,7 +131,7 @@ namespace Miracle.Settings
 
         private bool NestedClassHandler(PropertyInfo propertyInfo, string prefix, string key, out object value)
         {
-            SettingAttribute settingAttribute = propertyInfo.GetCustomAttributes(typeof(SettingAttribute), false).FirstOrDefault() as SettingAttribute;
+            var settingAttribute = propertyInfo.GetCustomAttributes(typeof(SettingAttribute), false).FirstOrDefault() as SettingAttribute;
             var propertyType = settingAttribute?.ConcreteType ?? propertyInfo.PropertyType;
             var inline = settingAttribute?.Inline ?? false;
             if (propertyType.IsClass && propertyType != typeof(string))
@@ -184,7 +184,7 @@ namespace Miracle.Settings
         {
             var list = new List<object>();
 
-            SettingAttribute attribute = propertyInfo.GetCustomAttributes(typeof (SettingAttribute), false).FirstOrDefault() as SettingAttribute;
+            var attribute = propertyInfo.GetCustomAttributes(typeof (SettingAttribute), false).FirstOrDefault() as SettingAttribute;
             if (attribute?.References != null)
             {
                 foreach (var reference in attribute.References)
