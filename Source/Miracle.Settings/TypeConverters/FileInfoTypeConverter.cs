@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 
@@ -36,14 +36,7 @@ namespace Miracle.Settings
         {
             if (values.Length > 0 && values.All(x => x is string) && !string.IsNullOrEmpty((string) values[0]))
             {
-                try
-                {
-                    return _pathResolver(Path.Combine(values.Cast<string>().ToArray()));
-                }
-                catch
-                {
-                    // ignored
-                }
+                return _pathResolver(Path.Combine(values.Cast<string>().ToArray()));
             }
             return null;
         }
@@ -56,7 +49,7 @@ namespace Miracle.Settings
         /// <returns>True if type converter is able to convert values to desired type, otherwise false</returns>
         public bool CanConvert(object[] values, Type conversionType)
         {
-            return conversionType == typeof(FileInfo) && MapPath(values) != null;
+            return conversionType == typeof(FileInfo) &&  values.Length > 0 && values.All(x => x is string) && !string.IsNullOrEmpty((string)values[0]);
         }
 
         /// <summary>
@@ -69,14 +62,14 @@ namespace Miracle.Settings
         public object ChangeType(object[] values, Type conversionType, IFormatProvider formatProvider)
         {
             var fileName = MapPath(values);
-            FileInfo fi = new FileInfo(fileName);
+            var fi = new FileInfo(fileName);
             if (!fi.Exists)
             {
                 if (_create)
                 {
-                    // Create file and close it immediately
                     using (fi.Create())
                     {
+                        // Create file and close it immediately
                     }
                 }
                 if (_required)

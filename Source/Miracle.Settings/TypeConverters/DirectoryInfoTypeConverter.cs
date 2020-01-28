@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 
@@ -51,7 +51,7 @@ namespace Miracle.Settings
         /// <returns>True if type converter is able to convert values to desired type, otherwise false</returns>
         public bool CanConvert(object[] values, Type conversionType)
         {
-            return conversionType == typeof(DirectoryInfo) && MapPath(values) != null;
+            return conversionType == typeof(DirectoryInfo) && values.Length > 0 && values.All(x => x is string) && !string.IsNullOrEmpty((string)values[0]);
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace Miracle.Settings
         public object ChangeType(object[] values, Type conversionType, IFormatProvider formatProvider)
         {
             var path = MapPath(values);
-            DirectoryInfo fi = new DirectoryInfo(path);
+            var fi = new DirectoryInfo(path);
             if (!fi.Exists)
             {
                 if (_create)

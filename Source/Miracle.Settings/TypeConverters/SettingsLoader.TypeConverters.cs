@@ -22,7 +22,7 @@ namespace Miracle.Settings
         /// </summary>
         public CultureInfo CultureInfo { get; set; } = CultureInfo.InvariantCulture;
 
-	    /// <summary>
+        /// <summary>
         /// Get default type converters
         /// </summary>
         /// <returns></returns>
@@ -64,7 +64,22 @@ namespace Miracle.Settings
         /// <returns></returns>
         private object ChangeType(object value, Type conversionType)
         {
-            return ChangeType(new[] {value}, conversionType);
+            return ChangeType(new[] { value }, conversionType);
+        }
+
+        private bool ChangeTypeInternal(object[] values, Type conversionType, out object result)
+        {
+            foreach (var typeConverter in TypeConverters)
+            {
+                if (typeConverter.CanConvert(values, conversionType))
+                {
+                    result = ChangeType(values, conversionType, typeConverter);
+                    return true;
+                }
+            }
+
+            result = null;
+            return false;
         }
 
         /// <summary>
@@ -80,16 +95,25 @@ namespace Miracle.Settings
                 return values[0];
             }
 
-            foreach (var typeConverter in TypeConverters)
+            if (Nullable.GetUnderlyingType(conversionType) != null)
             {
-                if (typeConverter.CanConvert(values, conversionType))
+                if (values.Length == 1 && values[0] == null) return null;
+
+                if (ChangeTypeInternal(values, Nullable.GetUnderlyingType(conversionType), out var nullableResult))
                 {
-                    return ChangeType(values, conversionType, typeConverter);
+                    return nullableResult;
+                }
+            }
+            else
+            {
+                if (ChangeTypeInternal(values, conversionType, out var result))
+                {
+                    return result;
                 }
             }
 
             throw new SettingsException(
-                String.Format(
+                string.Format(
                     values.Length == 1
                         ? Resources.ConvertValueErrorFormat
                         : Resources.ConvertValuesErrorFormat,
@@ -110,7 +134,7 @@ namespace Miracle.Settings
             catch (Exception ex)
             {
                 throw new SettingsException(
-                    String.Format(
+                    string.Format(
                         values.Length == 1
                             ? Resources.ConvertValueErrorFormat
                             : Resources.ConvertValuesErrorFormat,
