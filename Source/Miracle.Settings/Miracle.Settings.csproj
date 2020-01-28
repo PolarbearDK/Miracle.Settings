@@ -4,7 +4,7 @@
     <TargetFrameworks>netstandard2.0;net472;net462;net452;net40</TargetFrameworks>
     <LangVersion>latest</LangVersion>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Miracle.Settings.xml</DocumentationFile>
-    <Version>3.0.4</Version>
+    <Version>3.0.5</Version>
     <Authors>Philip Hoppe</Authors>
     <Company>Danish Software Development</Company>
     <PackageProjectUrl>https://github.com/PolarbearDK/Miracle.Settings</PackageProjectUrl>
@@ -13,7 +13,7 @@
 Supports validation, nested objects, arrays, lists and dictionaries.</Description>
     <Copyright>Copyright 2016-2019</Copyright>
     <PackageTags>appsetting strong type setting config configuration POCO</PackageTags>
-    <PackageReleaseNotes>Add support for Inline classes</PackageReleaseNotes>
+    <PackageReleaseNotes>Fix minor problem with Nullable types, Optional class where no properties matched class properties, FileInfo/DirectoryInfo handle bad urls consistently across target frameworks.</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageIconUrl>https://github.com/PolarbearDK/Miracle.Settings/raw/master/nuget-icon.png</PackageIconUrl>
     <RepositoryUrl>https://github.com/PolarbearDK/Miracle.Settings</RepositoryUrl>
