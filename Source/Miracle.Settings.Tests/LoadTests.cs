@@ -42,6 +42,8 @@ namespace Miracle.Settings.Tests
 
             //Simple
             Assert.That(settings.Enum, Is.EqualTo(BindingFlags.NonPublic | BindingFlags.Static));
+            Assert.That(settings.NullableEnum, Is.Null);
+            Assert.That(settings.NullableInt, Is.Null);
             Assert.That(settings.String, Is.EqualTo("Hello world"));
             Assert.That(settings.DateTime, Is.EqualTo(new DateTime(2004, 07, 17, 9, 0, 0, DateTimeKind.Local)));
             Assert.That(settings.TimeSpan, Is.EqualTo(new TimeSpan(11, 22, 33, 44, 560)));

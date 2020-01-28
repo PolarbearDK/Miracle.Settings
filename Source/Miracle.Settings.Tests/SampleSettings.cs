@@ -52,6 +52,12 @@ namespace Miracle.Settings.Tests
     {
         // -- Simple values --
         public string String { get; private set; }
+        
+        
+        public AnimalType? NullableEnum { get; private set; }
+        
+        public int? NullableInt { get; private set; }
+        
         public BindingFlags Enum { get; private set; }
         public DateTime DateTime { get; private set; }
         public TimeSpan TimeSpan { get; private set; }
@@ -188,7 +194,7 @@ namespace Miracle.Settings.Tests
         public Dictionary<string, Nested> MyDictionaryProperty { get; private set; }
     }
 
-    enum AnimalType { Parrot, Rabbit, Fox, Otter };
+    public enum AnimalType { Parrot, Rabbit, Fox, Otter };
 
     class Animal
     {
