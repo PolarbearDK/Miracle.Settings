@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NUnit.Framework;
 using Is = NUnit.DeepObjectCompare.Is;
 // ReSharper disable AccessToStaticMemberViaDerivedType
@@ -25,7 +25,6 @@ namespace Miracle.Settings.Tests
             Assert.That(setting.String, Is.EqualTo(@string));
             Assert.That(setting.Ignored, Is.Null);
 	        Assert.That(setting.NestedIgnored, Is.Null);
-			Assert.That(setting.TimeSpanIgnored, Is.Null);
         }
 	}
 }

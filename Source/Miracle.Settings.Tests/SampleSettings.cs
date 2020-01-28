@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -73,9 +73,6 @@ namespace Miracle.Settings.Tests
         public Nested NestedIgnored { get; private set; }
         [Ignore]
         public string[] NestedIgnoredArray { get; private set; }
-
-		// Optional by convension
-	    public TimeSpan? TimeSpanIgnored { get; private set; }
 	}
 
 	public class OptionalSettings
@@ -94,6 +91,25 @@ namespace Miracle.Settings.Tests
         public string[] OptionalArrayPresent { get; private set; }
         [Optional]
         public string[] OptionalArrayMissing { get; private set; }
+
+        // Optional by convension
+        public TimeSpan? OptionalTimespanMissing { get; private set; }
+        public TimeSpan? OptionalTimespanPresent { get; private set; }
+        public int? OptionalIntMissing { get; private set; }
+        public int? OptionalIntPresent { get; private set; }
+        public AnimalType? OptionalEnumMissing { get; private set; }
+        public AnimalType? OptionalEnumPresent { get; private set; }
+    }
+
+    public class NullableSettings
+    {
+        // Optional by convension
+        [Setting(IgnoreValue = "")]
+        public TimeSpan? NullableTimespan { get; private set; }
+        [Setting(IgnoreValue = "")]
+        public int? NullableInt { get; private set; }
+        [Setting(IgnoreValue = "")]
+        public AnimalType? NullableAnimal { get; private set; }
     }
 
     public class SimpleSettingsWithSettingName
@@ -188,7 +204,7 @@ namespace Miracle.Settings.Tests
         public Dictionary<string, Nested> MyDictionaryProperty { get; private set; }
     }
 
-    enum AnimalType { Parrot, Rabbit, Fox, Otter };
+    public enum AnimalType { Parrot, Rabbit, Fox, Otter };
 
     class Animal
     {

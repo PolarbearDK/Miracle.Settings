@@ -1,10 +1,11 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Reflection;
 using KellermanSoftware.CompareNetObjects;
 using NUnit.Framework;
 using Is = NUnit.DeepObjectCompare.Is;
+// ReSharper disable AccessToStaticMemberViaDerivedType
 
 namespace Miracle.Settings.Tests
 {
@@ -297,6 +298,12 @@ namespace Miracle.Settings.Tests
 		        }).WithComparisonConfig(new ComparisonConfig() {IgnoreCollectionOrder = true}));
         }
 
+        [Test]
+        public void OptionalTest()
+        {
+            var settings = SettingsLoader.Create<OptionalSettings>();
+            Assert.That(settings, Is.Not.Null);
+        }
 
         [Test]
         public void EnumDictionaryLoadTest()
