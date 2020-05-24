@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Xml;
 using Miracle.Settings.Properties;
 
@@ -35,6 +36,7 @@ namespace Miracle.Settings
                 new SimpleTypeConverter<DateTime>(s => XmlConvert.ToDateTime(s, XmlDateTimeSerializationMode.Local)),
                 new SimpleTypeConverter<IPAddress>(IPAddress.Parse),
                 new SimpleTypeConverter<Type>(s => Type.GetType(s, true)),
+                new SimpleTypeConverter<Assembly>(Assembly.Load),
 
                 new FileInfoTypeConverter(this.GetFullPath, required: true),
                 new DirectoryInfoTypeConverter(this.GetFullPath, required: true),
